@@ -1,0 +1,20 @@
+.choose-photo-button {
+  display: inline-flex;
+  padding: 9px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 20px 30px;
+  background: var(--Orange-Light, #e09231);
+}
+
+.choose-photo-button-text {
+  color: var(--White, #f8f3eb);
+
+  /* Bold text */
+  font-family: sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
+}

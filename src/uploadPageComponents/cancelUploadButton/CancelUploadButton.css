@@ -1,4 +1,4 @@
-.fancy-white-button {
+.cancel-upload-button {
   display: flex;
   width: 160px;
   height: 34px;
@@ -12,11 +12,11 @@
   background: var(--White, #f8f3eb);
 }
 
-.white-button-text {
+.cancel-upload-button-text {
   color: var(--Orange-Light, #e09231);
 
   /* Bold text */
-  font-family: Roboto;
+  font-family: sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 900;

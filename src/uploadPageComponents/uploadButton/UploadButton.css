@@ -1,14 +1,17 @@
-.fancy-orange-button {
-  display: inline-flex;
+.upload-button {
+  display: flex;
+  width: 160px;
+  height: 34px;
   padding: 9px 20px;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 3px;
+  flex-shrink: 0;
   border-radius: 20px 30px;
   background: var(--Orange-Light, #e09231);
 }
 
-.orange-button-text {
+.upload-button-text {
   color: var(--White, #f8f3eb);
 
   /* Bold text */
@@ -17,8 +20,4 @@
   font-style: normal;
   font-weight: 900;
   line-height: normal;
-}
-
-.fancy-orange-button:hover {
-  background-color: #cbe031;
 }
