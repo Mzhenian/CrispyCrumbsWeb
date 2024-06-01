@@ -4,7 +4,7 @@ import UploadVideoForm from '../../uploadPageComponents/videoUploadForm/VideoUpl
 
 function UploadVideo() {
   return (
-    <div className="uploadVideo">
+    <div className="container-mid">
       <UploadVideoForm/>
     </div>
   );

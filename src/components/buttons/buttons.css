@@ -1,0 +1,105 @@
+/* BUTTONS CSS */
+.generic-button {
+    /* color property */
+    background-color: var(--primary-color-light);
+    color: var(--white-color);
+    border: none;
+    cursor: pointer;
+
+    /* color property */
+
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: normal;
+    text-decoration: none;
+
+    padding: 9px 20px;
+
+    display: flex;
+    align-items: center;
+
+    display: flex;
+    gap: 5px;
+
+
+    /* transition property */
+    border-top-left-radius: 20px 30px;
+    border-top-right-radius: 30px 20px;
+    border-bottom-right-radius: 20px 30px;
+    border-bottom-left-radius: 30px 20px;
+    scale: 100%;
+
+    transition-property: border-radius, scale;
+    transition: 0.3s ease-in-out;
+}
+
+.generic-button:hover {
+    border-top-left-radius: 30px 20px;
+    border-top-right-radius: 20px 30px;
+    border-bottom-right-radius: 30px 20px;
+    border-bottom-left-radius: 20px 30px;
+    scale: 105%;
+}
+
+.generic-button.light {
+    background-color: var(--primary-color-light);
+}
+
+.generic-button.dark {
+    background-color: var(--primary-color-dark);
+}
+
+/* BUTTONS CSS */
+.light-button {
+    /* color property */
+    background-color: var(--primary-color-light);
+    color: var(--white-color);
+    border: none;
+    cursor: pointer;
+
+    /* color property */
+
+    font-family: "Roboto", sans-serif;
+    font-size: 14pt;
+    font-weight: 900;
+    line-height: normal;
+    text-decoration: none;
+
+    padding: 9px 20px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+
+
+    /* transition property */
+    border-top-left-radius: 20px 30px;
+    border-top-right-radius: 30px 20px;
+    border-bottom-right-radius: 20px 30px;
+    border-bottom-left-radius: 30px 20px;
+    scale: 100%;
+
+    transition-property: border-radius, scale;
+    transition: 0.3s ease-in-out;
+}
+
+.light-button:hover {
+    border-top-left-radius: 30px 20px;
+    border-top-right-radius: 20px 30px;
+    border-bottom-right-radius: 30px 20px;
+    border-bottom-left-radius: 20px 30px;
+    scale: 105%;
+}
+
+.light-button.light {
+    background-color: transparent;
+    color: var(--primary-color-light);
+    border: 3px solid var(--primary-color-light);
+}
+
+.light-button.dark {
+    background-color: transparent;
+    color: var(--primary-color-dark);
+    border: 3px solid var(--primary-color-dark);
+}

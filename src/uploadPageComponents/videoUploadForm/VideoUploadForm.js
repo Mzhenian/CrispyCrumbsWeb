@@ -1,9 +1,8 @@
 import React from "react";
 import "./VideoUploadForm.css";
 import LabeledTextInput from "../../components/labeledTextInput/LabeledTextInput";
-import ChoosePhotoButton from "../choosePhotoButton/ChoosePhotoButton";
-import UploadButton from "../uploadButton/UploadButton";
-import CancelUploadButton from "../cancelUploadButton/CancelUploadButton";
+import GenericButton from "../../components/buttons/GenericButton";
+import LightButton from "../../components/buttons/LightButton";
 
 function UploadVideoForm() {
   return (
@@ -12,21 +11,20 @@ function UploadVideoForm() {
         <text className="videoUploadFormTitleText">Upload a video</text>
       </div>
       <div className="videoUpFormInnerContainer">
-        
-        <LabeledTextInput label = { "Title-" } />
-        <LabeledTextInput label = { "Description-" } />
-      
+        <LabeledTextInput label={"Title-"} />
+        <LabeledTextInput label={"Description-"} />
+
         <label>Tags-</label>
         <div className="photo-pick">
           <label>Pictures-</label>
-          <ChoosePhotoButton text = { "Choose a photo"} />
+          <GenericButton text={"Choose a photo"} />
           <div className="video-photo-showcase">
             <img />
           </div>
         </div>
         <div className="upload-cancel-buttons">
-          <UploadButton text = { "Upload video" } />
-          <CancelUploadButton text = { "Cancel upload" } />
+          <GenericButton text={"Upload video"} />
+          <LightButton text={"Cancel upload"} />
         </div>
       </div>
     </div>

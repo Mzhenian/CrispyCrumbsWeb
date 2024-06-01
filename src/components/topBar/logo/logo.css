@@ -1,0 +1,57 @@
+/* BUTTONS CSS */
+.logo-container {
+    /* color property */
+    background-color: var(--primary-color-light);
+    color: var(--white-color);
+    border: none;
+    cursor: pointer;
+
+    /* color property */
+
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: normal;
+    text-decoration: none;
+
+    height: 34px;
+    width: 133px;
+
+    display: flex;
+    align-items: center;
+
+    display: flex;
+    gap: 5px;
+
+
+    /* transition property */
+    border-top-left-radius: 20px 30px;
+    border-top-right-radius: 30px 20px;
+    border-bottom-right-radius: 20px 30px;
+    border-bottom-left-radius: 30px 20px;
+    scale: 100%;
+
+    transition-property: border-radius, scale;
+    transition: 0.3s ease-in-out;
+}
+
+.logo-container:hover {
+    border-top-left-radius: 30px 20px;
+    border-top-right-radius: 20px 30px;
+    border-bottom-right-radius: 30px 20px;
+    border-bottom-left-radius: 20px 30px;
+    scale: 105%;
+}
+
+.logo-container.light {
+    background-color: var(--primary-color-light);
+}
+
+.logo-container.dark {
+    background-color: var(--primary-color-dark);
+}
+
+.logo {
+    height: fit-content;
+    margin: 5px 10px;
+}
