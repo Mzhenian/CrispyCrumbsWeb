@@ -54,4 +54,10 @@
 .logo {
     height: fit-content;
     margin: 5px 10px;
+    scale: 100%;
+    transition: 0.6s ease-in-out;
+}
+
+.logo:hover {
+    scale: 110%;
 }

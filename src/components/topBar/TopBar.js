@@ -11,8 +11,8 @@ import searchIcon from "../iconsLab/searchWhite.svg";
 const TopBar = ({ logged }) => {
   const theme = useContext(ThemeContext).theme;
 
-  const UploadLoginTitle = "Sign up";
-  const UploadSignUpTitle = "Log in";
+  const UploadLoginTitle = "Log in";
+  const UploadSignUpTitle = "Sign up";
   const UploadVideoTitle = "Upload Video";
 
   const searchBar = (
@@ -29,8 +29,8 @@ const TopBar = ({ logged }) => {
     </div>
   ) : (
     <div className="top-bar-buttons">
-      <GenericButton text={UploadLoginTitle} link={"/login"} />
       <GenericButton text={UploadSignUpTitle} link={"/signup"} />
+      <GenericButton text={UploadLoginTitle} link={"/login"} />
       <LightDarkButton />
     </div>
   );

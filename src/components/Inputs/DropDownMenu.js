@@ -1,5 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import "./inputs.css";
+import "../buttons/buttons.css";
+import { ThemeContext } from "../../ThemeContext";
+
 import dropdownIcon from "../iconsLab/down.svg";
 import searchIcon from "../iconsLab/searchWhite.svg";
 
@@ -7,6 +10,7 @@ export default function DropDownMenu(props) {
   const [dropdown, setDropdown] = useState(false);
   const [search, setSearch] = useState("");
   const dropdownRef = useRef(null);
+  const theme = useContext(ThemeContext).theme;
 
   const updateDropDown = () => {
     setDropdown(!dropdown);
@@ -57,9 +61,10 @@ export default function DropDownMenu(props) {
 
   const DropdownTitle = (
     <div
-      className="field"
+      className={`field ${theme}`}
       id="dropdown-title"
       onMouseDown={(e) => {
+        if (e.target !== e.currentTarget) return; // Only handle clicks on the title itself
         e.preventDefault();
         updateDropDown();
       }}
@@ -67,26 +72,26 @@ export default function DropDownMenu(props) {
       <div className="title-flag-container">
         {dropdown ? (
           <>
-            <img src={searchIcon} className="flag-icon" alt="icon" />
+            <img src={searchIcon} className="button-icon" alt="icon" />
             <input
               type="text"
               placeholder="Search..."
               value={search}
-              className="input-empty"
+              className={`input-empty ${theme}`}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
             />
           </>
         ) : (
           <>
-            {props.showFlag && <img src={getFileName(props.value)} className="flag-icon" alt="icon" />}
+            {props.showFlag && <img src={getFileName(props.value)} className="button-icon" alt="icon" />}
             {props.value}
           </>
         )}
       </div>
       <img
         src={dropdownIcon}
-        className="App-icon"
+        className="button-icon"
         id={`dropdown-icon-${dropdown ? "activated" : "deactivated"}`}
         alt="icon"
       />
@@ -94,10 +99,10 @@ export default function DropDownMenu(props) {
   );
 
   const DropDownList = (
-    <div className="dropdown-list" id={`dropdown-list-${dropdown ? "activated" : "deactivated"}`}>
+    <div className={`dropdown-list ${theme}`} id={`dropdown-list-${dropdown ? "activated" : "deactivated"}`}>
       {filteredItems.map((item, index) => (
-        <div key={index} className="dropdown-item" onClick={(e) => action(props.name, item.name)}>
-          {props.showFlag && <img src={item.fileName} className="flag-icon" alt="icon" />}
+        <div key={index} className={`dropdown-item ${theme}`} onClick={(e) => action(props.name, item.name)}>
+          {props.showFlag && <img src={item.fileName} className="button-icon" alt="icon" />}
           {item.name}
         </div>
       ))}

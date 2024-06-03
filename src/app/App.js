@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import { ThemeProvider } from "../ThemeContext";
+import TopBar from "../components/topBar/TopBar";
+import Home from "../pages/home/Home";
+import UploadVideo from "../pages/uploadVideo/UploadVideo";
+import SignUp from "../pages/signup/SignUp";
+import Login from "../pages/login/Login";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.StrictMode>
+      <ThemeProvider>
+        <BrowserRouter>
+          <TopBar />
+          <div className="main-body">
+            <Routes>
+              <Route index element={<Home />} />
+              <Route path="/uploadvideo" element={<UploadVideo />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </ThemeProvider>
+    </React.StrictMode>
   );
 }
 
