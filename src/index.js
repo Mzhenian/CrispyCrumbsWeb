@@ -1,17 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import UploadVideo from './pages/uploadvideo/UploadVideo';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./index.css";
+import { ThemeProvider } from "./ThemeContext";
+import reportWebVitals from "./reportWebVitals";
+import TopBar from "./components/topBar/TopBar";
+import Home from "./pages/home/Home";
+import UploadVideo from "./pages/uploadVideo/UploadVideo";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <UploadVideo />
+    <ThemeProvider>
+      <BrowserRouter>
+        <TopBar />
+        <div className="main-body">
+          <Routes>
+            <Route index element={<Home />} />
+            <Route path="/uploadvideo" element={<UploadVideo />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </ThemeProvider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
