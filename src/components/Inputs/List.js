@@ -1,4 +1,6 @@
 import "./inputs.css";
+import "../buttons/buttons.css";
+
 import removeIcon from "../iconsLab/close.svg";
 
 export default function List(props) {
@@ -19,12 +21,12 @@ export default function List(props) {
           <div className="field" id="input-item" key={index}>
             {item}
             {props.editMode && (
-              <img src={removeIcon} className="App-icon" id="action-icon" alt="icon" onClick={() => removeItem()} />
+              <img src={removeIcon} className="button-icon" id="action-icon" alt="icon" onClick={() => removeItem()} />
             )}
           </div>
         ))}
         {props.list.length > 2 && props.editMode && (
-          <div className="field" id="action-icon" onClick={() => removeAll()}>
+          <div className="field" id="button-icon" onClick={() => removeAll()}>
             Remove All
           </div>
         )}

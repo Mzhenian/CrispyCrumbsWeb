@@ -1,38 +1,93 @@
-.App {
-  text-align: center;
+/* TEXT CSS */
+h1 {
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h2 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h3 {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+
+p {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+a {
+  text-decoration: none;
+  font-weight: 900;
+}
+
+b {
+  font-weight: 900;
+}
+
+.note {
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.main-body {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 25px;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
 }
 
-.App-link {
-  color: #61dafb;
+.field {
+  min-width: 300px;
+  height: 34px;
+
+  display: flex;
+  justify-content: space-between;
+
+  padding: 5px 15px;
+
+  border-top-left-radius: 20px 30px;
+  border-top-right-radius: 30px 20px;
+  border-bottom-right-radius: 20px 30px;
+  border-bottom-left-radius: 30px 20px;
+
+  transition: border-radius 0.3s ease-in-out;
+
+  border: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.field.light {
+  background-color: var(--white-color);
+  color: var(--black-color);
+}
+
+.field.dark {
+  background-color: var(--black-color);
+  color: var(--white-color);
+}
+
+.field:hover {
+  border-top-left-radius: 30px 20px;
+  border-top-right-radius: 20px 30px;
+  border-bottom-right-radius: 30px 20px;
+  border-bottom-left-radius: 20px 30px;
+}
+
+.field:focus {
+  border: none;
+  outline: none;
 }

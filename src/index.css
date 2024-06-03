@@ -42,54 +42,22 @@ body.dark {
   color: var(--white-color);
 }
 
-/* TEXT CSS */
-h1 {
-  font-size: 26px;
-  font-style: normal;
-  font-weight: 900;
-  line-height: normal;
+/* Style the entire scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
 }
 
-h2 {
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 900;
-  line-height: normal;
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: rgba(118, 117, 115, 0.1);
 }
 
-h3 {
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 900;
-  line-height: normal;
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(118, 117, 115, 0.2);
 }
 
-p {
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-}
-
-a {
-  text-decoration: none;
-  font-weight: 900;
-}
-
-b {
-  font-weight: 900;
-}
-
-.note {
-  font-size: 9px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-}
-
-.main-body {
-  display: flex;
-  padding: 25px;
-  justify-content: center;
-  align-items: center;
+/* Hide scrollbar track */
+::-webkit-scrollbar-track {
+  background: transparent;
 }

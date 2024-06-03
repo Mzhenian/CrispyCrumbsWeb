@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./inputs.css";
+import "../buttons/buttons.css";
 import addIcon from "../iconsLab/add.svg";
 import List from "./List";
 
@@ -47,7 +48,7 @@ export default function ListInput(props) {
           id={props.listName}
           onClick={addItem}
           src={addIcon}
-          className="App-icon"
+          className="button-icon"
           alt="icon"
         />
       </div>
