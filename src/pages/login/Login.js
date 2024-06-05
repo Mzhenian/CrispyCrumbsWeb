@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { ThemeContext } from "../../ThemeContext.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
@@ -56,9 +57,9 @@ const LoginForm = () => {
             <div>
               <b>Remember me</b> <input type="checkbox" value={formData.rememberMe} />
             </div>
-            <a className={theme} href="./forgotpassword">
+            <Link className={theme} to="./forgotpassword">
               <b>I forgot my password</b>
-            </a>
+            </Link>
           </div>
           <div className="buttons-container">
             <GenericButton text="Log in" type="submit" onClick={handleSubmit} />
