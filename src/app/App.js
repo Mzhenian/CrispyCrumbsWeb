@@ -11,8 +11,8 @@ import Login from "../pages/login/Login";
 function App() {
   return (
     <React.StrictMode>
-      <ThemeProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <ThemeProvider>
           <TopBar />
           <div className="main-body">
             <Routes>
@@ -22,8 +22,8 @@ function App() {
               <Route path="/login" element={<Login />} />
             </Routes>
           </div>
-        </BrowserRouter>
-      </ThemeProvider>
+        </ThemeProvider>
+      </BrowserRouter>
     </React.StrictMode>
   );
 }

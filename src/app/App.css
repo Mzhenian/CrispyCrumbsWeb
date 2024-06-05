@@ -26,12 +26,9 @@ p {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  padding: 0px;
 }
 
-a {
-  text-decoration: none;
-  font-weight: 900;
-}
 
 b {
   font-weight: 900;
