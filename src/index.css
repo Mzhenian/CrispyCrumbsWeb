@@ -30,6 +30,7 @@ body {
   background-color: var(--white-color);
   font-family: "Roboto", sans-serif;
   margin: 0px;
+  transition: background-color 0.1s ease-in-out;
 }
 
 body.light {
