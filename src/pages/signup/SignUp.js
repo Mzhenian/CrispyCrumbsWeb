@@ -4,8 +4,9 @@ import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
 import ListInput from "../../components/Inputs/ListInput.js";
 import { countries } from "../../components/Inputs/CountriesListsData.js";
 import Container from "../../components/container/Container.js";
+import GenericButton from "../../components/buttons/GenericButton.js";
 
-const Home = () => {
+const SignUp = () => {
   const { theme } = useContext(ThemeContext);
   const [formData, setFormData] = useState({
     destination: "Israel",
@@ -21,20 +22,91 @@ const Home = () => {
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted:", formData);
+    // Add your form submission logic here
+    // window.location.href = `${serverLink}?name=${formData.links}`;
+  };
+
   return (
-    <div className={`page page-${theme}`}>
-      <Container title={"page1"} width={"1000px"}>
-        <DropDownMenu
-          name="destination"
-          arr={countries}
-          value={formData.destination}
-          showFlag={true}
-          action={handleInputChange}
-        />
-        <ListInput list={formData.hashtags} listName="hashtags" action={handleInputChange} editMode={true} />
+    <div className={`page ${theme}`}>
+      <Container title={"Sign up"} containerStyle={"signup-container"}>
+        <form onSubmit={handleSubmit}>
+          <div className="field-container">
+            <b>Full name</b>
+            <input
+              className={`field ${theme}`}
+              name="fullName"
+              value={formData.username}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="field-container">
+            <b>Phone Number</b>
+            <input
+              className={`field ${theme}`}
+              name="phoneNumber"
+              value={formData.username}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="field-container">
+            <b>Birthday</b>
+            <input
+              className={`field ${theme}`}
+              name="birthday"
+              value={formData.username}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="field-container">
+            <b>Username</b>
+            <input
+              className={`field ${theme}`}
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="field-container">
+            <b>Password</b>
+            <input
+              className={`field ${theme}`}
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="field-container">
+            <b>Authenticate password</b>
+            <input
+              className={`field ${theme}`}
+              name="password_auth"
+              type="password"
+              value={formData.password}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="buttons-container">
+            <GenericButton
+              text="Choose image"
+              type="submit"
+              onClick={handleSubmit}
+            />
+          </div>
+          <div className="buttons-container">
+            <GenericButton
+              text="Sign in"
+              type="submit"
+              onClick={handleSubmit}
+            />
+          </div>
+        </form>
       </Container>
     </div>
   );
 };
 
-export default Home;
+export default SignUp;
