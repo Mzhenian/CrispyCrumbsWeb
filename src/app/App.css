@@ -88,3 +88,11 @@ b {
   border: none;
   outline: none;
 }
+
+.error.light {
+  color: var(--secondary-color-light);
+}
+
+.error.dark {
+  color: var(--secondary-color-dark);
+}

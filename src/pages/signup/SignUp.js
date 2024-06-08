@@ -4,18 +4,28 @@ import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
 import { countries } from "../../DB/countries/CountriesListsData.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
+import { AuthContext } from "../../AuthContext.js";
+import usersDB from "../../DB/usersDB.json";
 
 const SignUp = () => {
   const { theme } = useContext(ThemeContext);
+  const { signup } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     fullName: "",
-    phoneNumber: "",
+    email: "",
     birthday: "",
     username: "",
     password: "",
     password_auth: "",
-    destination: "Israel",
+    country: "Israel",
   });
+  const [error, setError] = useState(""); // State to store error messages
+
+  // Function to check if username is available
+  const checkUsernameAvailability = (username) => {
+    const isUsernameAvailable = !usersDB.users.some((user) => user.userName === username);
+    return isUsernameAvailable;
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -34,17 +44,42 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your form submission logic here
-    // window.location.href = `${serverLink}?name=${formData.links}`;
+
+    // Check if passwords match
+    if (formData.password !== formData.password_auth) {
+      setError("Passwords do not match!");
+      return;
+    }
+
+    // Check if username already exists
+    const isUsernameTaken = !checkUsernameAvailability(formData.username);
+    if (isUsernameTaken) {
+      setError("Username already exists. Please choose a different one.");
+      return;
+    }
+
+    // Signup user if all checks pass
+    signup({
+      userName: formData.username,
+      email: formData.email,
+      password: formData.password,
+      fullName: formData.fullName,
+      phoneNumber: formData.phoneNumber,
+      birthday: formData.birthday,
+      country: formData.country,
+      profilePhoto: "",
+    });
+    alert("User registered successfully!");
+    // Redirect or any other logic
   };
 
   return (
     <div className={`page ${theme}`}>
       <Container title={"Sign up"} containerStyle={"signup-container"}>
         <form onSubmit={handleSubmit}>
+          {error && <b className={`error ${theme}`}>{error}</b>}
           <div className="field-container">
-            <b>Full name</b>
+            <b>Full Name</b>
             <input
               className={`field ${theme}`}
               name="fullName"
@@ -53,13 +88,8 @@ const SignUp = () => {
             />
           </div>
           <div className="field-container">
-            <b>Phone Number</b>
-            <input
-              className={`field ${theme}`}
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-            />
+            <b>Email</b>
+            <input className={`field ${theme}`} name="email" value={formData.email} onChange={handleInputChange} />
           </div>
           <div className="field-container">
             <b>Birthday</b>
@@ -90,7 +120,7 @@ const SignUp = () => {
             />
           </div>
           <div className="field-container">
-            <b>Authenticate password</b>
+            <b>Confirm Password</b>
             <input
               className={`field ${theme}`}
               name="password_auth"
@@ -101,9 +131,9 @@ const SignUp = () => {
           </div>
           <div className="field-container">
             <DropDownMenu
-              name="destination"
+              name="country"
               arr={countries}
-              value={formData.destination}
+              value={formData.country}
               showFlag={true}
               action={handleDropDownChange}
             />

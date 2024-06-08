@@ -4,10 +4,12 @@ import { ThemeContext } from "../../ThemeContext.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
+import { AuthContext } from "../../AuthContext";
 import "./login.css";
 
-const LoginForm = () => {
+const Login = () => {
   const { theme } = useContext(ThemeContext);
+  const { login } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -25,9 +27,12 @@ const LoginForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your form submission logic here
-    // window.location.href = `${serverLink}?name=${formData.links}`;
+    if (login(formData.username, formData.password)) {
+      alert("Login successful!");
+      // Redirect or any other logic
+    } else {
+      alert("Invalid username or password");
+    }
   };
 
   return (
@@ -55,7 +60,13 @@ const LoginForm = () => {
           </div>
           <div className="linear-layout">
             <div>
-              <b>Remember me</b> <input type="checkbox" value={formData.rememberMe} />
+              <b>Remember me</b>
+              <input
+                type="checkbox"
+                name="rememberMe"
+                checked={formData.rememberMe}
+                onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
+              />
             </div>
             <Link className={theme} to="./forgotpassword">
               <b>I forgot my password</b>
@@ -71,4 +82,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default Login;
