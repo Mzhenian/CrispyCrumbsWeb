@@ -1,4 +1,6 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { ThemeContext } from "../../ThemeContext.js";
 import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
 import { countries } from "../../DB/countries/CountriesListsData.js";
@@ -10,6 +12,8 @@ import usersDB from "../../DB/usersDB.json";
 const SignUp = () => {
   const { theme } = useContext(ThemeContext);
   const { signup } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -18,8 +22,9 @@ const SignUp = () => {
     password: "",
     password_auth: "",
     country: "Israel",
+    profilePhoto: "",
   });
-  const [error, setError] = useState(""); // State to store error messages
+  const [errorMessage, setErrorMessage] = useState(""); // State to store error messages
 
   // Function to check if username is available
   const checkUsernameAvailability = (username) => {
@@ -47,14 +52,14 @@ const SignUp = () => {
 
     // Check if passwords match
     if (formData.password !== formData.password_auth) {
-      setError("Passwords do not match!");
+      setErrorMessage("Passwords do not match!");
       return;
     }
 
     // Check if username already exists
     const isUsernameTaken = !checkUsernameAvailability(formData.username);
     if (isUsernameTaken) {
-      setError("Username already exists. Please choose a different one.");
+      setErrorMessage("Username already exists. Please choose a different one.");
       return;
     }
 
@@ -69,15 +74,16 @@ const SignUp = () => {
       country: formData.country,
       profilePhoto: "",
     });
-    alert("User registered successfully!");
-    // Redirect or any other logic
+
+    const targetRoute = "/";
+    navigate(targetRoute);
   };
 
   return (
     <div className={`page ${theme}`}>
       <Container title={"Sign up"} containerStyle={"signup-container"}>
         <form onSubmit={handleSubmit}>
-          {error && <b className={`error ${theme}`}>{error}</b>}
+          {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
           <div className="field-container">
             <b>Full Name</b>
             <input

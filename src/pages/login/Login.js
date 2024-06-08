@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../ThemeContext.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
@@ -10,6 +10,8 @@ import "./login.css";
 const Login = () => {
   const { theme } = useContext(ThemeContext);
   const { login } = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -27,17 +29,20 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (login(formData.username, formData.password)) {
-      alert("Login successful!");
-      // Redirect or any other logic
+    const { username, password } = formData;
+    if (login(username, password)) {
+      const targetRoute = "/";
+      navigate(targetRoute);
     } else {
-      alert("Invalid username or password");
+      setErrorMessage("Invalid username or password");
+      setFormData({ ...formData, password: "" }); // Clear password field
     }
   };
 
   return (
     <div className={`page ${theme}`}>
       <Container title={"Log in"} containerStyle={"login-container"}>
+        {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
         <form onSubmit={handleSubmit}>
           <div className="field-container">
             <b>Username</b>

@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (username, password) => {
     const user = usersDB.users.find((user) => user.userName === username && user.password === password);
-    if (user) {
+    if (user && username !== "") {
       setCurrentUser(user);
       localStorage.setItem("currentUser", JSON.stringify(user));
       return true;
