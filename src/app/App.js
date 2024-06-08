@@ -7,9 +7,10 @@ import Home from "../pages/home/Home";
 import UploadVideo from "../pages/uploadVideo/UploadVideo.js";
 import SignUp from "../pages/signup/SignUp";
 import Login from "../pages/login/Login";
-import { AuthProvider } from "../AuthContext"; // Import AuthProvider
-import PrivateRoute from "../PrivateRoute"; // Import PrivateRoute
+import WatchVideo from "../pages/watchvideo/WatchVideo";
 
+import { AuthProvider } from "../AuthContext";
+import PrivateRoute from "../PrivateRoute";
 function App() {
   return (
     <React.StrictMode>
@@ -17,7 +18,6 @@ function App() {
         <ThemeProvider>
           <AuthProvider>
             {" "}
-            {/* Wrap with AuthProvider */}
             <TopBar />
             <div className="main-body">
               <Routes>
@@ -25,6 +25,7 @@ function App() {
                 <Route path="/uploadvideo" element={<PrivateRoute element={<UploadVideo />} />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/watch/:videoId" element={<WatchVideo />} />
               </Routes>
             </div>
           </AuthProvider>
