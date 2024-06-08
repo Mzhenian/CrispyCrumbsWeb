@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { ThemeContext } from "../../ThemeContext.js";
 import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
-import { countries } from "../../DB/Countries/CountriesListsData.js";
+import { countries } from "../../DB/countries/CountriesListsData.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 
