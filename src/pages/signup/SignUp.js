@@ -1,21 +1,31 @@
 import React, { useContext, useState } from "react";
 import { ThemeContext } from "../../ThemeContext.js";
 import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
-import ListInput from "../../components/Inputs/ListInput.js";
-import { countries } from "../../components/Inputs/CountriesListsData.js";
+import { countries } from "../../DB/Countries/CountriesListsData.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 
 const SignUp = () => {
   const { theme } = useContext(ThemeContext);
   const [formData, setFormData] = useState({
+    fullName: "",
+    phoneNumber: "",
+    birthday: "",
+    username: "",
+    password: "",
+    password_auth: "",
     destination: "Israel",
-    platform: "facebook",
-    links: [],
-    hashtags: [],
   });
 
-  const handleInputChange = (name, value) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleDropDownChange = (name, value) => {
     setFormData({
       ...formData,
       [name]: value,
@@ -38,7 +48,7 @@ const SignUp = () => {
             <input
               className={`field ${theme}`}
               name="fullName"
-              value={formData.username}
+              value={formData.fullName}
               onChange={handleInputChange}
             />
           </div>
@@ -47,7 +57,7 @@ const SignUp = () => {
             <input
               className={`field ${theme}`}
               name="phoneNumber"
-              value={formData.username}
+              value={formData.phoneNumber}
               onChange={handleInputChange}
             />
           </div>
@@ -56,7 +66,7 @@ const SignUp = () => {
             <input
               className={`field ${theme}`}
               name="birthday"
-              value={formData.username}
+              value={formData.birthday}
               onChange={handleInputChange}
             />
           </div>
@@ -85,23 +95,21 @@ const SignUp = () => {
               className={`field ${theme}`}
               name="password_auth"
               type="password"
-              value={formData.password}
+              value={formData.password_auth}
               onChange={handleInputChange}
             />
           </div>
-          <div className="buttons-container">
-            <GenericButton
-              text="Choose image"
-              type="submit"
-              onClick={handleSubmit}
+          <div className="field-container">
+            <DropDownMenu
+              name="destination"
+              arr={countries}
+              value={formData.destination}
+              showFlag={true}
+              action={handleDropDownChange}
             />
           </div>
           <div className="buttons-container">
-            <GenericButton
-              text="Sign in"
-              type="submit"
-              onClick={handleSubmit}
-            />
+            <GenericButton text="Sign up" type="submit" onClick={handleSubmit} />
           </div>
         </form>
       </Container>

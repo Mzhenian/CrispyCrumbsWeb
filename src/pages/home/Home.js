@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { ThemeContext } from "../../ThemeContext.js";
 import DropDownMenu from "../../components/Inputs/DropDownMenu";
 import ListInput from "../../components/Inputs/ListInput";
-import { countries } from "../../components/Inputs/CountriesListsData";
+import { countries } from "../../DB/Countries/CountriesListsData.js";
 import Container from "../../components/container/Container.js";
 
 const Home = () => {
@@ -31,7 +31,6 @@ const Home = () => {
           showFlag={true}
           action={handleInputChange}
         />
-        <ListInput list={formData.hashtags} listName="hashtags" action={handleInputChange} editMode={true} />
       </Container>
     </div>
   );

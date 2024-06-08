@@ -15,7 +15,8 @@
       ],
       "followers": ["2"],
       "following": ["6", "1"],
-      "likedOrDislikedVideoIds": ["1", "6"]
+      "likedOrDislikedVideoIds": ["1", "6"],
+      "country": "Israel"
     },
     {
       "userId": "2",
@@ -25,7 +26,8 @@
       "playlists": [],
       "followers": ["1"],
       "following": ["3"],
-      "likedOrDislikedVideoIds": ["2", "6"]
+      "likedOrDislikedVideoIds": ["2", "6"],
+      "country": "Israel"
     },
     {
       "userId": "3",
@@ -35,7 +37,8 @@
       "playlists": [],
       "followers": ["2"],
       "following": ["4"],
-      "likedOrDislikedVideoIds": ["8"]
+      "likedOrDislikedVideoIds": ["8"],
+      "country": "Israel"
     },
     {
       "userId": "4",
@@ -45,7 +48,8 @@
       "playlists": [],
       "followers": ["3"],
       "following": ["5"],
-      "likedOrDislikedVideoIds": ["1"]
+      "likedOrDislikedVideoIds": ["1"],
+      "country": "Israel"
     },
     {
       "userId": "5",
@@ -55,7 +59,8 @@
       "playlists": [],
       "followers": ["4"],
       "following": ["6"],
-      "likedOrDislikedVideoIds": ["1","2","10"]
+      "likedOrDislikedVideoIds": ["1","2","10"],
+      "country": "Israel"
     },
     {
       "userId": "6",
@@ -65,7 +70,8 @@
       "playlists": [],
       "followers": ["5"],
       "following": ["7"],
-      "likedOrDislikedVideoIds": []
+      "likedOrDislikedVideoIds": [],
+      "country": "Israel"
     },
     {
       "userId": "7",
@@ -75,7 +81,8 @@
       "playlists": [],
       "followers": ["6"],
       "following": ["8"],
-      "likedOrDislikedVideoIds": []
+      "likedOrDislikedVideoIds": [],
+      "country": "Israel"
     },
     {
       "userId": "8",
@@ -85,7 +92,8 @@
       "playlists": [],
       "followers": ["7"],
       "following": ["9"],
-      "likedOrDislikedVideoIds": ["",""]
+      "likedOrDislikedVideoIds": ["",""],
+      "country": "United state"
     },
     {
       "userId": "9",
@@ -95,7 +103,8 @@
       "playlists": [],
       "followers": [],
       "following": ["6"],
-      "likedOrDislikedVideoIds": ["10","8", "6"]
+      "likedOrDislikedVideoIds": ["10","8", "6"],
+      "country": "Israel"
     }
   ]
 }

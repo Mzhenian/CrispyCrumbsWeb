@@ -4,7 +4,7 @@ import "./App.css";
 import { ThemeProvider } from "../ThemeContext";
 import TopBar from "../components/topBar/TopBar";
 import Home from "../pages/home/Home";
-import UploadVideo from "../pages/uploadvideo/UploadVideo.js";
+import UploadVideo from "../pages/uploadVideo/UploadVideo.js";
 import SignUp from "../pages/signup/SignUp";
 import Login from "../pages/login/Login";
 
