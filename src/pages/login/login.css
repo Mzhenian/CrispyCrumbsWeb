@@ -22,7 +22,14 @@ form {
     padding: 0px;
 }
 
-.linear-layout {
+.linear-layout-1 {
     display: flex;
     justify-content: space-between;
+}
+
+.linear-layout-2 {
+    display: flex;
+    justify-content: left;
+    align-content: center;
+    gap: 10px;
 }

@@ -1,11 +1,15 @@
-/* BUTTONS CSS */
-.light-dark-button {
+.toggle {
     border: none;
     cursor: pointer;
 
-    padding: 5px 10px;
+    width: 13pt;
+    height: 10pt;
+    padding: 3pt;
+
 
     display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 5px;
 
 
@@ -17,10 +21,10 @@
     scale: 100%;
 
     transition-property: border-radius, scale;
-    transition: 0.3s ease-in-out;
+    transition: 0.1s ease-in-out;
 }
 
-.light-dark-button:hover {
+.toggle:hover {
     border-top-left-radius: 30px 20px;
     border-top-right-radius: 20px 30px;
     border-bottom-right-radius: 30px 20px;
@@ -28,18 +32,18 @@
     scale: 105%;
 }
 
-.light-dark-button.light {
-    background-color: var(--black-color);
+.toggle.on.light {
+    background-color: var(--primary-color-light);
 }
 
-.light-dark-button.dark {
+.toggle.on.dark {
+    background-color: var(--primary-color-dark);
+}
+
+.toggle.off.light {
     background-color: var(--white-color);
 }
 
-.light-dark-icon {
-    width: 25px;
-}
-
-.light-dark-icon.dark {
-    filter: brightness(-100%);
+.toggle.off.dark {
+    background-color: var(--black-color);
 }

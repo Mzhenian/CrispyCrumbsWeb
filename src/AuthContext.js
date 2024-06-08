@@ -1,5 +1,7 @@
+// AuthContext.js
 import React, { createContext, useState, useEffect } from "react";
 import usersDB from "./DB/usersDB.json";
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {

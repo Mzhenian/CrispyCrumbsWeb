@@ -5,6 +5,7 @@ import addIcon from "../iconsLab/add.svg";
 import List from "./List";
 
 export default function ListInput(props) {
+
   const [textBox, setTextBox] = useState("");
 
   const handleTextBoxChange = (e) => {

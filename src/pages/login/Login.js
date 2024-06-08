@@ -6,6 +6,7 @@ import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
 import { AuthContext } from "../../AuthContext";
 import "./login.css";
+import OnOffToggle from "../../components/Inputs/toggle/OnOffToggle.js";
 
 const Login = () => {
   const { theme } = useContext(ThemeContext);
@@ -63,14 +64,16 @@ const Login = () => {
               onChange={handleInputChange}
             />
           </div>
-          <div className="linear-layout">
-            <div>
+          <div className="linear-layout-1">
+            <div className="linear-layout-2">
               <b>Remember me</b>
-              <input
-                type="checkbox"
+              <OnOffToggle
                 name="rememberMe"
-                checked={formData.rememberMe}
-                onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
+                value={formData.rememberMe}
+                action={(e) => {
+                  setFormData({ ...formData, rememberMe: !formData.rememberMe });
+                  console.log(formData.rememberMe);
+                }}
               />
             </div>
             <Link className={theme} to="./forgotpassword">
