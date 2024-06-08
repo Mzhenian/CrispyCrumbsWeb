@@ -1,0 +1,28 @@
+#signup-container {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 20px;
+    align-self: center;
+}
+
+form {
+    display: flex;
+    margin: 0px;
+    padding: 0px;
+}
+
+.linear-layout {
+    display: flex;
+    justify-content: space-between;
+}
