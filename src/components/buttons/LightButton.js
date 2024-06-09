@@ -17,7 +17,7 @@ const LightButton = ({ text, onClick, icon, link }) => {
           </div>
         </Link>
       )}
-      {!link && ( // Render the button without a link if link is not provided
+      {!link && (
         <div className={`light-button ${theme}`} onClick={onClick}>
           {text}
           {icon && <img className="button-icon" src={icon} alt={text} />}

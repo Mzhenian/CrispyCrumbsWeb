@@ -1,5 +1,5 @@
 .container {
-    min-width: 500pt;
+    min-width: 800px;
     border-top-left-radius: 20px 30px;
     border-top-right-radius: 30px 20px;
     border-bottom-right-radius: 20px 30px;
@@ -37,7 +37,7 @@
     background-color: var(--primary-color-dark);
 }
 
-.container-title {
+.container-title:hover {
     border-top-left-radius: 20px 30px;
     border-top-right-radius: 30px 20px;
     border-bottom-right-radius: 20px 30px;

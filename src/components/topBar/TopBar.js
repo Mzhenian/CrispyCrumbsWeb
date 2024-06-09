@@ -11,15 +11,11 @@ import searchIcon from "../iconsLab/searchWhite.svg";
 
 const TopBar = () => {
   const theme = useContext(ThemeContext).theme;
-  const { currentUser, logout } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
 
   const UploadLoginTitle = "Log in";
   const UploadSignUpTitle = "Sign up";
   const UploadVideoTitle = "Upload Video";
-
-  const handleLogout = () => {
-    logout();
-  };
 
   const leftButtons = currentUser ? (
     <div className="top-bar-buttons">

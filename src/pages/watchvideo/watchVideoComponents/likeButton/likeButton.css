@@ -1,0 +1,53 @@
+.like-button {
+    display: flex;
+    justify-content: baseline;
+    align-items: start;
+    padding: 10px;
+    width: 100px;
+
+
+}
+
+.light-button.light {
+    background-color: transparent;
+    color: var(--primary-color-light);
+    border: 3px solid var(--primary-color-light);
+}
+
+
+.like-button-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 34px;
+    padding: 5px 10px;
+    border-top-right-radius: 30px 20px;
+    border-bottom-right-radius: 20px 30px;
+
+    background-color: transparent;
+    color: var(--primary-color-dark);
+    border-right: 3px solid var(--primary-color-dark);
+    border-top: 3px solid var(--primary-color-dark);
+    border-bottom: 3px solid var(--primary-color-dark);
+}
+
+.like-button-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 34px;
+    padding: 5px 15px;
+    border-top-left-radius: 20px 30px;
+    border-bottom-left-radius: 30px 20px;
+
+    background-color: transparent;
+    color: var(--primary-color-dark);
+    border-left: 3px solid var(--primary-color-dark);
+    border-top: 3px solid var(--primary-color-dark);
+    border-bottom: 3px solid var(--primary-color-dark);
+
+}
+
+#selected {
+    background-color: aqua;
+}

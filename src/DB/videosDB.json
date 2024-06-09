@@ -26,7 +26,9 @@
           "comment": "unbelivable!",
           "Date": "25.2.2024"
         }
-      ]
+      ],
+      "likedBy": ["1", "2"],
+      "dislikedBy": ["3"]
     },
     {
       "videoId": "2",
@@ -40,7 +42,9 @@
       "dislikes": "200",
       "tags": ["Ediocasional"],
       "uploadDate": "23.2.2023",
-      "comments": []
+      "comments": [],
+      "likedBy": ["1", "2"],
+      "dislikedBy": ["3"]
     },
     {
       "videoId": "3",
@@ -54,7 +58,9 @@
       "dislikes": "300",
       "tags": ["Review"],
       "uploadDate": "23.3.2023",
-      "comments": []
+      "comments": [],
+      "likedBy": ["1", "2"],
+      "dislikedBy": ["3"]
     },
     {
       "videoId": "4",
@@ -82,7 +88,9 @@
       "dislikes": "500",
       "tags": ["Animation"],
       "uploadDate": "23.5.2023",
-      "comments": []
+      "comments": [],
+      "likedBy": ["1", "2"],
+      "dislikedBy": ["3"]
     },
     {
       "videoId": "6",
@@ -96,7 +104,9 @@
       "dislikes": "600",
       "tags": ["Music"],
       "uploadDate": "23.6.2023",
-      "comments": []
+      "comments": [],
+      "likedBy": ["1", "2"],
+      "dislikedBy": ["3"]
     },
     {
       "videoId": "7",
@@ -110,7 +120,9 @@
       "dislikes": "700",
       "tags": ["Recipe"],
       "uploadDate": "23.7.2023",
-      "comments": []
+      "comments": [],
+      "likedBy": ["1", "2"],
+      "dislikedBy": ["3"]
     },
     {
       "videoId": "8",
@@ -124,7 +136,9 @@
       "dislikes": "800",
       "tags": ["Recipe"],
       "uploadDate": "23.8.2023",
-      "comments": []
+      "comments": [],
+      "likedBy": ["1", "2"],
+      "dislikedBy": ["3"]
     },
     {
       "videoId": "9",
@@ -138,7 +152,9 @@
       "dislikes": "900",
       "tags": ["Animetion"],
       "uploadDate": "23.9.2023",
-      "comments": []
+      "comments": [],
+      "likedBy": ["1", "2"],
+      "dislikedBy": ["3"]
     },
     {
       "videoId": "10",
@@ -152,7 +168,9 @@
       "dislikes": "1000",
       "tags": ["Music"],
       "uploadDate": "22.8.2015",
-      "comments": []
+      "comments": [],
+      "likedBy": ["1", "2"],
+      "dislikedBy": ["3"]
     }
   ]
 }

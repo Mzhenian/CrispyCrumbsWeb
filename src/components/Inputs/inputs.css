@@ -39,9 +39,9 @@
 
     /* color property */
 
-    font-family: "Roboto", sans-serif;
+    font-family: "Rubik", sans-serif;
     font-size: 14px;
-    font-weight: 900;
+    font-weight: 700;
     line-height: normal;
     text-decoration: none;
 
@@ -149,7 +149,7 @@
 }
 
 .dropdown-item:hover {
-    font-weight: 900;
+    font-weight: 700;
     scale: 105%;
     transform: translateX(2.2%);
     z-index: 9000;
@@ -205,8 +205,8 @@ form {
 .input-empty {
     background: none;
     border: none;
-    font-family: "Roboto", sans-serif;
-    font-family: "Roboto", sans-serif;
+    font-family: "Rubik", sans-serif;
+    font-family: "Rubik", sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;

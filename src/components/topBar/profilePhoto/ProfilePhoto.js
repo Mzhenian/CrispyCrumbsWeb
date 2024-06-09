@@ -11,12 +11,11 @@ const ProfilePhoto = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false); // State to toggle popup
 
   useEffect(() => {
-    // Directly use the path from currentUser.profilePhoto - right now we use public but we will change it for the next time
     setProfilePhoto(currentUser.profilePhoto);
   }, [currentUser.profilePhoto]);
 
   const handleMenu = () => {
-    setIsMenuVisible(!isMenuVisible); // Toggle popup visibility
+    setIsMenuVisible(!isMenuVisible); 
   };
 
   const popup = (

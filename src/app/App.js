@@ -7,7 +7,7 @@ import Home from "../pages/home/Home";
 import UploadVideo from "../pages/uploadVideo/UploadVideo.js";
 import SignUp from "../pages/signup/SignUp";
 import Login from "../pages/login/Login";
-import WatchVideo from "../pages/watchvideo/WatchVideo";
+import WatchVideo from "../pages/watchVideo/WatchVideo";
 
 import { AuthProvider } from "../AuthContext";
 import PrivateRoute from "../PrivateRoute";
