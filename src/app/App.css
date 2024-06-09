@@ -26,12 +26,15 @@ p {
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 5px;
+  line-height: 1px;
 }
 
 
 b {
+  font-size: 14px;
+  font-style: normal;
   font-weight: 700;
+  line-height: 0px;
 }
 
 .note {

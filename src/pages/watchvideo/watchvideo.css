@@ -1,10 +1,16 @@
 .container {
-  width: 100%;
+  width: 952px;
   border-top-left-radius: 20px 30px;
   border-top-right-radius: 30px 20px;
   border-bottom-right-radius: 20px 30px;
   border-bottom-left-radius: 30px 20px;
   transition: background-color 0.1s ease-in-out;
+}
+
+.container-body {
+  padding: 29px 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .container.light {
@@ -18,12 +24,10 @@
 .container-video {
   display: flex;
   align-items: center;
-
   border-top-left-radius: 20px 30px;
   border-top-right-radius: 30px 20px;
   border-bottom-right-radius: 20px 30px;
   border-bottom-left-radius: 30px 20px;
-
   color: var(--white-color);
 }
 
@@ -50,14 +54,30 @@ video {
   width: 100%;
 }
 
-
-.title-and-buttons {
+.linear-layout {
   width: initial;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 }
 
 .title {
   width: 80%;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.author-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.details-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
