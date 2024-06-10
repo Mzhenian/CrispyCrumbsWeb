@@ -9,7 +9,7 @@ import dislikeIconDark from "../../../../components/iconsLab/dislike-dark.svg";
 
 import "./likeButton.css";
 
-const LikeButton = ({ counter, like, dislike, likeSelected, dislikeSelected }) => {
+const LikeButton = ({ likeCounter, dislikeCounter, like, dislike, likeSelected, dislikeSelected }) => {
   const { theme } = useContext(ThemeContext);
 
   const getLikeIcon = () => {
@@ -25,10 +25,11 @@ const LikeButton = ({ counter, like, dislike, likeSelected, dislikeSelected }) =
   return (
     <div className={`like-button ${theme}`}>
       <div className={`like-button-left ${theme}`} id={likeSelected ? `selected-${theme}` : ""} onClick={like}>
-        {counter}
+        {likeCounter}
         <img className="button-icon" src={getLikeIcon()} alt="like" />
       </div>
       <div className={`like-button-right ${theme}`} id={dislikeSelected ? `selected-${theme}` : ""} onClick={dislike}>
+        {dislikeCounter}
         <img className="button-icon" src={getDislikeIcon()} alt="dislike" />
       </div>
     </div>

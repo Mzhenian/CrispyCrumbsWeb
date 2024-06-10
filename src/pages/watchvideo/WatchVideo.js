@@ -7,6 +7,7 @@ import LikeButton from "./watchVideoComponents/likeButton/LikeButton";
 import { AuthContext } from "../../AuthContext";
 import { ThemeContext } from "../../ThemeContext";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
+import CommentsSection from "./watchVideoComponents/commentsSection/CommentsSection";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
@@ -74,30 +75,6 @@ const WatchVideo = () => {
     });
   };
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    if (!currentUser) return alert("You must be logged in to comment.");
-
-    if (newComment.trim()) {
-      const newCommentObj = {
-        commentId: Date.now().toString(),
-        userId: currentUser.userId,
-        comment: newComment,
-        date: new Date().toLocaleDateString(),
-      };
-      setComments((prevComments) => [...prevComments, newCommentObj]);
-      setNewComment("");
-    }
-  };
-
-  const handleCommentEdit = (commentId, updatedComment) => {
-    setComments((prevComments) =>
-      prevComments.map((comment) =>
-        comment.commentId === commentId ? { ...comment, comment: updatedComment } : comment
-      )
-    );
-  };
-
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
@@ -110,7 +87,7 @@ const WatchVideo = () => {
       ? video.description + "   "
       : video && video.description.slice(0, MAX_LENGTH) + "...";
 
-  const videoSection = (
+  const videoSection = video && (
     <div className={`container ${theme}`}>
       <video controls className="container-video">
         <source src={process.env.PUBLIC_URL + video.videoFile} type="video/mp4" />
@@ -118,10 +95,11 @@ const WatchVideo = () => {
       </video>
       <div className={`container-body ${theme}`}>
         <div className="linear-layout">
-          <h1 className="title">{video.title}</h1>
+          <h1 className="single-line-text">{video.title}</h1>
           <div className="buttons">
             <LikeButton
-              counter={likes}
+              dislikeCounter={dislikes}
+              likeCounter={likes}
               like={handleLike}
               dislike={handleDislike}
               likeSelected={likeSelected}
@@ -169,40 +147,7 @@ const WatchVideo = () => {
     <div className="watch-video-container">
       {videoSection}
       <div className="video-details">
-        <div className="comments-section">
-          <h2>Comments</h2>
-          {comments.map((comment) => {
-            const commentAuthor = usersDB.users.find((user) => user.userId === comment.userId);
-            return (
-              <div key={comment.commentId} className="comment">
-                <p>
-                  <strong>{commentAuthor.userName}</strong>: {comment.comment}
-                </p>
-                <p className="comment-date">{comment.date}</p>
-                {currentUser && currentUser.userId === comment.userId && (
-                  <div>
-                    <button
-                      onClick={() =>
-                        handleCommentEdit(comment.commentId, prompt("Edit your comment:", comment.comment))
-                      }
-                    >
-                      Edit
-                    </button>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-          <form onSubmit={handleCommentSubmit}>
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add a comment..."
-              rows="4"
-            />
-            <button type="submit">Submit</button>
-          </form>
-        </div>
+        <CommentsSection videoId={videoId} currentUser={currentUser} comments={comments} setComments={setComments} />
       </div>
     </div>
   );
