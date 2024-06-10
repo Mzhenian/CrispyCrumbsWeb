@@ -1,4 +1,11 @@
+.comments-section {
+  margin-top: 20px;
+}
+
 .comment-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-width: 800px;
   border-top-left-radius: 20px 30px;
   border-top-right-radius: 30px 20px;
@@ -36,7 +43,41 @@
 }
 
 .comment-buttons {
+  align-self: flex-start;
   display: flex;
-  align-items: self-start;
+  align-items: flex-start;
   gap: 20px;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.comment-data {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.comment-title {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  height: 15px;
+}
+
+#comment {
+  justify-content: start;
+  gap: 10px;
+}
+
+#write-comment {
+  flex-direction: column;
+}
+
+.edit-comment {
+  width: 100%;
 }

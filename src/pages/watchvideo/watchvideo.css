@@ -54,7 +54,7 @@ video {
   width: 100%;
 }
 
-.linear-layout {
+.linear-layout-watch {
   width: initial;
   display: flex;
   justify-content: space-around;

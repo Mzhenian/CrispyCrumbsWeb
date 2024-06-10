@@ -94,7 +94,7 @@ const WatchVideo = () => {
         Your browser does not support the video tag.
       </video>
       <div className={`container-body ${theme}`}>
-        <div className="linear-layout">
+        <div className="linear-layout-watch">
           <h1 className="single-line-text">{video.title}</h1>
           <div className="buttons">
             <LikeButton
