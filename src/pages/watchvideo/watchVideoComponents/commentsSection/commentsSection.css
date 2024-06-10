@@ -1,0 +1,42 @@
+.comment-box {
+  min-width: 800px;
+  border-top-left-radius: 20px 30px;
+  border-top-right-radius: 30px 20px;
+  border-bottom-right-radius: 20px 30px;
+  border-bottom-left-radius: 30px 20px;
+  transition: background-color 0.1s ease-in-out;
+  padding: 15px 20px;
+}
+
+.comment-box.light {
+  background-color: var(--dark-white-color);
+}
+
+.comment-box.dark {
+  background-color: var(--light-black-color);
+}
+
+.input-empty {
+  background: none;
+  border: none;
+  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.input-empty.light {
+  color: var(--black-color);
+}
+
+.input-empty.light::placeholder {
+  color: var(--light-black-color);
+}
+
+.comment-buttons {
+  display: flex;
+  align-items: self-start;
+  gap: 20px;
+}

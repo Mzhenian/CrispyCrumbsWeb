@@ -75,3 +75,8 @@ a.light {
 a.dark {
   color: var(--white-color);
 }
+
+textarea {
+  resize: none;
+  width: 100%;
+}
