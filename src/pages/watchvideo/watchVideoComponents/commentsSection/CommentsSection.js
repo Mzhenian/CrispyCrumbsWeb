@@ -22,7 +22,7 @@ const CommentsSection = ({ currentUser, comments, setComments }) => {
         comment: newComment,
         date: new Date().toLocaleDateString(),
       };
-      setComments((prevComments) => [...prevComments, newCommentObj]);
+      setComments((prevComments) => [newCommentObj, ...prevComments]);
       setNewComment("");
     }
   };

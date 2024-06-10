@@ -4,6 +4,7 @@ import videoDB from "../../DB/videosDB.json";
 import usersDB from "../../DB/usersDB.json";
 import "./watchvideo.css";
 import LikeButton from "./watchVideoComponents/likeButton/LikeButton";
+import SuggestedVideos from "./watchVideoComponents/suggestedFunctions/SuggestedVideos";
 import { AuthContext } from "../../AuthContext";
 import { ThemeContext } from "../../ThemeContext";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
@@ -25,6 +26,10 @@ const WatchVideo = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
+    // Scroll to the top when the videoId changes
+    window.scrollTo(0, 0);
+
+    // Find the video by videoId
     const foundVideo = videoDB.videos.find((v) => v.videoId === videoId);
     if (foundVideo) {
       setVideo(foundVideo);
@@ -36,7 +41,8 @@ const WatchVideo = () => {
       const foundAuthor = usersDB.users.find((user) => user.userId === foundVideo.userId);
       setAuthor(foundAuthor);
 
-      if (currentUser) {
+      // Ensure likedBy and dislikedBy exist before checking if currentUser is included
+      if (currentUser && Array.isArray(foundVideo.likedBy)) {
         setLikeSelected(foundVideo.likedBy.includes(currentUser.userId));
         setDislikeSelected(foundVideo.dislikedBy.includes(currentUser.userId));
       }
@@ -89,7 +95,7 @@ const WatchVideo = () => {
 
   const videoSection = video && (
     <div className={`container ${theme}`}>
-      <video controls className="container-video">
+      <video key={video.videoId} controls className="container-video">
         <source src={process.env.PUBLIC_URL + video.videoFile} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
@@ -119,7 +125,7 @@ const WatchVideo = () => {
           )}
         </div>
         <div className="details-section">
-          <p className="note">{`${video.views} views`}</p>
+          <p className="note">{`${views} views`}</p>
           <p className="note">{video.uploadDate}</p>
           {video.tags.slice(0, 5).map((t, index) => (
             <p key={index} className="note">
@@ -145,10 +151,13 @@ const WatchVideo = () => {
 
   return (
     <div className="watch-video-container">
-      {videoSection}
-      <div className="video-details">
-        <CommentsSection videoId={videoId} currentUser={currentUser} comments={comments} setComments={setComments} />
+      <div className="main-video-section">
+        {videoSection}
+        <div className="video-details">
+          <CommentsSection videoId={videoId} currentUser={currentUser} comments={comments} setComments={setComments} />
+        </div>
       </div>
+      <SuggestedVideos />
     </div>
   );
 };

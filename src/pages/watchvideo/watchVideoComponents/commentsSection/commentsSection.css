@@ -11,8 +11,16 @@
   border-top-right-radius: 30px 20px;
   border-bottom-right-radius: 20px 30px;
   border-bottom-left-radius: 30px 20px;
+  transition: 0.3 ease-in-out;
   transition: background-color 0.1s ease-in-out;
   padding: 15px 20px;
+}
+
+.comment-box:hover {
+  border-top-left-radius: 30px 20px;
+  border-top-right-radius: 20px 30px;
+  border-bottom-right-radius: 30px 20px;
+  border-bottom-left-radius: 20px 30px;
 }
 
 .comment-box.light {
@@ -70,6 +78,7 @@
 }
 
 #comment {
+  display: flex;
   justify-content: start;
   gap: 10px;
 }
