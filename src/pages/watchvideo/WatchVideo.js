@@ -29,7 +29,7 @@ const WatchVideo = () => {
       setVideo(foundVideo);
       setLikes(foundVideo.likes);
       setDislikes(foundVideo.dislikes);
-      setViews((prevViews) => prevViews + 1); // Increment views
+      setViews((prevViews) => prevViews + 1);
       setComments(foundVideo.comments);
 
       const foundAuthor = usersDB.users.find((user) => user.userId === foundVideo.userId);
@@ -110,60 +110,64 @@ const WatchVideo = () => {
       ? video.description + "   "
       : video && video.description.slice(0, MAX_LENGTH) + "...";
 
+  const videoSection = (
+    <div className={`container ${theme}`}>
+      <video controls className="container-video">
+        <source src={process.env.PUBLIC_URL + video.videoFile} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div className={`container-body ${theme}`}>
+        <div className="linear-layout">
+          <h1 className="title">{video.title}</h1>
+          <div className="buttons">
+            <LikeButton
+              counter={likes}
+              like={handleLike}
+              dislike={handleDislike}
+              likeSelected={likeSelected}
+              dislikeSelected={dislikeSelected}
+            />
+          </div>
+        </div>
+        <div className="author-section">
+          {author && (
+            <>
+              <ProfilePhoto profile={author.profilePhoto} />
+              <div className="author-details">
+                <b className="author-name">{author.userName}</b>
+                <p>{author.followers.length} followers</p>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="details-section">
+          <p className="note">{`${video.views} views`}</p>
+          <p className="note">{video.uploadDate}</p>
+          {video.tags.slice(0, 5).map((t, index) => (
+            <p key={index} className="note">
+              #{t}
+            </p>
+          ))}
+        </div>
+        <p className="video-description">
+          {truncatedDescription}
+          {video.description.length >= MAX_LENGTH && (
+            <b onClick={toggleDescription} className="read-more">
+              {showFullDescription ? " Read less" : " Read more"}
+            </b>
+          )}
+        </p>
+      </div>
+    </div>
+  );
+
   if (!video) {
     return <div>404 Video not found</div>;
   }
 
   return (
     <div className="watch-video-container">
-      <div className={`container ${theme}`}>
-        <video controls className="container-video">
-          <source src={process.env.PUBLIC_URL + video.videoFile} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <div className={`container-body ${theme}`}>
-          <div className="linear-layout">
-            <h1 className="title">{video.title}</h1>
-            <div className="buttons">
-              <LikeButton
-                counter={likes}
-                like={handleLike}
-                dislike={handleDislike}
-                likeSelected={likeSelected}
-                dislikeSelected={dislikeSelected}
-              />
-            </div>
-          </div>
-          <div className="author-section">
-            {author && (
-              <>
-                <ProfilePhoto profile={author.profilePhoto} />
-                <div className="author-details">
-                  <b className="author-name">{author.userName}</b>
-                  <p>{author.followers.length} followers</p>
-                </div>
-              </>
-            )}
-          </div>
-          <div className="details-section">
-            <p className="note">{`${video.views} views`}</p>
-            <p className="note">{video.uploadDate}</p>
-            {video.tags.slice(0, 5).map((t, index) => (
-              <p key={index} className="note">
-                #{t}
-              </p>
-            ))}
-          </div>
-          <p className="video-description">
-            {truncatedDescription}
-            {video.description.length >= MAX_LENGTH && (
-              <b onClick={toggleDescription} className="read-more">
-                {showFullDescription ? " Read less" : " Read more"}
-              </b>
-            )}
-          </p>
-        </div>
-      </div>
+      {videoSection}
       <div className="video-details">
         <div className="comments-section">
           <h2>Comments</h2>
