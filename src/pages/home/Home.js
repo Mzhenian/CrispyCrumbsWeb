@@ -8,12 +8,12 @@ const Home = () => {
   const { theme } = useContext(ThemeContext);
 
   return (
-    <div className={`watch-video-section ${theme}`}>
+    <div className={`watch-home-video-section ${theme}`}>
       {videoDB.videos.map((video) => (
-        <Link to={`/watch/${video.videoId}`} key={video.videoId} className={`video-card ${theme}`}>
-          <img src={video.thumbnail} alt={video.title} className="video-thumbnail" />
-          <div className="video-details">
-            <p className="video-title">{video.title}</p>
+        <Link to={`/watch/${video.videoId}`} key={video.videoId} className={`home-video-card ${theme}`}>
+          <img src={video.thumbnail} alt={video.title} className="home-video-thumbnail" />
+          <div className="home-video-details">
+            <p className="home-video-title">{video.title}</p>
             <p className="note">{video.views} views</p>
           </div>
         </Link>
