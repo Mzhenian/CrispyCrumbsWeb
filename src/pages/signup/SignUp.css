@@ -1,0 +1,11 @@
+#signup-container {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

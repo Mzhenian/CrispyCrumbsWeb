@@ -1,13 +1,18 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../ThemeContext.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
+import { AuthContext } from "../../AuthContext";
 import "./login.css";
+import OnOffToggle from "../../components/Inputs/toggle/OnOffToggle.js";
 
-const LoginForm = () => {
+const Login = () => {
   const { theme } = useContext(ThemeContext);
+  const { login } = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -25,14 +30,20 @@ const LoginForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your form submission logic here
-    // window.location.href = `${serverLink}?name=${formData.links}`;
+    const { username, password } = formData;
+    if (login(username, password)) {
+      const targetRoute = "/";
+      navigate(targetRoute);
+    } else {
+      setErrorMessage("Invalid username or password");
+      setFormData({ ...formData, password: "" }); // Clear password field
+    }
   };
 
   return (
     <div className={`page ${theme}`}>
       <Container title={"Log in"} containerStyle={"login-container"}>
+        {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
         <form onSubmit={handleSubmit}>
           <div className="field-container">
             <b>Username</b>
@@ -53,9 +64,17 @@ const LoginForm = () => {
               onChange={handleInputChange}
             />
           </div>
-          <div className="linear-layout">
-            <div>
-              <b>Remember me</b> <input type="checkbox" value={formData.rememberMe} />
+          <div className="linear-layout-1">
+            <div className="linear-layout-2">
+              <b>Remember me</b>
+              <OnOffToggle
+                name="rememberMe"
+                value={formData.rememberMe}
+                action={(e) => {
+                  setFormData({ ...formData, rememberMe: !formData.rememberMe });
+                  console.log(formData.rememberMe);
+                }}
+              />
             </div>
             <Link className={theme} to="./forgotpassword">
               <b>I forgot my password</b>
@@ -71,4 +90,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default Login;

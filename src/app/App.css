@@ -1,23 +1,22 @@
 /* TEXT CSS */
 h1 {
-  font-size: 26px;
+  font-size: 24px;
   font-style: normal;
-  font-weight: 900;
-  line-height: normal;
+  font-weight: 700;
 }
 
 h2 {
-  font-size: 20px;
+  font-size: 18px;
   font-style: normal;
-  font-weight: 900;
-  line-height: normal;
+  font-weight: 700;
+  margin: 5px;
 }
 
 h3 {
   font-size: 14px;
   font-style: normal;
-  font-weight: 900;
-  line-height: normal;
+  font-weight: 700;
+  margin: 5px;
 }
 
 
@@ -25,13 +24,14 @@ p {
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: normal;
-  padding: 0px;
+  margin: 3px;
 }
 
 
 b {
-  font-weight: 900;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
 }
 
 .note {
@@ -63,7 +63,7 @@ b {
   border-bottom-left-radius: 30px 20px;
 
   transition: border-radius 0.3s ease-in-out;
-
+  transition: background-color 0.1s ease-in-out;
   border: none;
 }
 
@@ -87,4 +87,16 @@ b {
 .field:focus {
   border: none;
   outline: none;
+}
+
+.error {
+  margin-bottom: 16pt;
+}
+
+.error.light {
+  color: var(--secondary-color-light);
+}
+
+.error.dark {
+  color: var(--secondary-color-dark);
 }

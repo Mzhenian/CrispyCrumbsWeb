@@ -1,30 +1,25 @@
 import React, { useContext } from "react";
 import "./topBar.css";
-
+import { AuthContext } from "../../AuthContext";
 import { ThemeContext } from "../../ThemeContext";
 import GenericButton from "../buttons/GenericButton";
+import ProfilePhoto from "./profilePhoto/ProfilePhoto";
 import LightDarkButton from "./lightDarkButton/LightDarkButton";
-
 import Logo from "./logo/Logo";
 import searchIcon from "../iconsLab/searchWhite.svg";
 
-const TopBar = ({ logged }) => {
-  const theme = useContext(ThemeContext).theme;
+const TopBar = () => {
+  const { theme } = useContext(ThemeContext);
+  const { currentUser } = useContext(AuthContext);
 
   const UploadLoginTitle = "Log in";
   const UploadSignUpTitle = "Sign up";
   const UploadVideoTitle = "Upload Video";
 
-  const searchBar = (
-    <div className={`search-bar ${theme}`}>
-      <input className={`transparent-input ${theme}`}></input>
-      <GenericButton icon={searchIcon} />
-    </div>
-  );
-
-  const leftButtons = logged ? (
+  const leftButtons = currentUser ? (
     <div className="top-bar-buttons">
       <GenericButton text={UploadVideoTitle} link={"/uploadvideo"} />
+      <ProfilePhoto />
       <LightDarkButton />
     </div>
   ) : (
@@ -35,7 +30,13 @@ const TopBar = ({ logged }) => {
     </div>
   );
 
-  console.log(theme);
+  const searchBar = (
+    <div className={`search-bar ${theme}`}>
+      <input className={`transparent-input ${theme}`} />
+      <GenericButton icon={searchIcon} />
+    </div>
+  );
+
   return (
     <div className={`top-bar ${theme}`}>
       <Logo />

@@ -1,0 +1,95 @@
+/* BUTTONS CSS */
+.profile-photo {
+    height: 34px;
+    width: 34px;
+
+    /* transition property */
+    border-top-left-radius: 20px 30px;
+    border-top-right-radius: 30px 20px;
+    border-bottom-right-radius: 20px 30px;
+    border-bottom-left-radius: 30px 20px;
+    scale: 100%;
+
+    transition-property: border-radius, scale;
+    transition: 0.3s ease-in-out;
+
+    background-color: var(--white-color);
+    ;
+}
+
+.profile-photo:hover {
+    border-top-left-radius: 30px 20px;
+    border-top-right-radius: 20px 30px;
+    border-bottom-right-radius: 30px 20px;
+    border-bottom-left-radius: 20px 30px;
+    scale: 105%;
+}
+
+.popup {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    width: 150px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.3s ease-in-out;
+
+    border-top-left-radius: 30px 20px;
+    border-top-right-radius: 20px 30px;
+    border-bottom-right-radius: 30px 20px;
+    border-bottom-left-radius: 20px 30px;
+}
+
+.popup-row {
+    padding: 10px 15px;
+    border-top-left-radius: 30px 20px;
+    border-top-right-radius: 20px 30px;
+    border-bottom-right-radius: 30px 20px;
+    border-bottom-left-radius: 20px 30px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.popup-row:hover {
+    border-top-left-radius: 30px 20px;
+    border-top-right-radius: 20px 30px;
+    border-bottom-right-radius: 30px 20px;
+    border-bottom-left-radius: 20px 30px;
+    scale: 105%;
+
+    font-weight: 700;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.light .popup {
+    background-color: var(--dark-white-color);
+    color: var(--black-color);
+}
+
+.dark .popup {
+    background-color: var(--light-black-color);
+    color: var(--white-color);
+}
+
+.light .popup-row:hover {
+    background-color: var(--primary-color-light);
+    color: var(--white-color);
+}
+
+.dark .popup-row:hover {
+    background-color: var(--primary-color-dark);
+    color: var(--white-color);
+}

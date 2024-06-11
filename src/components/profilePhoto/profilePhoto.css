@@ -1,0 +1,25 @@
+/* BUTTONS CSS */
+.profile-photo {
+    height: 34px;
+    width: 34px;
+
+    /* transition property */
+    border-top-left-radius: 20px 30px;
+    border-top-right-radius: 30px 20px;
+    border-bottom-right-radius: 20px 30px;
+    border-bottom-left-radius: 30px 20px;
+    scale: 100%;
+
+    transition-property: border-radius, scale;
+    transition: 0.3s ease-in-out;
+
+    background-color: var(--white-color);
+}
+
+.profile-photo:hover {
+    border-top-left-radius: 30px 20px;
+    border-top-right-radius: 20px 30px;
+    border-bottom-right-radius: 30px 20px;
+    border-bottom-left-radius: 20px 30px;
+    scale: 105%;
+}

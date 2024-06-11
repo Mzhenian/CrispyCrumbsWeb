@@ -2,8 +2,10 @@
   padding: 15px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between; /* Adjust space between items */
-  align-items: center; /* Align items vertically center */
+  justify-content: space-between;
+  /* Adjust space between items */
+  align-items: center;
+  /* Align items vertically center */
 }
 
 .label-input {
@@ -13,7 +15,7 @@
   font-family: sans-serif;
   font-size: 14px;
   font-style: normal;
-  font-weight: 900;
+  font-weight: 700;
   line-height: normal;
 }
 

@@ -5,6 +5,8 @@
     align-items: center;
     padding: 10pt 25pt;
 
+    transition: background-color 0.1s ease-in-out;
+
 }
 
 .top-bar.light {
@@ -34,6 +36,8 @@
     border-bottom-left-radius: 30px 20px;
 
     transition: border-radius 0.3s ease-in-out;
+    transition: background-color 0.1s ease-in-out;
+
 }
 
 .search-bar.light {

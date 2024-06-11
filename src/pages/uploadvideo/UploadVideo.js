@@ -1,11 +1,12 @@
-import React from 'react';
+import React from "react";
 import "./UploadVideo.css";
-import UploadVideoForm from '../../uploadPageComponents/videoUploadForm/VideoUploadForm';
+import UploadVideoForm from "../../uploadPageComponents/videoUploadForm/VideoUploadForm";
+
 
 function UploadVideo() {
   return (
     <div className="container-mid">
-      <UploadVideoForm/>
+      <UploadVideoForm />
     </div>
   );
 }

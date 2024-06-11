@@ -1,38 +1,26 @@
-import React, { useContext, useState } from "react";
-import { ThemeContext } from "../../ThemeContext.js";
-import DropDownMenu from "../../components/Inputs/DropDownMenu";
-import ListInput from "../../components/Inputs/ListInput";
-import { countries } from "../../components/Inputs/CountriesListsData";
-import Container from "../../components/container/Container.js";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
+import videoDB from "../../DB/videosDB.json";
+import "./home.css";
+import { ThemeContext } from "../../ThemeContext";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
-  const [formData, setFormData] = useState({
-    destination: "Israel",
-    platform: "facebook",
-    links: [],
-    hashtags: [],
-  });
-
-  const handleInputChange = (name, value) => {
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
 
   return (
-    <div className={`page page-${theme}`}>
-      <Container title={"page1"} width={"1000px"}>
-        <DropDownMenu
-          name="destination"
-          arr={countries}
-          value={formData.destination}
-          showFlag={true}
-          action={handleInputChange}
-        />
-        <ListInput list={formData.hashtags} listName="hashtags" action={handleInputChange} editMode={true} />
-      </Container>
+    <div className={`watch-home-video-section ${theme}`}>
+      {videoDB.videos.map((video) => (
+        <Link to={`/watch/${video.videoId}`} key={video.videoId} className={`home-video-card ${theme}`}>
+          <img src={video.thumbnail} alt={video.title} className="home-video-thumbnail" />
+          <div className="home-video-b">
+            <div className="home-video-details">
+              <p className="home-video-title">{video.title}</p>
+              <p className="note">{video.views} views</p>
+            </div>
+          </div>
+        </Link>
+      ))}
     </div>
   );
 };

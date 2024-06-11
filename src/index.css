@@ -28,8 +28,9 @@
 /* BODY CSS */
 body {
   background-color: var(--white-color);
-  font-family: "Roboto", sans-serif;
+  font-family: "Rubik", sans-serif;
   margin: 0px;
+  transition: background-color 0.1s ease-in-out;
 }
 
 body.light {
@@ -64,7 +65,7 @@ body.dark {
 
 a {
   text-decoration: none;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 a.light {
@@ -73,4 +74,9 @@ a.light {
 
 a.dark {
   color: var(--white-color);
+}
+
+textarea {
+  resize: none;
+  width: 100%;
 }

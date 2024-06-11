@@ -1,18 +1,7 @@
 /* BUTTONS CSS */
 .light-dark-button {
-    /* color property */
-    background-color: var(--primary-color-light);
-    color: var(--white-color);
     border: none;
     cursor: pointer;
-
-    /* color property */
-
-    font-family: "Roboto", sans-serif;
-    font-size: 14px;
-    font-weight: 900;
-    line-height: normal;
-    text-decoration: none;
 
     padding: 5px 10px;
 

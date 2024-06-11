@@ -1,0 +1,88 @@
+.like-button {
+    display: flex;
+    justify-content: baseline;
+    align-items: start;
+    padding: 10px;
+    height: 25px;
+    transform: translateY(-10px);
+}
+
+.like-button-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    border-top-right-radius: 30px 20px;
+    border-bottom-right-radius: 20px 30px;
+    width: 50px;
+
+    background-color: transparent;
+    transition: 0.3s ease-in-out;
+    color: var(--primary-color-dark);
+
+
+}
+
+.like-button-right:hover {
+    border-top-right-radius: 20px 30px;
+    border-bottom-right-radius: 30px 20px;
+}
+
+.like-button-right.light {
+    color: var(--primary-color-light);
+    border-right: 3px solid var(--primary-color-light);
+    border-top: 3px solid var(--primary-color-light);
+    border-bottom: 3px solid var(--primary-color-light);
+}
+
+.like-button-right.dark {
+    color: var(--primary-color-dark);
+    border-right: 3px solid var(--primary-color-dark);
+    border-top: 3px solid var(--primary-color-dark);
+    border-bottom: 3px solid var(--primary-color-dark);
+}
+
+.like-button-left {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 15px;
+    border-top-left-radius: 20px 30px;
+    border-bottom-left-radius: 30px 20px;
+
+    background-color: transparent;
+    transition: 0.3s ease-in-out;
+
+}
+
+.like-button-left:hover {
+    border-top-left-radius: 30px 20px;
+    border-bottom-left-radius: 20px 30px;
+}
+
+.like-button-left.light {
+    color: var(--primary-color-light);
+    border-left: 3px solid var(--primary-color-light);
+    border-top: 3px solid var(--primary-color-light);
+    border-bottom: 3px solid var(--primary-color-light);
+}
+
+.like-button-left.dark {
+    color: var(--primary-color-dark);
+    border-left: 3px solid var(--primary-color-dark);
+    border-top: 3px solid var(--primary-color-dark);
+    border-bottom: 3px solid var(--primary-color-dark);
+}
+
+#selected-light {
+    font-weight: 700;
+    background-color: var(--primary-color-light);
+    color: var(--white-color);
+}
+
+#selected-dark {
+    font-weight: 700;
+    background-color: var(--primary-color-dark);
+    color: var(--white-color);
+}
