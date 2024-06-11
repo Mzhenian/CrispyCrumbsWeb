@@ -1,21 +1,23 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../../../ThemeContext";
 import { AuthContext } from "../../../AuthContext";
-
 import "./profilePhoto.css";
 
 const ProfilePhoto = () => {
   const { theme } = useContext(ThemeContext);
   const { currentUser, logout } = useContext(AuthContext);
-  const [profilePhoto, setProfilePhoto] = useState(null); // State to store profile photo
-  const [isMenuVisible, setIsMenuVisible] = useState(false); // State to toggle popup
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
 
   useEffect(() => {
-    setProfilePhoto(currentUser.profilePhoto);
-  }, [currentUser.profilePhoto]);
+    if (currentUser && currentUser.profilePhoto) {
+      setProfilePhoto(currentUser.profilePhoto);
+      console.log("Profile photo set to:", currentUser.profilePhoto);
+    }
+  }, [currentUser]);
 
   const handleMenu = () => {
-    setIsMenuVisible(!isMenuVisible); 
+    setIsMenuVisible(!isMenuVisible);
   };
 
   const popup = (
@@ -32,10 +34,10 @@ const ProfilePhoto = () => {
     <>
       {profilePhoto && (
         <img
-          src={currentUser.profilePhoto}
+          src={process.env.PUBLIC_URL + profilePhoto}
           className={`profile-photo ${theme}`}
-          onClick={(e) => handleMenu()}
-          alt={currentUser.username}
+          onClick={handleMenu}
+          alt={currentUser.userName}
         />
       )}
       {isMenuVisible && popup}

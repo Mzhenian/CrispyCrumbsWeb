@@ -10,7 +10,7 @@
       "phoneNumber": "555-555-5551",
       "birthday": "1990-01-01",
       "country": "Israel",
-      "profilePhoto": "./users/1.png",
+      "profilePhoto": "/users/1.png",
       "followers": ["2"],
       "following": ["6", "1"],
       "videosIds": ["1"],
@@ -26,7 +26,7 @@
       "phoneNumber": "555-555-5552",
       "birthday": "1985-05-15",
       "country": "Israel",
-      "profilePhoto": "./users/2.png",
+      "profilePhoto": "/users/2.png",
       "followers": ["1"],
       "following": ["3"],
       "videosIds": ["2"],
@@ -42,7 +42,7 @@
       "phoneNumber": "555-555-5553",
       "birthday": "1980-09-20",
       "country": "Israel",
-      "profilePhoto": "./users/3.png",
+      "profilePhoto": "/users/3.png",
       "followers": ["2"],
       "following": ["4"],
       "videosIds": ["3"],
@@ -58,7 +58,7 @@
       "phoneNumber": "555-555-5554",
       "birthday": "1992-03-10",
       "country": "Israel",
-      "profilePhoto": "./users/4.png",
+      "profilePhoto": "/users/4.png",
       "followers": ["3"],
       "following": ["5"],
       "videosIds": ["4"],
@@ -74,13 +74,12 @@
       "phoneNumber": "555-555-5555",
       "birthday": "1988-12-25",
       "country": "Israel",
-      "profilePhoto": "./users/5.jpg",
+      "profilePhoto": "/users/5.jpg",
       "followers": ["4"],
       "following": ["6"],
       "videosIds": ["5"],
       "likedVideoIds": ["1", "2", "10"],
       "dislikedVideoIds": []
-
     },
     {
       "userId": "6",
@@ -91,13 +90,12 @@
       "phoneNumber": "555-555-5556",
       "birthday": "1995-07-08",
       "country": "Israel",
-      "profilePhoto": "./users/6.png",
+      "profilePhoto": "/users/6.png",
       "followers": ["5"],
       "following": ["7"],
       "videosIds": ["6", "10"],
       "likedVideoIds": [],
       "dislikedVideoIds": []
-
     },
     {
       "userId": "7",
@@ -108,7 +106,7 @@
       "phoneNumber": "555-555-5557",
       "birthday": "1983-04-12",
       "country": "Israel",
-      "profilePhoto": "./users/7.jpg",
+      "profilePhoto": "/users/7.jpg",
       "followers": ["6"],
       "following": ["8"],
       "videosIds": ["7"],
@@ -124,13 +122,12 @@
       "phoneNumber": "555-555-5558",
       "birthday": "1947-07-30",
       "country": "United States",
-      "profilePhoto": "./users/.png",
+      "profilePhoto": "/users/8.png", 
       "followers": ["7"],
       "following": ["9"],
       "videosIds": ["8"],
       "likedVideoIds": ["", ""],
       "dislikedVideoIds": []
-
     },
     {
       "userId": "9",
@@ -141,13 +138,12 @@
       "phoneNumber": "555-555-5559",
       "birthday": "1973-05-25",
       "country": "Israel",
-      "profilePhoto": "./users/9.jpg",
+      "profilePhoto": "/users/9.jpg",
       "followers": [],
       "following": ["6"],
       "videosIds": ["9"],
       "likedVideoIds": ["10", "8", "6"],
       "dislikedVideoIds": []
-
     }
   ]
 }

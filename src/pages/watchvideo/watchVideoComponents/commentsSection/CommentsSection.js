@@ -87,7 +87,7 @@ const CommentsSection = ({ currentUser, comments, setComments }) => {
             </div>
           ) : (
             <div id="comment">
-              <ProfilePhoto profile={commentAuthor} />
+              <ProfilePhoto profilePhoto={commentAuthor.profilePhoto} userName={commentAuthor.userName} />
               <div className="comment-data">
                 <div className="comment-title">
                   <b>@{commentAuthor.userName}</b> {comment.date}

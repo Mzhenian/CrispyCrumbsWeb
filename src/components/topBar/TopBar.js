@@ -1,16 +1,15 @@
-// TopBar.js
 import React, { useContext } from "react";
 import "./topBar.css";
 import { AuthContext } from "../../AuthContext";
 import { ThemeContext } from "../../ThemeContext";
 import GenericButton from "../buttons/GenericButton";
-import ProfilePhoto from "../../components/topBar/profilePhoto/ProfilePhoto.js";
+import ProfilePhoto from "./profilePhoto/ProfilePhoto";
 import LightDarkButton from "./lightDarkButton/LightDarkButton";
 import Logo from "./logo/Logo";
 import searchIcon from "../iconsLab/searchWhite.svg";
 
 const TopBar = () => {
-  const theme = useContext(ThemeContext).theme;
+  const { theme } = useContext(ThemeContext);
   const { currentUser } = useContext(AuthContext);
 
   const UploadLoginTitle = "Log in";
@@ -33,7 +32,7 @@ const TopBar = () => {
 
   const searchBar = (
     <div className={`search-bar ${theme}`}>
-      <input className={`transparent-input ${theme}`}></input>
+      <input className={`transparent-input ${theme}`} />
       <GenericButton icon={searchIcon} />
     </div>
   );

@@ -20,7 +20,6 @@ const WatchVideo = () => {
   const [dislikes, setDislikes] = useState(0);
   const [views, setViews] = useState(0);
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
   const [likeSelected, setLikeSelected] = useState(false);
   const [dislikeSelected, setDislikeSelected] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -113,10 +112,11 @@ const WatchVideo = () => {
             />
           </div>
         </div>
+
         <div className="author-section">
           {author && (
             <>
-              <ProfilePhoto profile={author.profilePhoto} />
+              <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />
               <div className="author-details">
                 <b className="author-name">{author.userName}</b>
                 <p>{author.followers.length} followers</p>

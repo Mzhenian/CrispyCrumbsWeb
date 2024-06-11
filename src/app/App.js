@@ -8,16 +8,15 @@ import UploadVideo from "../pages/uploadVideo/UploadVideo.js";
 import SignUp from "../pages/signup/SignUp";
 import Login from "../pages/login/Login";
 import WatchVideo from "../pages/watchVideo/WatchVideo";
-
 import { AuthProvider } from "../AuthContext";
 import PrivateRoute from "../PrivateRoute";
+
 function App() {
   return (
     <React.StrictMode>
       <BrowserRouter>
         <ThemeProvider>
           <AuthProvider>
-            {" "}
             <TopBar />
             <div className="main-body">
               <Routes>

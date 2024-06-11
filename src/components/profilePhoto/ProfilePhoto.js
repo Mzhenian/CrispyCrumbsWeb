@@ -1,9 +1,8 @@
-import React, { useContext } from "react";
-
+import React from "react";
 import "./profilePhoto.css";
 
-const ProfilePhoto = (profile) => {
-  return <>{<img src={profile.profilePhoto} className={`profile-photo`} alt={profile.username} />}</>;
+const ProfilePhoto = ({ profilePhoto, userName }) => {
+  return <img src={process.env.PUBLIC_URL + profilePhoto} className="profile-photo" alt={userName} />;
 };
 
 export default ProfilePhoto;
