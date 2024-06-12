@@ -4,7 +4,7 @@ import { ThemeContext } from "../../ThemeContext.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
-import { AuthContext } from "../../AuthContext";
+import { AuthContext } from "../../contexts/AuthContext.js";
 import "./login.css";
 import OnOffToggle from "../../components/Inputs/toggle/OnOffToggle.js";
 

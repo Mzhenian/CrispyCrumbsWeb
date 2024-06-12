@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../../../ThemeContext";
-import { AuthContext } from "../../../AuthContext";
+import { AuthContext } from "../../../contexts/AuthContext";
 import "./profilePhoto.css";
 
 const ProfilePhoto = () => {
