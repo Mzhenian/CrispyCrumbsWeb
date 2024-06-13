@@ -103,6 +103,11 @@ const SignUp = () => {
       return;
     }
 
+    if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 15) {
+      setErrorMessage("Phone number must be between 10 and 15 digits.");
+      return;
+    }
+
     if (!formData.acceptTerms) {
       setErrorMessage("You must accept the terms of use to sign up.");
       return;
@@ -110,11 +115,6 @@ const SignUp = () => {
 
     if (!formData.email || !formData.phoneNumber || !formData.fullName) {
       setErrorMessage("Please fill in all required fields.");
-      return;
-    }
-
-    if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 15) {
-      setErrorMessage("Phone number must be between 10 and 15 digits.");
       return;
     }
 
