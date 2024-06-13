@@ -29,7 +29,7 @@ form {
 
 .linear-layout-2 {
     display: flex;
-    justify-content: left;
-    align-content: center;
-    gap: 10px;
+    justify-content: start;
+    align-items: center;
+    gap: 15px;
 }

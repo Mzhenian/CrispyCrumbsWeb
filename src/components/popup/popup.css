@@ -22,6 +22,7 @@
     border-bottom-left-radius: 30px 20px;
     transition: background-color 0.1s ease-in-out;
     z-index: 999;
+    overflow-y: auto;
 }
 
 .popup-window.light {
@@ -78,7 +79,7 @@
 .cancel-button {
     size: 80%;
     position: absolute;
-    top: 1px;
+    top: 0px;
     right: 10px;
     background: transparent;
     border: none;

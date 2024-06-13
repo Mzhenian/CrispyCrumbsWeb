@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../ThemeContext.js";
 import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
@@ -83,9 +83,16 @@ const SignUp = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    if (formData.username.length < 8) {
+      setErrorMessage("Username must be at least 8 characters long.");
+      return;
+    }
 
-    // Validate fields
+    if (formData.password.length < 8) {
+      setErrorMessage("Password must be at least 8 characters long.");
+      return;
+    }
+
     if (formData.password !== formData.password_auth) {
       setErrorMessage("Passwords do not match!");
       return;
@@ -103,6 +110,11 @@ const SignUp = () => {
 
     if (!formData.email || !formData.phoneNumber || !formData.fullName) {
       setErrorMessage("Please fill in all required fields.");
+      return;
+    }
+
+    if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 15) {
+      setErrorMessage("Phone number must be between 10 and 15 digits.");
       return;
     }
 
@@ -129,6 +141,8 @@ const SignUp = () => {
     const targetRoute = "/";
     navigate(targetRoute);
   };
+
+  const fileInputRef = useRef(null);
 
   return (
     <div className={`page ${theme}`}>
@@ -223,8 +237,24 @@ const SignUp = () => {
             />
           </div>
           <div className="field-container">
-            <b>Profile Photo</b>
-            <input className={`field ${theme}`} name="profilePhoto" type="file" onChange={handlePhotoChange} />
+            <div className="linear-layout-2">
+              <b>Profile Photo</b>
+              <input
+                className="field"
+                name="profilePhoto"
+                type="file"
+                onChange={handlePhotoChange}
+                ref={fileInputRef}
+                style={{ display: "none" }}
+              />
+              <GenericButton
+                text="Upload Photo"
+                onClick={(e) => {
+                  e.preventDefault();
+                  fileInputRef.current.click();
+                }}
+              />
+            </div>
           </div>
           <div className="field-container">
             <div className="linear-layout-2">
