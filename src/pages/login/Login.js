@@ -29,7 +29,6 @@ const Login = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
     const { username, password } = formData;
     if (login(username, password)) {
       const targetRoute = "/";

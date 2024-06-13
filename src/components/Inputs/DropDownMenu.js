@@ -15,13 +15,13 @@ export default function DropDownMenu(props) {
     setDropdown(!dropdown);
   };
 
-  const action = (name, value) => {
+  const handleAction = (name, value) => {
     props.action(name, value);
     updateDropDown();
   };
 
   const getFileName = (name) => {
-    if (!name) return null; // Check for undefined name
+    if (!name) return null;
     const lowercaseName = name.toLowerCase();
     const File = props.arr.find((c) => c.name && c.name.toLowerCase() === lowercaseName);
     return File ? File.fileName : null;
@@ -33,8 +33,7 @@ export default function DropDownMenu(props) {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && filteredItems.length > 0) {
-      // If Enter key is pressed and there are filtered items, select the first item
-      action(props.name, filteredItems[0].name);
+      handleAction(props.name, filteredItems[0].name);
     }
   };
 
@@ -49,21 +48,18 @@ export default function DropDownMenu(props) {
   };
 
   useEffect(() => {
-    // Attach the event listener on mount
     document.addEventListener("mousedown", handleOutsideClick);
-
-    // Detach the event listener on unmount
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, []); // Empty dependency array means this effect will only run on mount and unmount
+  }, []);
 
   const DropdownTitle = (
     <div
       className={`field ${theme}`}
       id="dropdown-title"
       onMouseDown={(e) => {
-        if (e.target !== e.currentTarget) return; // Only handle clicks on the title itself
+        if (e.target !== e.currentTarget) return;
         e.preventDefault();
         updateDropDown();
       }}
@@ -100,7 +96,7 @@ export default function DropDownMenu(props) {
   const DropDownList = (
     <div className={`dropdown-list ${theme}`} id={`dropdown-list-${dropdown ? "activated" : "deactivated"}`}>
       {filteredItems.map((item, index) => (
-        <div key={index} className={`dropdown-item ${theme}`} onClick={(e) => action(props.name, item.name)}>
+        <div key={index} className={`dropdown-item ${theme}`} onClick={() => handleAction(props.name, item.name)}>
           {props.showFlag && <img src={item.fileName} className="button-icon" alt="icon" />}
           {item.name}
         </div>

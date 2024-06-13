@@ -2,7 +2,6 @@ import React, { useContext, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../ThemeContext.js";
 import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
-import { countries } from "../../DB/Countries/CountriesListsData.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
@@ -10,6 +9,7 @@ import { AuthContext } from "../../contexts/AuthContext.js";
 import TermsOfUse from "./components/TermsOfUse";
 import OnOffToggle from "../../components/Inputs/toggle/OnOffToggle.js";
 import { months, days, years } from "./SignUpData";
+import countries from "../../DB/Countries/CountriesListsData.js";
 import "./signup.css";
 
 const SignUp = () => {
@@ -36,8 +36,7 @@ const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState(""); // State to store error messages
   const [isTermsOpen, setIsTermsOpen] = useState(false); // State to manage terms popup
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (name, value) => {
     setFormData({
       ...formData,
       [name]: value,
@@ -127,7 +126,7 @@ const SignUp = () => {
       phoneNumber: formData.phoneNumber,
       birthday: `${formData.birthday.year}-${formData.birthday.month}-${formData.birthday.day}`,
       country: formData.country,
-      profilePhoto: formData.profilePhoto || "/default-profile.png", // Default profile photo if not provided
+      profilePhoto: formData.profilePhoto || "/default-profile.png",
       followers: [],
       following: [],
       videosIds: [],
@@ -135,11 +134,8 @@ const SignUp = () => {
       dislikedVideoIds: [],
     };
 
-    // Signup user if all checks pass
     signup(newUser);
-
-    const targetRoute = "/";
-    navigate(targetRoute);
+    navigate("/");
   };
 
   const fileInputRef = useRef(null);
@@ -155,7 +151,7 @@ const SignUp = () => {
               className={`field ${theme}`}
               name="fullName"
               value={formData.fullName}
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
           <div className="field-container">
@@ -164,12 +160,17 @@ const SignUp = () => {
               className={`field ${theme}`}
               name="username"
               value={formData.username}
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
           <div className="field-container">
             <b>Email</b>
-            <input className={`field ${theme}`} name="email" value={formData.email} onChange={handleInputChange} />
+            <input
+              className={`field ${theme}`}
+              name="email"
+              value={formData.email}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+            />
           </div>
           <div className="field-container">
             <b>Password</b>
@@ -178,7 +179,7 @@ const SignUp = () => {
               name="password"
               type="password"
               value={formData.password}
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
           <div className="field-container">
@@ -188,7 +189,7 @@ const SignUp = () => {
               name="password_auth"
               type="password"
               value={formData.password_auth}
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
           <div className="field-container">
@@ -233,7 +234,7 @@ const SignUp = () => {
               className={`field ${theme}`}
               name="phoneNumber"
               value={formData.phoneNumber}
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
           <div className="field-container">
@@ -267,7 +268,7 @@ const SignUp = () => {
             </div>
           </div>
           <div className="buttons-container">
-            <GenericButton text="Sign up" type="submit" onClick={handleSubmit} />
+            <GenericButton text="Sign up" type="submit" />
             <LightButton text="Login" link="/login" />
           </div>
         </form>
