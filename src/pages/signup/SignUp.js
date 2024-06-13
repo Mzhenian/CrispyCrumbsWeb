@@ -250,7 +250,6 @@ const SignUp = () => {
               <GenericButton
                 text="Upload Photo"
                 onClick={(e) => {
-                  e.preventDefault();
                   fileInputRef.current.click();
                 }}
               />
