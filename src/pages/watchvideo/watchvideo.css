@@ -1,12 +1,11 @@
 .watch-video-container {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   gap: 20px;
 }
 
 .main-video-section {
-  width: 90%;
+  width: 100%;
 }
 
 .container {

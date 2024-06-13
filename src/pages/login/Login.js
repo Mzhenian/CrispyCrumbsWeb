@@ -70,10 +70,7 @@ const Login = () => {
               <OnOffToggle
                 name="rememberMe"
                 value={formData.rememberMe}
-                action={(e) => {
-                  setFormData({ ...formData, rememberMe: !formData.rememberMe });
-                  console.log(formData.rememberMe);
-                }}
+                action={() => setFormData({ ...formData, rememberMe: !formData.rememberMe })}
               />
             </div>
             <Link className={theme} to="./forgotpassword">
@@ -82,7 +79,7 @@ const Login = () => {
           </div>
           <div className="buttons-container">
             <GenericButton text="Log in" type="submit" onClick={handleSubmit} />
-            <LightButton text="Signup" link="./signup" />
+            <LightButton text="Signup" link="/signup" />
           </div>
         </form>
       </Container>

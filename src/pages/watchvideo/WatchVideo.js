@@ -30,6 +30,9 @@ const WatchVideo = () => {
       if (currentUser && Array.isArray(foundVideo.likedBy)) {
         setLikeSelected(foundVideo.likedBy.includes(currentUser.userId));
         setDislikeSelected(foundVideo.dislikedBy.includes(currentUser.userId));
+      } else if (!currentUser) {
+        setLikeSelected(false);
+        setDislikeSelected(false);
       }
     }
   }, [videoId, currentUser, getVideoById, getUserById]);

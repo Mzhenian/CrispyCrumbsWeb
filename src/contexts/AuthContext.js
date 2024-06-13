@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const loggedUser = JSON.parse(localStorage.getItem("currentUser"));
-    console.log("Logged user from localStorage:", loggedUser);
     if (loggedUser) {
       setCurrentUser(loggedUser);
     }
@@ -16,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (username, password) => {
     const user = usersDB.users.find((user) => user.userName === username && user.password === password);
-    if (user && username !== "") {
+    if (user) {
       setCurrentUser(user);
       localStorage.setItem("currentUser", JSON.stringify(user));
       return true;
@@ -37,7 +36,16 @@ export const AuthProvider = ({ children }) => {
     usersDB.users.push(newUser);
     setCurrentUser(newUser);
     localStorage.setItem("currentUser", JSON.stringify(newUser));
+    localStorage.setItem("usersDB", JSON.stringify(usersDB)); // Save updated usersDB to localStorage
   };
 
-  return <AuthContext.Provider value={{ currentUser, login, logout, signup }}>{children}</AuthContext.Provider>;
+  const isUsernameAvailable = (username) => {
+    return !usersDB.users.some((user) => user.userName === username);
+  };
+
+  return (
+    <AuthContext.Provider value={{ currentUser, login, logout, signup, isUsernameAvailable }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 500px;
-  width: 25%;
+  max-width: 600px;
+  min-width: 250px;
 }
 
 .suggested-video-card {
@@ -18,14 +18,23 @@
   border-top-right-radius: 30px 20px;
   border-bottom-right-radius: 20px 30px;
   border-bottom-left-radius: 30px 20px;
-  transition: 0.3s ease-in-out;
+  transition: 0.4s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
 }
 
 .suggested-video-card.light {
-  background-color: var(--dark-white-color);
+  background-color: var(--white-color);
 }
 
 .suggested-video-card.dark {
+  background-color: var(--black-color);
+}
+
+.suggested-video-card.light:hover {
+  background-color: var(--dark-white-color);
+}
+
+.suggested-video-card.dark:hover {
   background-color: var(--light-black-color);
 }
 
@@ -36,13 +45,6 @@
   border-bottom-left-radius: 20px 30px;
 }
 
-.suggested-video-card.light:hover {
-  background-color: var(--white-color);
-}
-
-.suggested-video-card.dark:hover {
-  background-color: var(--black-color);
-}
 
 .suggested-video-thumbnail {
   width: 200px;

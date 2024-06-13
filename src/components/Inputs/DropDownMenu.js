@@ -2,7 +2,6 @@ import React, { useState, useContext, useRef, useEffect } from "react";
 import "./inputs.css";
 import "../buttons/buttons.css";
 import { ThemeContext } from "../../ThemeContext";
-
 import dropdownIcon from "../iconsLab/down.svg";
 import searchIcon from "../iconsLab/searchWhite.svg";
 
@@ -106,12 +105,11 @@ export default function DropDownMenu(props) {
           {item.name}
         </div>
       ))}
-      fffff
     </div>
   );
 
   return (
-    <div ref={dropdownRef}>
+    <div ref={dropdownRef} style={{ width: "100%" }}>
       {DropdownTitle}
       {DropDownList}
     </div>

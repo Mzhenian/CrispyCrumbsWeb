@@ -1,0 +1,87 @@
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-window {
+    position: relative;
+    width: 50%;
+    max-width: 800px;
+    max-height: 700px;
+    border-top-left-radius: 20px 30px;
+    border-top-right-radius: 30px 20px;
+    border-bottom-right-radius: 20px 30px;
+    border-bottom-left-radius: 30px 20px;
+    transition: background-color 0.1s ease-in-out;
+    z-index: 999;
+}
+
+.popup-window.light {
+    background-color: var(--dark-white-color);
+}
+
+.popup-window.dark {
+    background-color: var(--light-black-color);
+}
+
+.popup-title {
+    display: flex;
+    align-items: center;
+    border-top-left-radius: 20px 30px;
+    border-top-right-radius: 30px 20px;
+    border-bottom-right-radius: 20px 30px;
+    border-bottom-left-radius: 30px 20px;
+    color: var(--white-color);
+    padding-left: 20px;
+    height: 44px;
+}
+
+.popup-title.light {
+    background-color: var(--primary-color-light);
+}
+
+.popup-title.dark {
+    background-color: var(--primary-color-dark);
+}
+
+.popup-title:hover {
+    border-top-left-radius: 20px 30px;
+    border-top-right-radius: 30px 20px;
+    border-bottom-right-radius: 20px 30px;
+    border-bottom-left-radius: 30px 20px;
+}
+
+.popup-body {
+    padding: 29px 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.cancel-button {
+    size: 80%;
+    position: absolute;
+    top: 1px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+}

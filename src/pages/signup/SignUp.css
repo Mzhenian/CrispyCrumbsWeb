@@ -1,11 +1,28 @@
-#signup-container {
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-}
-
 .field-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
+}
+
+.signup-form-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.terms-text {
+    cursor: pointer;
+}
+
+.terms-text.light {
+    color: var(--primary-color-light)
+}
+
+.terms-text.dark {
+    color: var(--primary-color-dark)
 }

@@ -18,12 +18,13 @@ const Home = () => {
             <img src={video.thumbnail} alt={video.title} className="home-video-thumbnail" />
             <div className="home-video-b">
               <div className="home-video-details">
-                <p className="home-video-title">{video.title}</p>
+                <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />
                 <div className="home-video-info">
-                  <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />
-                  <p className="home-video-author">{author.userName}</p>
+                  <p className="home-video-title">{video.title}</p>
+
+                  <p className="note">{author.userName}</p>
+                  <p className="note">{video.views} views</p>
                 </div>
-                <p className="note">{video.views} views</p>
               </div>
             </div>
           </Link>
