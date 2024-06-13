@@ -24,3 +24,15 @@
   display: flex;
   justify-content: space-between;
 }
+
+.upload-img {
+  align-self: center;
+  justify-self: center;
+  width: 60%;
+  margin-bottom: 20px;
+}
+
+.upload-click-here {
+  text-align: center;
+  cursor: pointer;
+}

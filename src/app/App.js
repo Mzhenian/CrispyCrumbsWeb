@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import { ThemeProvider } from "../ThemeContext";
+import { ThemeProvider } from "../contexts/ThemeContext";
 import TopBar from "../components/topBar/TopBar";
 import Home from "../pages/home/Home";
 import UploadVideo from "../pages/uploadVideo/UploadVideo.js";

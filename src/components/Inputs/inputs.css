@@ -126,6 +126,7 @@
 }
 
 .input-items-list {
+    width: 500px;
     margin: 12px 0 5px;
     display: flex;
     flex-wrap: wrap;
@@ -140,11 +141,6 @@
     align-items: center;
 }
 
-#action-icon {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
 
 form {
     width: inherit;

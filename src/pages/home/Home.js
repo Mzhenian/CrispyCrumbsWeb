@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import "./home.css";
-import { ThemeContext } from "../../ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { VideoContext } from "../../contexts/VideoContext";
 
 const Home = () => {
@@ -15,7 +15,9 @@ const Home = () => {
         const author = getUserById(video.userId);
         return (
           <Link to={`/watch/${video.videoId}`} key={video.videoId} className={`home-video-card ${theme}`}>
-            <img src={video.thumbnail} alt={video.title} className="home-video-thumbnail" />
+            <div className="thumbnail-container">
+              <img src={video.thumbnail} alt={video.title} className="home-video-thumbnail" />
+            </div>
             <div className="home-video-b">
               <div className="home-video-details">
                 <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />

@@ -4,11 +4,21 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.popup-overlay.light {
+    background: rgba(248, 243, 235, 0.8);
+
+}
+
+.popup-overlay.dark {
+    background: rgba(16, 16, 16, 0.8);
+
 }
 
 .popup-window {
@@ -21,7 +31,7 @@
     border-bottom-right-radius: 20px 30px;
     border-bottom-left-radius: 30px 20px;
     transition: background-color 0.1s ease-in-out;
-    z-index: 999;
+    z-index: 1100;
     overflow-y: auto;
 }
 
@@ -31,6 +41,11 @@
 
 .popup-window.dark {
     background-color: var(--light-black-color);
+}
+
+.popup-body-content {
+    display: flex;
+    flex-direction: column;
 }
 
 .popup-title {

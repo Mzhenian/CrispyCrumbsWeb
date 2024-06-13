@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { VideoContext } from "../../../../contexts/VideoContext";
 import "./commentsSection.css";
-import { ThemeContext } from "../../../../ThemeContext";
+import { ThemeContext } from "../../../../contexts/ThemeContext";
 import ProfilePhoto from "../../../../components/profilePhoto/ProfilePhoto";
 import GenericButton from "../../../../components/buttons/GenericButton";
 import LightButton from "../../../../components/buttons/LightButton";

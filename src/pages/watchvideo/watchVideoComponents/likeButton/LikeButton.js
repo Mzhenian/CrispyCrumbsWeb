@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "../../../../ThemeContext";
+import { ThemeContext } from "../../../../contexts/ThemeContext";
 import likeIcon from "../../../../components/iconsLab/like.svg";
 import dislikeIcon from "../../../../components/iconsLab/dislike.svg";
 import likeIconLight from "../../../../components/iconsLab/like-light.svg";

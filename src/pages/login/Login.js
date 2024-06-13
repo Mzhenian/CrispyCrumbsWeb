@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ThemeContext } from "../../ThemeContext.js";
+import { ThemeContext } from "../../contexts/ThemeContext.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";

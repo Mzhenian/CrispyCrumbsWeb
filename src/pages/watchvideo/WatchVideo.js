@@ -5,7 +5,7 @@ import { VideoContext } from "../../contexts/VideoContext";
 import "./watchvideo.css";
 import LikeButton from "./watchVideoComponents/likeButton/LikeButton";
 import SuggestedVideos from "./watchVideoComponents/suggestedFunctions/SuggestedVideos";
-import { ThemeContext } from "../../ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import CommentsSection from "./watchVideoComponents/commentsSection/CommentsSection";
 

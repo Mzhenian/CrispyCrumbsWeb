@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./suggestedVideos.css";
-import { ThemeContext } from "../../../../ThemeContext";
+import { ThemeContext } from "../../../../contexts/ThemeContext";
 import { VideoContext } from "../../../../contexts/VideoContext";
 
 const SuggestedVideos = () => {

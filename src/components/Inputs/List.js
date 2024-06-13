@@ -1,9 +1,13 @@
 import "./inputs.css";
 import "../buttons/buttons.css";
+import React, { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 import removeIcon from "../iconsLab/close.svg";
 
 export default function List(props) {
+  const theme = useContext(ThemeContext).theme;
+
   const removeItem = (index) => {
     const updatedList = props.list;
     updatedList.splice(index, 1);
@@ -18,7 +22,7 @@ export default function List(props) {
     props.list.length !== 0 && (
       <div className="input-items-list">
         {props.list.map((item, index) => (
-          <div className="field" id="input-item" key={index}>
+          <div className={`field ${theme}`} id="input-item" key={index}>
             {item}
             {props.editMode && (
               <img src={removeIcon} className="button-icon" id="action-icon" alt="icon" onClick={() => removeItem()} />
@@ -26,7 +30,7 @@ export default function List(props) {
           </div>
         ))}
         {props.list.length > 2 && props.editMode && (
-          <div className="field" id="button-icon" onClick={() => removeAll()}>
+          <div className={`field ${theme}`} id="input-item" onClick={() => removeAll()}>
             Remove All
           </div>
         )}

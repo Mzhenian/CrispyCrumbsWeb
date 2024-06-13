@@ -1,17 +1,21 @@
 import React, { useContext, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ThemeContext } from "../../ThemeContext.js";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
+import ListInput from "../../components/Inputs/ListInput.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
+import Popup from "../../components/popup/Popup.js";
 import { VideoContext } from "../../contexts/VideoContext.js";
 import { AuthContext } from "../../contexts/AuthContext.js";
 import { categories } from "./UploadVideoData.js";
+import uploadLight from "./components/uploadLogo/uploadLight.svg";
+import uploadDark from "./components/uploadLogo/uploadLight.svg";
+
 import "./uploadVideo.css";
 
 const UploadVideo = () => {
-  const tags = []; // Ensure this is populated with your actual tags data
   const { theme } = useContext(ThemeContext);
   const { uploadVideo } = useContext(VideoContext);
   const { currentUser } = useContext(AuthContext);
@@ -26,6 +30,7 @@ const UploadVideo = () => {
     thumbnail: null,
   });
   const [errorMessage, setErrorMessage] = useState(""); // State to store error messages
+  const [isPopupOpen, setIsPopupOpen] = useState(true); // State to manage popup visibility
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -34,12 +39,12 @@ const UploadVideo = () => {
     });
   };
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
+  const handleFileChange = (name, files) => {
     setFormData({
       ...formData,
       [name]: files[0],
     });
+    setIsPopupOpen(false); // Close the popup once the file is selected or dropped
   };
 
   const handleTagsChange = (name, value) => {
@@ -50,6 +55,8 @@ const UploadVideo = () => {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
+
     if (!formData.title || !formData.description || !formData.category || !formData.videoFile || !formData.thumbnail) {
       setErrorMessage("Please fill in all required fields.");
       return;
@@ -84,27 +91,32 @@ const UploadVideo = () => {
 
   return (
     <div className={`page ${theme}`}>
+      <Popup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        title="Upload Video"
+        onFileDrop={(files) => handleFileChange("videoFile", files)}
+        canClose={false}
+      >
+        <div className="popup-body-content">
+          <img className="upload-img" src={theme === "light" ? uploadLight : uploadDark} alt="upload" />
+          <p className="upload-click-here" onClick={() => videoInputRef.current.click()}>
+            Click to here upload a file or drag and drop a file here.
+          </p>
+          <input
+            className="field"
+            name="videoFile"
+            type="file"
+            accept="video/*"
+            onChange={(e) => handleFileChange(e.target.name, e.target.files)}
+            ref={videoInputRef}
+            style={{ display: "none" }}
+          />
+        </div>
+      </Popup>
       <Container title={"Upload Video"} containerStyle={"upload-video-container"}>
         <form className="upload-form-container" onSubmit={handleSubmit}>
           {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
-          <div className="field-container">
-            <b>Video File</b>
-            <input
-              className="field"
-              name="videoFile"
-              type="file"
-              accept="video/*"
-              onChange={handleFileChange}
-              ref={videoInputRef}
-              style={{ display: "none" }}
-            />
-            <GenericButton
-              text="Upload Video"
-              onClick={(e) => {
-                videoInputRef.current.click();
-              }}
-            />
-          </div>
           <div className="field-container">
             <b>Title</b>
             <input
@@ -130,40 +142,30 @@ const UploadVideo = () => {
               arr={categories}
               value={formData.category}
               showFlag={false}
-              action={handleInputChange}
+              action={(name, value) => handleInputChange(name, value)}
             />
           </div>
           <div className="field-container">
             <b>Tags</b>
-            <DropDownMenu
-              name="tags"
-              arr={tags}
-              value={formData.tags}
-              showFlag={false}
-              action={handleTagsChange}
-              multiple
-            />
+            <ListInput name="tags" list={formData.tags} action={handleTagsChange} editMode={true} />
           </div>
           <div className="field-container">
-            <b>Thumbnail</b>
-            <input
-              className="field"
-              name="thumbnail"
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              ref={thumbnailInputRef}
-              style={{ display: "none" }}
-            />
-            <GenericButton
-              text="Upload Thumbnail"
-              onClick={(e) => {
-                thumbnailInputRef.current.click();
-              }}
-            />
+            <div className="linear-layout-2">
+              <b>Thumbnail</b>
+              <input
+                className="field"
+                name="thumbnail"
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileChange(e.target.name, e.target.files)}
+                ref={thumbnailInputRef}
+                style={{ display: "none" }}
+              />
+              <GenericButton text="Upload Thumbnail" onClick={() => thumbnailInputRef.current.click()} />
+            </div>
           </div>
           <div className="buttons-container">
-            <GenericButton text="Upload" type="submit" onClick={handleSubmit} />
+            <GenericButton text="Upload" type="submit" />
             <LightButton text="Cancel" link="/" />
           </div>
         </form>

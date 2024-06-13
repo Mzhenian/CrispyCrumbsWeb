@@ -1,7 +1,7 @@
 import { React, useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { ThemeContext } from "../../ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import "./buttons.css";
 
 const LightButton = ({ text, onClick, icon, link }) => {

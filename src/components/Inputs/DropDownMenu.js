@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import "./inputs.css";
 import "../buttons/buttons.css";
-import { ThemeContext } from "../../ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import dropdownIcon from "../iconsLab/down.svg";
 import searchIcon from "../iconsLab/searchWhite.svg";
 
