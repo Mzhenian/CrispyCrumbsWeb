@@ -6,7 +6,7 @@ const VideoContext = createContext();
 
 const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState(videoDB.videos);
-  const [users, setUsers] = useState(usersDB.users);
+  const [users] = useState(usersDB.users);
 
   const getVideoById = (videoId) => videos.find((video) => video.videoId === videoId);
   const getUserById = (userId) => users.find((user) => user.userId === userId);
@@ -85,6 +85,21 @@ const VideoProvider = ({ children }) => {
     );
   };
 
+  const editComment = (videoId, updatedComment) => {
+    setVideos((prevVideos) =>
+      prevVideos.map((video) =>
+        video.videoId === videoId
+          ? {
+              ...video,
+              comments: video.comments.map((comment) =>
+                comment.commentId === updatedComment.commentId ? updatedComment : comment
+              ),
+            }
+          : video
+      )
+    );
+  };
+
   return (
     <VideoContext.Provider
       value={{
@@ -97,6 +112,7 @@ const VideoProvider = ({ children }) => {
         likeVideo,
         dislikeVideo,
         addComment,
+        editComment,
       }}
     >
       {children}

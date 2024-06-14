@@ -8,14 +8,13 @@ import LightButton from "../../../../components/buttons/LightButton";
 
 const CommentsSection = ({ currentUser, videoId }) => {
   const { theme } = useContext(ThemeContext);
-  const { getUserById, getVideoById, addComment } = useContext(VideoContext);
+  const { getUserById, getVideoById, addComment, editComment } = useContext(VideoContext);
   const video = getVideoById(videoId);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingText, setEditingText] = useState("");
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
+  const handleCommentSubmit = () => {
     if (newComment.trim()) {
       const newCommentObj = {
         commentId: Date.now().toString(),
@@ -38,12 +37,11 @@ const CommentsSection = ({ currentUser, videoId }) => {
   };
 
   const handleSaveEdit = (commentId) => {
-    addComment(
-      videoId,
-      video.comments.map((comment) =>
-        comment.commentId === commentId ? { ...comment, comment: editingText } : comment
-      )
-    );
+    const updatedComment = {
+      ...video.comments.find((comment) => comment.commentId === commentId),
+      comment: editingText,
+    };
+    editComment(videoId, updatedComment);
     setEditingCommentId(null);
     setEditingText("");
   };
