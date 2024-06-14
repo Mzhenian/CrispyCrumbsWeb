@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import "./popup.css";
+import "./Popup.css";
 import GenericButton from "../buttons/GenericButton";
 import cancelIcon from "../../components/iconsLab/close.svg";
 

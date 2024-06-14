@@ -2,12 +2,11 @@ import React, { useContext, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
 import { AuthContext } from "../../contexts/AuthContext.js";
-
 import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
-import "./signup.css";
+import "./SignUp.css";
 import TermsOfUse from "./components/TermsOfUse";
 import OnOffToggle from "../../components/Inputs/toggle/OnOffToggle.js";
 import { months, days, years } from "./SignUpData";
@@ -44,7 +43,6 @@ const SignUp = () => {
     });
   };
 
-  
   const handleDropDownChange = (name, value) => {
     if (name in formData.birthday) {
       setFormData({

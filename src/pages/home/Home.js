@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
-import "./home.css";
+import "./Home.css";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { VideoContext } from "../../contexts/VideoContext";
 

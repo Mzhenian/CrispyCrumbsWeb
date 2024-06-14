@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { Link } from "react-router-dom";
-import "./buttons.css";
+import "./Buttons.css";
 
 const GenericButton = ({ text, onClick, icon, link, fileInput }) => {
   const theme = useContext(ThemeContext).theme;

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { VideoContext } from "../../contexts/VideoContext";
-import "./watchvideo.css";
+import "./WatchVideo.css";
 import LikeButton from "./watchVideoComponents/likeButton/LikeButton";
 import SuggestedVideos from "./watchVideoComponents/suggestedFunctions/SuggestedVideos";
 import { ThemeContext } from "../../contexts/ThemeContext";

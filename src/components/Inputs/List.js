@@ -1,5 +1,5 @@
-import "./inputs.css";
-import "../buttons/buttons.css";
+import "./Inputs.css";
+import "../buttons/Buttons.css";
 import React, { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 

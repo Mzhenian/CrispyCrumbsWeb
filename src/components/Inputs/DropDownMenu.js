@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
-import "./inputs.css";
-import "../buttons/buttons.css";
+import "./Inputs.css";
+import "../buttons/Buttons.css";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import dropdownIcon from "../iconsLab/down.svg";
 import searchIcon from "../iconsLab/searchWhite.svg";

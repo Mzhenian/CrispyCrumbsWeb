@@ -5,7 +5,7 @@ import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
 import { AuthContext } from "../../contexts/AuthContext.js";
-import "./login.css";
+import "./Login.css";
 import OnOffToggle from "../../components/Inputs/toggle/OnOffToggle.js";
 
 const Login = () => {

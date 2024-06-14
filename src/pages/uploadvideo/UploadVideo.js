@@ -12,8 +12,7 @@ import { AuthContext } from "../../contexts/AuthContext.js";
 import { categories } from "./UploadVideoData.js";
 import uploadLight from "./components/uploadLogo/uploadLight.svg";
 import uploadDark from "./components/uploadLogo/uploadLight.svg";
-
-import "./uploadVideo.css";
+import "./UploadVideo.css";
 
 const UploadVideo = () => {
   const { theme } = useContext(ThemeContext);
@@ -55,8 +54,6 @@ const UploadVideo = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
     if (!formData.title || !formData.description || !formData.category || !formData.videoFile || !formData.thumbnail) {
       setErrorMessage("Please fill in all required fields.");
       return;
@@ -165,7 +162,7 @@ const UploadVideo = () => {
             </div>
           </div>
           <div className="buttons-container">
-            <GenericButton text="Upload" type="submit" />
+            <GenericButton text="Upload" type="submit" onClick={handleSubmit} />
             <LightButton text="Cancel" link="/" />
           </div>
         </form>

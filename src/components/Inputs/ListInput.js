@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
-import "./inputs.css";
-import "../buttons/buttons.css";
+import "./Inputs.css";
+import "../buttons/Buttons.css";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import addIcon from "../iconsLab/add.svg";
 import List from "./List";
