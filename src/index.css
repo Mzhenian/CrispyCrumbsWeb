@@ -68,10 +68,12 @@ a {
   font-weight: 700;
 }
 
+Link.light,
 a.light {
   color: var(--black-color);
 }
 
+Link.light,
 a.dark {
   color: var(--white-color);
 }
@@ -79,4 +81,9 @@ a.dark {
 textarea {
   resize: none;
   width: 100%;
+}
+
+.no-link-style {
+  text-decoration: none;
+  color: inherit;
 }

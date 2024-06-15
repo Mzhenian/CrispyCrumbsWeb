@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { VideoContext } from "../../contexts/VideoContext";
 import "./WatchVideo.css";
@@ -20,6 +20,7 @@ const WatchVideo = () => {
   const [likeSelected, setLikeSelected] = useState(false);
   const [dislikeSelected, setDislikeSelected] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,14 +41,14 @@ const WatchVideo = () => {
   }, [videoId, currentUser, getVideoById, getUserById]);
 
   const handleLike = () => {
-    if (!currentUser) return alert("You must be logged in to like a video.");
+    if (!currentUser) return navigate("/login");
     likeVideo(videoId, currentUser.userId);
     setLikeSelected(!likeSelected);
     if (dislikeSelected) setDislikeSelected(false);
   };
 
   const handleDislike = () => {
-    if (!currentUser) return alert("You must be logged in to dislike a video.");
+    if (!currentUser) return navigate("/login");
     dislikeVideo(videoId, currentUser.userId);
     setDislikeSelected(!dislikeSelected);
     if (likeSelected) setLikeSelected(false);
@@ -89,11 +90,15 @@ const WatchVideo = () => {
         <div className="author-section">
           {author && (
             <>
-              <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />
-              <div className="author-details">
-                <b className="author-name">{author.userName}</b>
-                <p>{author.followers.length} followers</p>
-              </div>
+              <Link to={`/crumb/${author.userId}`}>
+                <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />{" "}
+              </Link>{" "}
+              <Link to={`/crumb/${author.userId}`} className="no-link-style">
+                <div className="author-details">
+                  <b className="author-name">{author.userName}</b>
+                  <p>{author.followers.length} followers</p>
+                </div>
+              </Link>
               <SubscribeButton userToSubscribe={author.userId} />
             </>
           )}

@@ -7,7 +7,7 @@ import "../../home/VideoList.css";
 
 const VideoList = ({ userId }) => {
   const { theme } = useContext(ThemeContext);
-  const { videos, getUserById } = useContext(VideoContext);
+  const { videos } = useContext(VideoContext);
   const [sortOption, setSortOption] = useState("newest");
   const [userVideos, setUserVideos] = useState([]);
 
@@ -38,7 +38,6 @@ const VideoList = ({ userId }) => {
   const videosList = (
     <div className={`watch-user-profile-video-section ${theme}`}>
       {sortedVideos().map((video) => {
-        const author = getUserById(video.userId);
         return (
           <Link to={`/watch/${video.videoId}`} key={video.videoId} className={`user-profile-video-card ${theme}`}>
             <div className="thumbnail-container">
