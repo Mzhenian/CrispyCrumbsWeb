@@ -8,6 +8,7 @@ import SuggestedVideos from "./watchVideoComponents/suggestedFunctions/Suggested
 import { ThemeContext } from "../../contexts/ThemeContext";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import CommentsSection from "./watchVideoComponents/commentsSection/CommentsSection";
+import SubscribeButton from "../../components/buttons/SubscribeButton";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
@@ -25,7 +26,8 @@ const WatchVideo = () => {
     const foundVideo = getVideoById(videoId);
     if (foundVideo) {
       setVideo(foundVideo);
-      setAuthor(getUserById(foundVideo.userId));
+      const videoAuthor = getUserById(foundVideo.userId);
+      setAuthor(videoAuthor);
 
       if (currentUser && Array.isArray(foundVideo.likedBy)) {
         setLikeSelected(foundVideo.likedBy.includes(currentUser.userId));
@@ -92,6 +94,7 @@ const WatchVideo = () => {
                 <b className="author-name">{author.userName}</b>
                 <p>{author.followers.length} followers</p>
               </div>
+              <SubscribeButton userToSubscribe={author.userId} />
             </>
           )}
         </div>

@@ -12,7 +12,6 @@ const ProfilePhoto = () => {
   useEffect(() => {
     if (currentUser && currentUser.profilePhoto) {
       setProfilePhoto(currentUser.profilePhoto);
-      console.log("Profile photo set to:", currentUser.profilePhoto);
     }
   }, [currentUser]);
 

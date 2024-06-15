@@ -5,16 +5,22 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [users, setUsers] = useState(usersDB.users);
 
   useEffect(() => {
     const loggedUser = JSON.parse(localStorage.getItem("currentUser"));
     if (loggedUser) {
       setCurrentUser(loggedUser);
     }
+
+    const savedUsers = JSON.parse(localStorage.getItem("usersDB"));
+    if (savedUsers) {
+      setUsers(savedUsers.users);
+    }
   }, []);
 
   const login = (username, password) => {
-    const user = usersDB.users.find((user) => user.userName === username && user.password === password);
+    const user = users.find((user) => user.userName === username && user.password === password);
     if (user) {
       setCurrentUser(user);
       localStorage.setItem("currentUser", JSON.stringify(user));
@@ -31,20 +37,105 @@ export const AuthProvider = ({ children }) => {
   const signup = (userData) => {
     const newUser = {
       ...userData,
-      userId: (usersDB.users.length + 1).toString(),
+      userId: (users.length + 1).toString(),
+      followers: [],
+      following: [],
+      videosIds: [],
+      likedVideoIds: [],
+      dislikedVideoIds: [],
     };
-    usersDB.users.push(newUser);
+    const updatedUsers = [...users, newUser];
+    setUsers(updatedUsers);
     setCurrentUser(newUser);
     localStorage.setItem("currentUser", JSON.stringify(newUser));
-    localStorage.setItem("usersDB", JSON.stringify(usersDB)); // Save updated usersDB to localStorage
+    localStorage.setItem("usersDB", JSON.stringify({ users: updatedUsers })); // Save updated users to localStorage
   };
 
   const isUsernameAvailable = (username) => {
-    return !usersDB.users.some((user) => user.userName === username);
+    return !users.some((user) => user.userName === username);
   };
 
+  const getUserById = (userId) => {
+    return users.find((user) => user.userId === userId);
+  };
+
+  const followUser = (userIdToFollow) => {
+    if (!currentUser) return false;
+    if (currentUser.following.includes(userIdToFollow)) return false;
+
+    const updatedCurrentUser = {
+      ...currentUser,
+      following: [...currentUser.following, userIdToFollow],
+    };
+
+    const updatedUsers = users.map((user) => {
+      if (user.userId === currentUser.userId) {
+        return updatedCurrentUser;
+      } else if (user.userId === userIdToFollow) {
+        return {
+          ...user,
+          followers: [...user.followers, currentUser.userId],
+        };
+      }
+      return user;
+    });
+
+    setUsers(updatedUsers);
+    setCurrentUser(updatedCurrentUser);
+    localStorage.setItem("currentUser", JSON.stringify(updatedCurrentUser));
+    localStorage.setItem("usersDB", JSON.stringify({ users: updatedUsers }));
+    return true;
+  };
+
+  const unfollowUser = (userIdToUnfollow) => {
+    if (!currentUser) return false;
+    if (!currentUser.following.includes(userIdToUnfollow)) return false;
+
+    const updatedCurrentUser = {
+      ...currentUser,
+      following: currentUser.following.filter((id) => id !== userIdToUnfollow),
+    };
+
+    const updatedUsers = users.map((user) => {
+      if (user.userId === currentUser.userId) {
+        return updatedCurrentUser;
+      } else if (user.userId === userIdToUnfollow) {
+        return {
+          ...user,
+          followers: user.followers.filter((id) => id !== currentUser.userId),
+        };
+      }
+      return user;
+    });
+
+    setUsers(updatedUsers);
+    setCurrentUser(updatedCurrentUser);
+    localStorage.setItem("currentUser", JSON.stringify(updatedCurrentUser));
+    localStorage.setItem("usersDB", JSON.stringify({ users: updatedUsers }));
+    return true;
+  };
+
+  const isFollowing = (userIdToCheck) => {
+    if (!currentUser) return false;
+    return currentUser.following.includes(userIdToCheck);
+  };
+
+
   return (
-    <AuthContext.Provider value={{ currentUser, login, logout, signup, isUsernameAvailable }}>
+    <AuthContext.Provider
+      value={{
+        currentUser,
+        users,
+        login,
+        logout,
+        signup,
+        isUsernameAvailable,
+        getUserById,
+        followUser,
+        unfollowUser,
+        isFollowing,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

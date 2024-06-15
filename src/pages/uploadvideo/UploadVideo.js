@@ -28,8 +28,8 @@ const UploadVideo = () => {
     videoFile: null,
     thumbnail: null,
   });
-  const [errorMessage, setErrorMessage] = useState(""); // State to store error messages
-  const [isPopupOpen, setIsPopupOpen] = useState(true); // State to manage popup visibility
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isPopupOpen, setIsPopupOpen] = useState(true);
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -117,7 +117,7 @@ const UploadVideo = () => {
           <div className="field-container">
             <b>Title</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="title"
               value={formData.title}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
@@ -125,8 +125,8 @@ const UploadVideo = () => {
           </div>
           <div className="field-container">
             <b>Description</b>
-            <textarea
-              className={`field ${theme}`}
+            <input
+              className={`input-field ${theme}`}
               name="description"
               value={formData.description}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
@@ -150,7 +150,7 @@ const UploadVideo = () => {
             <div className="linear-layout-2">
               <b>Thumbnail</b>
               <input
-                className="field"
+                className={`input-field ${theme}`}
                 name="thumbnail"
                 type="file"
                 accept="image/*"

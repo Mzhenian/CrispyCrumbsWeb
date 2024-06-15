@@ -48,7 +48,7 @@ b {
   align-items: center;
 }
 
-.field {
+.input-field {
   height: 34px;
 
   display: flex;
@@ -64,14 +64,20 @@ b {
   transition: background-color 0.1s ease-in-out;
   transition: 0.3s ease-in-out;
   border: none;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+
+  transition: padding-left 0s ease-in-out;
 }
 
-.field.light {
+.input-field.light {
   background-color: var(--white-color);
   color: var(--black-color);
 }
 
-.field.dark {
+.input-field.dark {
   background-color: var(--black-color);
   color: var(--white-color);
 }

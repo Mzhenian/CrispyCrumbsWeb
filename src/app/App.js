@@ -8,6 +8,7 @@ import UploadVideo from "../pages/uploadVideo/UploadVideo.js";
 import SignUp from "../pages/signup/SignUp";
 import Login from "../pages/login/Login";
 import WatchVideo from "../pages/watchvideo/WatchVideo.js";
+import UserProfile from "../pages/UserProfile/UserProfile.js";
 import { AuthProvider } from "../contexts/AuthContext.js";
 import { VideoProvider } from "../contexts/VideoContext.js";
 import PrivateRoute from "../PrivateRoute";
@@ -27,6 +28,7 @@ function App() {
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/watch/:videoId" element={<WatchVideo />} />
+                  <Route path="/crumb/:userId" element={<UserProfile />} />
                 </Routes>
               </div>
             </VideoProvider>

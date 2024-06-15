@@ -5,6 +5,7 @@
     padding: 10px;
     height: 25px;
     transform: translateY(-10px);
+    cursor: pointer;
 }
 
 .like-button-right {

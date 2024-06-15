@@ -148,7 +148,7 @@ const SignUp = () => {
           <div className="field-container">
             <b>Full Name</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="fullName"
               value={formData.fullName}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
@@ -157,7 +157,7 @@ const SignUp = () => {
           <div className="field-container">
             <b>Username</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="username"
               value={formData.username}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
@@ -166,7 +166,7 @@ const SignUp = () => {
           <div className="field-container">
             <b>Email</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="email"
               value={formData.email}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
@@ -175,7 +175,7 @@ const SignUp = () => {
           <div className="field-container">
             <b>Password</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="password"
               type="password"
               value={formData.password}
@@ -185,7 +185,7 @@ const SignUp = () => {
           <div className="field-container">
             <b>Confirm Password</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="password_auth"
               type="password"
               value={formData.password_auth}
@@ -231,7 +231,7 @@ const SignUp = () => {
           <div className="field-container">
             <b>Phone Number</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}

@@ -40,20 +40,22 @@ export default function ListInput(props) {
   return (
     <div>
       {props.editMode && (
-        <div className={`field ${theme}`} id="input-title">
+        <div className={`input-field ${theme}`} id="input-title">
           <div>
             <input className={`input-empty ${theme}`} type="text" value={textBox} onChange={handleTextBoxChange} />
           </div>
-          <img
-            type="button"
-            value={textBox}
-            name={props.name}
-            id={props.name}
-            onClick={addItem}
-            src={addIcon}
-            className="button-icon"
-            alt="icon"
-          />
+          <div className={`input-highlight ${theme}`}>
+            <img
+              type="button"
+              value={textBox}
+              name={props.name}
+              id={props.name}
+              onClick={addItem}
+              src={addIcon}
+              className="button-icon"
+              alt="icon"
+            />
+          </div>
         </div>
       )}
       <List

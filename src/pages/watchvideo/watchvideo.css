@@ -2,9 +2,12 @@
   display: flex;
   justify-content: space-around;
   gap: 20px;
+  width: 100%;
+  max-width: 1717px;
 }
 
 .main-video-section {
+
   width: 100%;
 }
 

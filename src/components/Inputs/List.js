@@ -22,7 +22,7 @@ export default function List(props) {
     props.list.length !== 0 && (
       <div className="input-items-list">
         {props.list.map((item, index) => (
-          <div className={`field ${theme}`} id="input-item" key={index}>
+          <div className={`input-field ${theme}`} id="input-item" key={index}>
             {item}
             {props.editMode && (
               <img src={removeIcon} className="button-icon" id="action-icon" alt="icon" onClick={() => removeItem()} />
@@ -30,7 +30,7 @@ export default function List(props) {
           </div>
         ))}
         {props.list.length > 2 && props.editMode && (
-          <div className={`field ${theme}`} id="input-item" onClick={() => removeAll()}>
+          <div className={`input-field ${theme}`} id="input-item" onClick={() => removeAll()}>
             Remove All
           </div>
         )}

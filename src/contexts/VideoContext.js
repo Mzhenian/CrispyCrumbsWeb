@@ -1,12 +1,12 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
 import videoDB from "../DB/videosDB.json";
-import usersDB from "../DB/usersDB.json";
+import { AuthContext } from "./AuthContext"; // Adjust the import path if necessary
 
 const VideoContext = createContext();
 
 const VideoProvider = ({ children }) => {
+  const { users } = useContext(AuthContext);
   const [videos, setVideos] = useState(videoDB.videos);
-  const [users] = useState(usersDB.users);
 
   const getVideoById = (videoId) => videos.find((video) => video.videoId === videoId);
   const getUserById = (userId) => users.find((user) => user.userId === userId);
@@ -104,7 +104,6 @@ const VideoProvider = ({ children }) => {
     <VideoContext.Provider
       value={{
         videos,
-        users,
         getVideoById,
         getUserById,
         editVideo,

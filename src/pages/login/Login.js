@@ -47,7 +47,7 @@ const Login = () => {
           <div className="field-container">
             <b>Username</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="username"
               value={formData.username}
               onChange={handleInputChange}
@@ -56,7 +56,7 @@ const Login = () => {
           <div className="field-container">
             <b>Password</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="password"
               type="password"
               value={formData.password}
