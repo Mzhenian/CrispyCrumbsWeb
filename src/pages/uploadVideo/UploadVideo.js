@@ -1,8 +1,8 @@
 import React, { useContext, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
-import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
-import ListInput from "../../components/Inputs/ListInput.js";
+import DropDownMenu from "../../components/inputs/DropDownMenu.js";
+import ListInput from "../../components/inputs/ListInput.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";

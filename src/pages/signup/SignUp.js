@@ -2,13 +2,13 @@ import React, { useContext, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
 import { AuthContext } from "../../contexts/AuthContext.js";
-import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
+import DropDownMenu from "../../components/inputs/DropDownMenu.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
 import "./SignUp.css";
 import TermsOfUse from "./components/TermsOfUse.js";
-import OnOffToggle from "../../components/Inputs/toggle/OnOffToggle.js";
+import OnOffToggle from "../../components/inputs/toggle/OnOffToggle.js";
 import { months, days, years } from "./SignUpData.js";
 import countries from "../../DB/Countries/CountriesListsData.js";
 
