@@ -1,17 +1,17 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import { ThemeProvider } from "../contexts/ThemeContext";
-import TopBar from "../components/topBar/TopBar";
-import Home from "../pages/home/Home";
+import { ThemeProvider } from "../contexts/ThemeContext.js";
+import TopBar from "../components/topBar/TopBar.js";
+import Home from "../pages/home/Home.js";
 import UploadVideo from "../pages/uploadVideo/UploadVideo.js";
-import SignUp from "../pages/signup/SignUp";
-import Login from "../pages/login/Login";
+import SignUp from "../pages/signup/SignUp.js";
+import Login from "../pages/login/Login.js";
 import WatchVideo from "../pages/watchvideo/WatchVideo.js";
-import UserProfile from "../pages/UserProfile/UserProfile.js";
+import UserProfile from "../pages/userProfile/UserProfile.js";
 import { AuthProvider } from "../contexts/AuthContext.js";
 import { VideoProvider } from "../contexts/VideoContext.js";
-import PrivateRoute from "../PrivateRoute";
+import PrivateRoute from "../PrivateRoute.js";
 
 function App() {
   return (

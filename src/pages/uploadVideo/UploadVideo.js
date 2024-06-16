@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext.js";
 import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
 import ListInput from "../../components/Inputs/ListInput.js";
 import Container from "../../components/container/Container.js";

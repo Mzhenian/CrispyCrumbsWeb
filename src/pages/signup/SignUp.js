@@ -7,9 +7,9 @@ import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
 import "./SignUp.css";
-import TermsOfUse from "./components/TermsOfUse";
+import TermsOfUse from "./components/TermsOfUse.js";
 import OnOffToggle from "../../components/Inputs/toggle/OnOffToggle.js";
-import { months, days, years } from "./SignUpData";
+import { months, days, years } from "./SignUpData.js";
 import countries from "../../DB/Countries/CountriesListsData.js";
 
 const SignUp = () => {
