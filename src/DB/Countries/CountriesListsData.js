@@ -253,7 +253,7 @@ import zaFlag from "./flags/zaFlag.svg";
 import zmFlag from "./flags/zmFlag.svg";
 import zwFlag from "./flags/zwFlag.svg";
 
-export const countries = [
+const countries = [
   { name: "Andorra", fileName: adFlag },
   { name: "United Arab Emirates", fileName: aeFlag },
   { name: "Afghanistan", fileName: afFlag },
@@ -505,3 +505,5 @@ export const countries = [
   { name: "Zambia", fileName: zmFlag },
   { name: "Zimbabwe", fileName: zwFlag },
 ];
+
+export default countries;

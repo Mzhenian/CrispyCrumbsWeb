@@ -1,8 +1,8 @@
 import { React, useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { ThemeContext } from "../../ThemeContext";
-import "./buttons.css";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import "./Buttons.css";
 
 const LightButton = ({ text, onClick, icon, link }) => {
   const theme = useContext(ThemeContext).theme;

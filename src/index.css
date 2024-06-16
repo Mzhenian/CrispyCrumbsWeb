@@ -1,7 +1,7 @@
 :root {
   --white-color: #fffaf0;
   --black-color: #101010;
-  --dark-white-color: #f8f3eb;
+  --dark-white-color: #F0EBE1;
   --light-black-color: #1e1d1a;
 
   /* Light Theme Colors */
@@ -68,10 +68,12 @@ a {
   font-weight: 700;
 }
 
+Link.light,
 a.light {
   color: var(--black-color);
 }
 
+Link.light,
 a.dark {
   color: var(--white-color);
 }
@@ -79,4 +81,9 @@ a.dark {
 textarea {
   resize: none;
   width: 100%;
+}
+
+.no-link-style {
+  text-decoration: none;
+  color: inherit;
 }

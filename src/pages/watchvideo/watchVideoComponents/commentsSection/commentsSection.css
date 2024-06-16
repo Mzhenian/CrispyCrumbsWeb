@@ -11,7 +11,7 @@
   border-top-right-radius: 30px 20px;
   border-bottom-right-radius: 20px 30px;
   border-bottom-left-radius: 30px 20px;
-  transition: 0.3 ease-in-out;
+  transition: 0.3s ease-in-out;
   transition: background-color 0.1s ease-in-out;
   padding: 15px 20px;
 }

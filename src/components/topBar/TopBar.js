@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import "./topBar.css";
-import { AuthContext } from "../../AuthContext";
-import { ThemeContext } from "../../ThemeContext";
+import "./TopBar.css";
+import { AuthContext } from "../../contexts/AuthContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import GenericButton from "../buttons/GenericButton";
 import ProfilePhoto from "./profilePhoto/ProfilePhoto";
 import LightDarkButton from "./lightDarkButton/LightDarkButton";
