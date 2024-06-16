@@ -1,83 +1,57 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
-import videoDB from "../../DB/videosDB.json";
-import usersDB from "../../DB/usersDB.json";
-import "./watchvideo.css";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
+import { VideoContext } from "../../contexts/VideoContext";
+import "./WatchVideo.css";
 import LikeButton from "./watchVideoComponents/likeButton/LikeButton";
 import SuggestedVideos from "./watchVideoComponents/suggestedFunctions/SuggestedVideos";
-import { AuthContext } from "../../AuthContext";
-import { ThemeContext } from "../../ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import CommentsSection from "./watchVideoComponents/commentsSection/CommentsSection";
+import SubscribeButton from "../../components/buttons/SubscribeButton";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
   const { currentUser } = useContext(AuthContext);
-  const { videoId } = useParams(); // Get videoId from URL parameters
+  const { videoId } = useParams();
+  const { getVideoById, getUserById, likeVideo, dislikeVideo } = useContext(VideoContext);
   const [video, setVideo] = useState(null);
   const [author, setAuthor] = useState(null);
-  const [likes, setLikes] = useState(0);
-  const [dislikes, setDislikes] = useState(0);
-  const [views, setViews] = useState(0);
-  const [comments, setComments] = useState([]);
   const [likeSelected, setLikeSelected] = useState(false);
   const [dislikeSelected, setDislikeSelected] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Scroll to the top when the videoId changes
     window.scrollTo(0, 0);
-
-    // Find the video by videoId
-    const foundVideo = videoDB.videos.find((v) => v.videoId === videoId);
+    const foundVideo = getVideoById(videoId);
     if (foundVideo) {
       setVideo(foundVideo);
-      setLikes(foundVideo.likes);
-      setDislikes(foundVideo.dislikes);
-      setViews((prevViews) => prevViews + 1);
-      setComments(foundVideo.comments);
+      const videoAuthor = getUserById(foundVideo.userId);
+      setAuthor(videoAuthor);
 
-      const foundAuthor = usersDB.users.find((user) => user.userId === foundVideo.userId);
-      setAuthor(foundAuthor);
-
-      // Ensure likedBy and dislikedBy exist before checking if currentUser is included
       if (currentUser && Array.isArray(foundVideo.likedBy)) {
         setLikeSelected(foundVideo.likedBy.includes(currentUser.userId));
         setDislikeSelected(foundVideo.dislikedBy.includes(currentUser.userId));
+      } else if (!currentUser) {
+        setLikeSelected(false);
+        setDislikeSelected(false);
       }
     }
-  }, [videoId, currentUser]);
+  }, [videoId, currentUser, getVideoById, getUserById]);
 
   const handleLike = () => {
-    if (!currentUser) return alert("You must be logged in to like a video.");
-
-    setLikeSelected((prevLikeSelected) => {
-      const newLikeSelected = !prevLikeSelected;
-      if (newLikeSelected) {
-        setLikes((prevLikes) => prevLikes + 1);
-        setDislikeSelected(false);
-        setDislikes((prevDislikes) => (dislikeSelected ? prevDislikes - 1 : prevDislikes));
-      } else {
-        setLikes((prevLikes) => prevLikes - 1);
-      }
-      return newLikeSelected;
-    });
+    if (!currentUser) return navigate("/login");
+    likeVideo(videoId, currentUser.userId);
+    setLikeSelected(!likeSelected);
+    if (dislikeSelected) setDislikeSelected(false);
   };
 
   const handleDislike = () => {
-    if (!currentUser) return alert("You must be logged in to dislike a video.");
-
-    setDislikeSelected((prevDislikeSelected) => {
-      const newDislikeSelected = !prevDislikeSelected;
-      if (newDislikeSelected) {
-        setDislikes((prevDislikes) => prevDislikes + 1);
-        setLikeSelected(false);
-        setLikes((prevLikes) => (likeSelected ? prevLikes - 1 : prevLikes));
-      } else {
-        setDislikes((prevDislikes) => prevDislikes - 1);
-      }
-      return newDislikeSelected;
-    });
+    if (!currentUser) return navigate("/login");
+    dislikeVideo(videoId, currentUser.userId);
+    setDislikeSelected(!dislikeSelected);
+    if (likeSelected) setLikeSelected(false);
   };
 
   const toggleDescription = () => {
@@ -103,8 +77,8 @@ const WatchVideo = () => {
           <h1 className="single-line-text">{video.title}</h1>
           <div className="buttons">
             <LikeButton
-              dislikeCounter={dislikes}
-              likeCounter={likes}
+              dislikeCounter={video.dislikes}
+              likeCounter={video.likes}
               like={handleLike}
               dislike={handleDislike}
               likeSelected={likeSelected}
@@ -116,16 +90,21 @@ const WatchVideo = () => {
         <div className="author-section">
           {author && (
             <>
-              <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />
-              <div className="author-details">
-                <b className="author-name">{author.userName}</b>
-                <p>{author.followers.length} followers</p>
-              </div>
+              <Link to={`/crumb/${author.userId}`}>
+                <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />{" "}
+              </Link>{" "}
+              <Link to={`/crumb/${author.userId}`} className="no-link-style">
+                <div className="author-details">
+                  <b className="author-name">{author.userName}</b>
+                  <p>{author.followers.length} followers</p>
+                </div>
+              </Link>
+              <SubscribeButton userToSubscribe={author.userId} />
             </>
           )}
         </div>
         <div className="details-section">
-          <p className="note">{`${views} views`}</p>
+          <p className="note">{`${video.views} views`}</p>
           <p className="note">{video.uploadDate}</p>
           {video.tags.slice(0, 5).map((t, index) => (
             <p key={index} className="note">
@@ -154,7 +133,7 @@ const WatchVideo = () => {
       <div className="main-video-section">
         {videoSection}
         <div className="video-details">
-          <CommentsSection videoId={videoId} currentUser={currentUser} comments={comments} setComments={setComments} />
+          <CommentsSection videoId={videoId} currentUser={currentUser} />
         </div>
       </div>
       <SuggestedVideos />

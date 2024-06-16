@@ -48,8 +48,7 @@ b {
   align-items: center;
 }
 
-.field {
-  min-width: 300px;
+.input-field {
   height: 34px;
 
   display: flex;
@@ -62,17 +61,23 @@ b {
   border-bottom-right-radius: 20px 30px;
   border-bottom-left-radius: 30px 20px;
 
-  transition: border-radius 0.3s ease-in-out;
   transition: background-color 0.1s ease-in-out;
+  transition: 0.3s ease-in-out;
   border: none;
+
+  font-family: "Rubik", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+
+  transition: padding-left 0s ease-in-out;
 }
 
-.field.light {
+.input-field.light {
   background-color: var(--white-color);
   color: var(--black-color);
 }
 
-.field.dark {
+.input-field.dark {
   background-color: var(--black-color);
   color: var(--white-color);
 }

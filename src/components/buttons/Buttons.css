@@ -35,6 +35,10 @@
     transition: 0.3s ease-in-out;
 }
 
+#subscribe-button {
+    width: 120px;
+}
+
 .generic-button:hover {
     border-top-left-radius: 30px 20px;
     border-top-right-radius: 20px 30px;
@@ -67,8 +71,7 @@
     line-height: normal;
     text-decoration: none;
 
-    padding: 9px 25px;
-
+    padding: 9px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,7 +84,6 @@
     border-bottom-left-radius: 30px 20px;
     scale: 100%;
 
-    transition-property: border-radius, scale;
     transition: 0.3s ease-in-out;
 }
 

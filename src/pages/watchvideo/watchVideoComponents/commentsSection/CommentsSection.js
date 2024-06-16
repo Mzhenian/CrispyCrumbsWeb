@@ -1,20 +1,20 @@
 import React, { useState, useContext } from "react";
-import usersDB from "../../../../DB/usersDB.json";
+import { VideoContext } from "../../../../contexts/VideoContext";
 import "./commentsSection.css";
-import { ThemeContext } from "../../../../ThemeContext";
+import { ThemeContext } from "../../../../contexts/ThemeContext";
 import ProfilePhoto from "../../../../components/profilePhoto/ProfilePhoto";
 import GenericButton from "../../../../components/buttons/GenericButton";
 import LightButton from "../../../../components/buttons/LightButton";
 
-const CommentsSection = ({ currentUser, comments, setComments }) => {
+const CommentsSection = ({ currentUser, videoId }) => {
   const { theme } = useContext(ThemeContext);
+  const { getUserById, getVideoById, addComment, editComment } = useContext(VideoContext);
+  const video = getVideoById(videoId);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingText, setEditingText] = useState("");
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-
+  const handleCommentSubmit = () => {
     if (newComment.trim()) {
       const newCommentObj = {
         commentId: Date.now().toString(),
@@ -22,7 +22,7 @@ const CommentsSection = ({ currentUser, comments, setComments }) => {
         comment: newComment,
         date: new Date().toLocaleDateString(),
       };
-      setComments((prevComments) => [newCommentObj, ...prevComments]);
+      addComment(videoId, newCommentObj);
       setNewComment("");
     }
   };
@@ -37,9 +37,11 @@ const CommentsSection = ({ currentUser, comments, setComments }) => {
   };
 
   const handleSaveEdit = (commentId) => {
-    setComments((prevComments) =>
-      prevComments.map((comment) => (comment.commentId === commentId ? { ...comment, comment: editingText } : comment))
-    );
+    const updatedComment = {
+      ...video.comments.find((comment) => comment.commentId === commentId),
+      comment: editingText,
+    };
+    editComment(videoId, updatedComment);
     setEditingCommentId(null);
     setEditingText("");
   };
@@ -67,9 +69,9 @@ const CommentsSection = ({ currentUser, comments, setComments }) => {
   );
 
   const commentsList =
-    comments &&
-    comments.map((comment) => {
-      const commentAuthor = usersDB.users.find((user) => user.userId === comment.userId);
+    video.comments &&
+    video.comments.map((comment) => {
+      const commentAuthor = getUserById(comment.userId);
       return (
         <div key={comment.commentId} className={`comment-box ${theme}`} id="comment">
           {editingCommentId === comment.commentId ? (

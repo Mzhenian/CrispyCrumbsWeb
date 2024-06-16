@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "../../../ThemeContext";
+import { ThemeContext } from "../../../contexts/ThemeContext";
 import darkTheme from "../../iconsLab/darkTheme.svg";
 import lightTheme from "../../iconsLab/lightTheme.svg";
 import "./lightDarkButton.css";

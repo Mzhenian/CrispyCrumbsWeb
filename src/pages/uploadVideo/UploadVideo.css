@@ -1,0 +1,38 @@
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload-video-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.upload-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.upload-img {
+  align-self: center;
+  justify-self: center;
+  width: 60%;
+  margin-bottom: 20px;
+}
+
+.upload-click-here {
+  text-align: center;
+  cursor: pointer;
+}

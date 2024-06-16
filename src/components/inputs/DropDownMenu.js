@@ -1,10 +1,8 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
-import "./inputs.css";
-import "../buttons/buttons.css";
-import { ThemeContext } from "../../ThemeContext";
-
+import "./Inputs.css";
+import "../buttons/Buttons.css";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import dropdownIcon from "../iconsLab/down.svg";
-import searchIcon from "../iconsLab/searchWhite.svg";
 
 export default function DropDownMenu(props) {
   const [dropdown, setDropdown] = useState(false);
@@ -16,13 +14,13 @@ export default function DropDownMenu(props) {
     setDropdown(!dropdown);
   };
 
-  const action = (name, value) => {
+  const handleAction = (name, value) => {
     props.action(name, value);
     updateDropDown();
   };
 
   const getFileName = (name) => {
-    if (!name) return null; // Check for undefined name
+    if (!name) return null;
     const lowercaseName = name.toLowerCase();
     const File = props.arr.find((c) => c.name && c.name.toLowerCase() === lowercaseName);
     return File ? File.fileName : null;
@@ -34,8 +32,7 @@ export default function DropDownMenu(props) {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && filteredItems.length > 0) {
-      // If Enter key is pressed and there are filtered items, select the first item
-      action(props.name, filteredItems[0].name);
+      handleAction(props.name, filteredItems[0].name);
     }
   };
 
@@ -50,29 +47,27 @@ export default function DropDownMenu(props) {
   };
 
   useEffect(() => {
-    // Attach the event listener on mount
     document.addEventListener("mousedown", handleOutsideClick);
-
-    // Detach the event listener on unmount
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, []); // Empty dependency array means this effect will only run on mount and unmount
+  }, []);
+
+  const onClicking = (e) => {
+    if (e.target !== e.currentTarget) return;
+    e.preventDefault();
+    updateDropDown();
+  };
 
   const DropdownTitle = (
     <div
-      className={`field ${theme}`}
-      id="dropdown-title"
-      onMouseDown={(e) => {
-        if (e.target !== e.currentTarget) return; // Only handle clicks on the title itself
-        e.preventDefault();
-        updateDropDown();
-      }}
+      className={`input-field ${theme}`}
+      id={dropdown ? `dropdown-title-on` : `dropdown-title-off`}
+      onMouseDown={(e) => onClicking(e)}
     >
       <div className="title-flag-container">
         {dropdown ? (
           <>
-            <img src={searchIcon} className="button-icon" alt="icon" />
             <input
               type="text"
               placeholder="Search..."
@@ -84,34 +79,36 @@ export default function DropDownMenu(props) {
           </>
         ) : (
           <>
-            {props.showFlag && <img src={getFileName(props.value)} className="button-icon" alt="icon" />}
+            {props.showFlag && <img src={getFileName(props.value)} className="button-icon" alt="flag icon" />}
             {props.value}
           </>
         )}
       </div>
-      <img
-        src={dropdownIcon}
-        className="button-icon"
-        id={`dropdown-icon-${dropdown ? "activated" : "deactivated"}`}
-        alt="icon"
-      />
+      <div className={`input-highlight ${theme}`} onMouseDown={(e) => onClicking(e)}>
+        <img
+          onMouseDown={(e) => onClicking(e)}
+          src={dropdownIcon}
+          className="button-icon"
+          id={`dropdown-icon-${dropdown ? "activated" : "deactivated"}`}
+          alt="dropdown icon"
+        />
+      </div>
     </div>
   );
 
   const DropDownList = (
     <div className={`dropdown-list ${theme}`} id={`dropdown-list-${dropdown ? "activated" : "deactivated"}`}>
       {filteredItems.map((item, index) => (
-        <div key={index} className={`dropdown-item ${theme}`} onClick={(e) => action(props.name, item.name)}>
-          {props.showFlag && <img src={item.fileName} className="button-icon" alt="icon" />}
+        <div key={index} className={`dropdown-item ${theme}`} onClick={() => handleAction(props.name, item.name)}>
+          {props.showFlag && <img src={item.fileName} className="button-icon" alt="flag icon" />}
           {item.name}
         </div>
       ))}
-      fffff
     </div>
   );
 
   return (
-    <div ref={dropdownRef}>
+    <div ref={dropdownRef} style={{ width: "100%" }}>
       {DropdownTitle}
       {DropDownList}
     </div>

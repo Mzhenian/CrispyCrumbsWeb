@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import { ThemeContext } from "../../../ThemeContext";
-import { AuthContext } from "../../../AuthContext";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import { AuthContext } from "../../../contexts/AuthContext";
 import "./profilePhoto.css";
 
 const ProfilePhoto = () => {
@@ -12,7 +12,6 @@ const ProfilePhoto = () => {
   useEffect(() => {
     if (currentUser && currentUser.profilePhoto) {
       setProfilePhoto(currentUser.profilePhoto);
-      console.log("Profile photo set to:", currentUser.profilePhoto);
     }
   }, [currentUser]);
 

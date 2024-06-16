@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ThemeContext } from "../../ThemeContext.js";
+import { ThemeContext } from "../../contexts/ThemeContext.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
-import { AuthContext } from "../../AuthContext";
-import "./login.css";
-import OnOffToggle from "../../components/Inputs/toggle/OnOffToggle.js";
+import { AuthContext } from "../../contexts/AuthContext.js";
+import "./Login.css";
+import OnOffToggle from "../../components/inputs/toggle/OnOffToggle.js";
 
 const Login = () => {
   const { theme } = useContext(ThemeContext);
@@ -29,7 +29,6 @@ const Login = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
     const { username, password } = formData;
     if (login(username, password)) {
       const targetRoute = "/";
@@ -48,7 +47,7 @@ const Login = () => {
           <div className="field-container">
             <b>Username</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="username"
               value={formData.username}
               onChange={handleInputChange}
@@ -57,7 +56,7 @@ const Login = () => {
           <div className="field-container">
             <b>Password</b>
             <input
-              className={`field ${theme}`}
+              className={`input-field ${theme}`}
               name="password"
               type="password"
               value={formData.password}
@@ -70,10 +69,7 @@ const Login = () => {
               <OnOffToggle
                 name="rememberMe"
                 value={formData.rememberMe}
-                action={(e) => {
-                  setFormData({ ...formData, rememberMe: !formData.rememberMe });
-                  console.log(formData.rememberMe);
-                }}
+                action={() => setFormData({ ...formData, rememberMe: !formData.rememberMe })}
               />
             </div>
             <Link className={theme} to="./forgotpassword">
@@ -82,7 +78,7 @@ const Login = () => {
           </div>
           <div className="buttons-container">
             <GenericButton text="Log in" type="submit" onClick={handleSubmit} />
-            <LightButton text="Signup" link="./signup" />
+            <LightButton text="Signup" link="/signup" />
           </div>
         </form>
       </Container>
