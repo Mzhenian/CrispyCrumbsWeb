@@ -97,6 +97,11 @@ b {
 }
 
 
+.field:valid {
+  background-color: inherit;
+  border: none;
+  outline: none;
+}
 
 .error {
   margin-bottom: 16pt;
