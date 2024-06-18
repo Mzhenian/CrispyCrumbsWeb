@@ -27,13 +27,15 @@ const UserProfile = () => {
         <VideoList userId={userId} />
       </div>
       <div className="profile-details">
-        <Container>
-          <ProfilePhoto profilePhoto={user.profilePhoto} userName={user.userName} />
-          <h1>{user.fullName}</h1>
-          <p>Username: {user.userName}</p>
+        <Container id="container-style">
+          <ProfilePhoto profilePhoto={user.profilePhoto} userName={user.userName} profilePhotoStyle={"profile-style"} />
+          <h1>{user.userName}</h1>
+          <div className="linear-layout-2">
+            <p>Followers: {user.followers.length}</p>
+            <p>Following: {user.following.length}</p>
+          </div>
           <p>Country: {user.country}</p>
-          <p>Followers: {user.followers.length}</p>
-          <p>Following: {user.following.length}</p>
+
           <SubscribeButton userToSubscribe={user.userId} />
         </Container>
       </div>

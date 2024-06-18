@@ -3,7 +3,7 @@ import "../buttons/Buttons.css";
 import React, { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 
-import removeIcon from "../iconsLab/close.svg";
+import removeIcon from "../iconsLab/closeOrange.svg";
 
 export default function List(props) {
   const theme = useContext(ThemeContext).theme;

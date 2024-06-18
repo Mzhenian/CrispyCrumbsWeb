@@ -12,14 +12,14 @@ const LightButton = ({ text, onClick, icon, link }) => {
       {link && (
         <Link to={link} aria-disabled={true} role="button" tabIndex={0} onClick={onClick}>
           <div className={`light-button ${theme}`}>
-            {text}
+            <div className="button-text">{text}</div>
             {icon && <img className="button-icon" src={icon} alt={text} />}
           </div>
         </Link>
       )}
       {!link && (
         <div className={`light-button ${theme}`} onClick={onClick}>
-          {text}
+          <div className="button-text">{text}</div>
           {icon && <img className="button-icon" src={icon} alt={text} />}
         </div>
       )}

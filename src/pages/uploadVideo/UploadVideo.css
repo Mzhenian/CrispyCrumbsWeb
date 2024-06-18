@@ -4,9 +4,10 @@
   align-items: center;
 }
 
-.upload-video-container {
-  width: 100%;
-  max-width: 600px;
+#upload-video-container {
+  width: 800px;
+  display: flex;
+  flex-direction: column;
 }
 
 .upload-form-container {
@@ -35,4 +36,9 @@
 .upload-click-here {
   text-align: center;
   cursor: pointer;
+}
+
+#description-field {
+  height: 200px;
+  box-sizing: border-box;
 }

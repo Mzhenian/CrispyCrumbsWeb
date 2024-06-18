@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import "./profilePhoto.css";
@@ -8,6 +9,7 @@ const ProfilePhoto = () => {
   const { currentUser, logout } = useContext(AuthContext);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser && currentUser.profilePhoto) {
@@ -21,8 +23,9 @@ const ProfilePhoto = () => {
 
   const popup = (
     <div className={`popup ${theme}`}>
-      <div className="popup-row">View my profile</div>
-      <div className="popup-row">Settings</div>
+      <div className="popup-row" onClick={() => navigate(`/crumb/${currentUser.userId}`)}>
+        View my profile
+      </div>
       <div className="popup-row" onClick={logout}>
         Log out
       </div>

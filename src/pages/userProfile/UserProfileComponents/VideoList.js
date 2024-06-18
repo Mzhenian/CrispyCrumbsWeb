@@ -4,9 +4,12 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import { VideoContext } from "../../../contexts/VideoContext";
 import GenericButton from "../../../components/buttons/GenericButton";
 import "../../home/VideoList.css";
+import { AuthContext } from "../../../contexts/AuthContext";
+import editIcon from "../../../components/iconsLab/edit.svg";
 
 const VideoList = ({ userId }) => {
   const { theme } = useContext(ThemeContext);
+  const { currentUser } = useContext(AuthContext);
   const { videos } = useContext(VideoContext);
   const [sortOption, setSortOption] = useState("newest");
   const [userVideos, setUserVideos] = useState([]);
@@ -39,18 +42,26 @@ const VideoList = ({ userId }) => {
     <div className={`watch-user-profile-video-section ${theme}`}>
       {sortedVideos().map((video) => {
         return (
-          <Link to={`/watch/${video.videoId}`} key={video.videoId} className={`user-profile-video-card ${theme}`}>
-            <div className="thumbnail-container">
-              <img src={video.thumbnail} alt={video.title} className="user-profile-video-thumbnail" />
-            </div>
-            <div className="user-profile-video-details">
-              <div className="user-profile-video-info">
-                <p className="user-profile-video-title">{video.title}</p>
-                <p className="note">{video.views} views</p>
-                <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
+          <div key={video.videoId} className={`user-profile-video-card ${theme}`}>
+            <Link to={`/watch/${video.videoId}`} className="no-link-style">
+              <div className="thumbnail-container">
+                <img src={video.thumbnail} alt={video.title} className="user-profile-video-thumbnail" />
               </div>
+
+              <div>
+                <div className="user-profile-video-details">
+                  <div className="user-profile-video-info">
+                    <p className="user-profile-video-title">{video.title}</p>
+                    <p className="note">{video.views} views</p>
+                    <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+            <div className="video-list-edit-icon">
+              {currentUser.userId === userId && <GenericButton icon={editIcon} link={`/edit/${video.videoId}`} />}
             </div>
-          </Link>
+          </div>
         );
       })}
     </div>

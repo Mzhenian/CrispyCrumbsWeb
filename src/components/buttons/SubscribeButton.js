@@ -30,7 +30,6 @@ const SubscribeButton = ({ userToSubscribe, displayNum = false }) => {
     setSubscribed(!subscribed);
   };
 
-
   return !currentUser ? (
     <Link to="/login" className={`generic-button ${theme}`} id="subscribe-button">
       Subscribe

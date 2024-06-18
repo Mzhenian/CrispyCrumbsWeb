@@ -5,6 +5,7 @@ import { ThemeContext } from "../../../../contexts/ThemeContext";
 import ProfilePhoto from "../../../../components/profilePhoto/ProfilePhoto";
 import GenericButton from "../../../../components/buttons/GenericButton";
 import LightButton from "../../../../components/buttons/LightButton";
+import editIcon from "../../../../components/iconsLab/edit.svg";
 
 const CommentsSection = ({ currentUser, videoId }) => {
   const { theme } = useContext(ThemeContext);
@@ -93,14 +94,14 @@ const CommentsSection = ({ currentUser, videoId }) => {
               <div className="comment-data">
                 <div className="comment-title">
                   <b>@{commentAuthor.userName}</b> {comment.date}
-                  {currentUser && currentUser.userId === comment.userId && (
-                    <>
-                      <GenericButton text="Edit" onClick={() => handleEditClick(comment.commentId, comment.comment)} />
-                    </>
-                  )}
                 </div>
                 <p>{comment.comment}</p>
               </div>
+            </div>
+          )}
+          {currentUser && currentUser.userId === comment.userId && editingCommentId !== comment.commentId && (
+            <div className="edit-button-container">
+              <GenericButton icon={editIcon} onClick={() => handleEditClick(comment.commentId, comment.comment)} />
             </div>
           )}
         </div>

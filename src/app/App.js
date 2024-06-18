@@ -11,7 +11,9 @@ import WatchVideo from "../pages/watchvideo/WatchVideo.js";
 import UserProfile from "../pages/userProfile/UserProfile.js";
 import { AuthProvider } from "../contexts/AuthContext.js";
 import { VideoProvider } from "../contexts/VideoContext.js";
-import PrivateRoute from "../PrivateRoute.js";
+import PrivateRoute from "../routs/PrivateRoute.js";
+import SignedRoute from "../routs/SignedRoute.js";
+import EditVideo from "../pages/editVideo/EditVideo.js";
 
 function App() {
   return (
@@ -25,10 +27,11 @@ function App() {
                 <Routes>
                   <Route index element={<Home />} />
                   <Route path="/uploadvideo" element={<PrivateRoute element={<UploadVideo />} />} />
-                  <Route path="/signup" element={<SignUp />} />
-                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<SignedRoute element={<SignUp />} />} />
+                  <Route path="/login" element={<SignedRoute element={<Login />} />} />
                   <Route path="/watch/:videoId" element={<WatchVideo />} />
                   <Route path="/crumb/:userId" element={<UserProfile />} />
+                  <Route path="/edit/:videoId" element={<EditVideo />} />
                 </Routes>
               </div>
             </VideoProvider>

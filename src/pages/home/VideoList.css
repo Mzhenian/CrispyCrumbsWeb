@@ -102,3 +102,30 @@
   gap: 10px;
   margin-bottom: 25px;
 }
+
+.video-list-edit-icon {
+  position: absolute;
+}
+
+.thumbnail-link,
+.title-link,
+.author-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  /* Make it clear the author name is clickable */
+}
+
+.thumbnail-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  /* 16:9 Aspect Ratio */
+  overflow: hidden;
+  border-top-left-radius: 20px 30px;
+  border-top-right-radius: 30px 20px;
+  border-bottom-right-radius: 20px 30px;
+  border-bottom-left-radius: 30px 20px;
+  background-color: var(--tertiary-color-dark);
+  transition: 0.3s ease-in-out;
+}
