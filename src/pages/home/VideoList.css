@@ -102,3 +102,16 @@
   gap: 10px;
   margin-bottom: 25px;
 }
+
+.video-list-edit-icon {
+  position: absolute;
+}
+
+.thumbnail-link,
+.title-link,
+.author-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  /* Make it clear the author name is clickable */
+}

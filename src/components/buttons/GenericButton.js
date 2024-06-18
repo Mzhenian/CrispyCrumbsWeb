@@ -19,13 +19,13 @@ const GenericButton = ({ text, onClick, icon, link, fileInput }) => {
       {link ? (
         <Link to={link} aria-disabled={true} role="button" tabIndex={0} onClick={handleClick}>
           <div className={`generic-button ${theme}`}>
-            {text}
+            {text && <div className="button-text">{text}</div>}
             {icon && <img className="button-icon" src={icon} alt={text} />}
           </div>
         </Link>
       ) : (
         <div className={`generic-button ${theme}`} onClick={handleClick}>
-          {text}
+          {text && <div className="button-text">{text}</div>}
           {icon && <img className="button-icon" src={icon} alt={text} />}
         </div>
       )}

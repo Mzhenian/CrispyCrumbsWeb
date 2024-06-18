@@ -1,27 +1,26 @@
-import React, { useContext, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState, useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
 import DropDownMenu from "../../components/inputs/DropDownMenu.js";
 import ListInput from "../../components/inputs/ListInput.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
-import Popup from "../../components/popup/Popup.js";
 import { VideoContext } from "../../contexts/VideoContext.js";
 import { AuthContext } from "../../contexts/AuthContext.js";
-import { categories } from "./UploadVideoData.js";
-import uploadLight from "./components/uploadLogo/uploadLight.svg";
-import uploadDark from "./components/uploadLogo/uploadLight.svg";
-import uploadIcon from "../../components/iconsLab/upload.svg";
+import { categories } from "../uploadVideo/UploadVideoData.js";
+import "../uploadVideo/UploadVideo.css";
+
 import cancelIcon from "../../components/iconsLab/closeOrange.svg";
+import editIcon from "../../components/iconsLab/edit.svg";
 
-import "./UploadVideo.css";
-
-const UploadVideo = () => {
+const EditVideo = () => {
   const { theme } = useContext(ThemeContext);
-  const { uploadVideo } = useContext(VideoContext);
+  const { editVideo, getVideoById } = useContext(VideoContext);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { videoId } = useParams();
+  const [video, setVideo] = useState(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -32,7 +31,30 @@ const UploadVideo = () => {
     thumbnail: null,
   });
   const [errorMessage, setErrorMessage] = useState("");
-  const [isPopupOpen, setIsPopupOpen] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  const thumbnailInputRef = useRef(null);
+
+  useEffect(() => {
+    const video = getVideoById(videoId);
+    setVideo(video);
+
+    if (video && currentUser) {
+      if (video.userId === currentUser.userId) {
+        setIsAuthorized(true);
+        setFormData({
+          title: video.title,
+          description: video.description,
+          category: video.category,
+          tags: video.tags,
+          videoFile: video.videoFile,
+          thumbnail: video.thumbnail,
+        });
+      } else {
+        setIsAuthorized(false);
+      }
+    }
+  }, [videoId, getVideoById, video, currentUser]);
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -46,7 +68,6 @@ const UploadVideo = () => {
       ...formData,
       [name]: files[0],
     });
-    setIsPopupOpen(false); // Close the popup once the file is selected or dropped
   };
 
   const handleTagsChange = (name, value) => {
@@ -62,59 +83,29 @@ const UploadVideo = () => {
       return;
     }
 
-    const newVideo = {
-      videoId: Date.now().toString(),
-      title: formData.title,
-      description: formData.description,
-      category: formData.category,
-      tags: formData.tags,
-      videoFile: URL.createObjectURL(formData.videoFile),
-      thumbnail: URL.createObjectURL(formData.thumbnail),
+    const updatedVideo = {
+      ...formData,
+      videoFile: formData.videoFile,
+      thumbnail: formData.thumbnail,
       userId: currentUser.userId,
-      views: 0,
-      likes: 0,
-      dislikes: 0,
-      uploadDate: new Date().toLocaleDateString(),
-      comments: [],
-      likedBy: [],
-      dislikedBy: [],
     };
 
-    // Upload video if all checks pass
-    uploadVideo(newVideo);
-
+    // Update video if all checks pass
+    editVideo(videoId, updatedVideo);
     navigate("/");
   };
 
-  const videoInputRef = useRef(null);
-  const thumbnailInputRef = useRef(null);
+  if (!isAuthorized) {
+    return (
+      <div className={`page ${theme}`}>
+        <p className={`error ${theme}`}>You are not authorized to edit this video.</p>
+      </div>
+    );
+  }
 
   return (
     <div className={`page ${theme}`}>
-      <Popup
-        isOpen={isPopupOpen}
-        onClose={() => setIsPopupOpen(false)}
-        title="Upload Video"
-        onFileDrop={(files) => handleFileChange("videoFile", files)}
-        canClose={false}
-      >
-        <div className="popup-body-content">
-          <img className="upload-img" src={theme === "light" ? uploadLight : uploadDark} alt="upload" />
-          <p className="upload-click-here" onClick={() => videoInputRef.current.click()}>
-            Click to here upload a file or drag and drop a file here.
-          </p>
-          <input
-            className="field"
-            name="videoFile"
-            type="file"
-            accept="video/*"
-            onChange={(e) => handleFileChange(e.target.name, e.target.files)}
-            ref={videoInputRef}
-            style={{ display: "none" }}
-          />
-        </div>
-      </Popup>
-      <Container title={"Upload Video"} containerStyle={"upload-video-container"}>
+      <Container title={"Edit Video"} containerStyle={"upload-video-container"}>
         <form className="upload-form-container" onSubmit={handleSubmit}>
           {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
           <div className="field-container">
@@ -165,8 +156,8 @@ const UploadVideo = () => {
             </div>
           </div>
           <div className="buttons-container">
-            <GenericButton text="Upload" type="submit" onClick={handleSubmit} icon={uploadIcon} />
-            <LightButton text="Cancel" link="/" icon={cancelIcon}/>
+            <GenericButton text="Update" type="submit" onClick={handleSubmit} icon={editIcon} />
+            <LightButton text="Cancel" link="/" icon={cancelIcon} />
           </div>
         </form>
       </Container>
@@ -174,4 +165,4 @@ const UploadVideo = () => {
   );
 };
 
-export default UploadVideo;
+export default EditVideo;

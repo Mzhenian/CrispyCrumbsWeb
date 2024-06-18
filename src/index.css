@@ -87,3 +87,16 @@ textarea {
   text-decoration: none;
   color: inherit;
 }
+
+#no-link-style {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+
+video::-webkit-media-controls-timeline {
+  background-color: #e69138;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+}

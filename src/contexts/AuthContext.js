@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [users, setUsers] = useState(usersDB.users);
+  const [users, setUsers] = useState(usersDB.users || []);
 
   useEffect(() => {
     const loggedUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     setUsers(updatedUsers);
     setCurrentUser(newUser);
     localStorage.setItem("currentUser", JSON.stringify(newUser));
-    localStorage.setItem("usersDB", JSON.stringify({ users: updatedUsers })); // Save updated users to localStorage
+    localStorage.setItem("usersDB", JSON.stringify({ users: updatedUsers }));
   };
 
   const isUsernameAvailable = (username) => {
@@ -119,7 +119,6 @@ export const AuthProvider = ({ children }) => {
     if (!currentUser) return false;
     return currentUser.following.includes(userIdToCheck);
   };
-
 
   return (
     <AuthContext.Provider

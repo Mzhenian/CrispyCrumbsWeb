@@ -1,5 +1,7 @@
 #signup-container {
     width: 800px;
+    display: flex;
+    flex-direction: column;
 }
 
 .field-container {

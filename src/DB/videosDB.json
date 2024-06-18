@@ -5,26 +5,33 @@
       "videoId": "1",
       "videoFile": "/videos/1.mp4",
       "thumbnail": "/videos/1.jpg",
-      "title": "השניצל שיעשה היסטוריה  השפים טועמים את המנה הכי ישראלית שיש",
-      "description": "השניצל שיעשה היסטוריה  השפים טועמים את המנה הכי ישראלית שיש",
+      "title": "השניצל שיעשה היסטוריה השפים טועמים את המנה הכי ישראלית שיש",
+      "description": "השניצל שיעשה היסטוריה. השפים טועמים את המנה הכי ישראלית שיש. מדובר בשניצל שמצליח לשבור את כל המוסכמות ולחדש בכל פעם מחדש.",
       "userId": "1",
-      "views": 10000,
-      "likes": 1000,
-      "dislikes": 100,
-      "tags": ["review"],
-      "uploadDate": "23.1.2023",
+      "views": 7000,
+      "likes": 2,
+      "dislikes": 1,
+      "tags": ["Review", "Israeli Food", "Cooking"],
+      "category": "Schnitzel",
+      "uploadDate": "2023-01-23T10:00:00.000Z",
       "comments": [
         {
           "commentId": "1",
           "userId": "2",
-          "comment": "awesome!",
-          "Date": "21.2.2024"
+          "comment": "Awesome!",
+          "Date": "2024-02-21T14:30:00.000Z"
         },
         {
           "commentId": "2",
           "userId": "3",
-          "comment": "unbelivable!",
-          "Date": "25.2.2024"
+          "comment": "Unbelievable!",
+          "Date": "2024-02-25T15:45:00.000Z"
+        },
+        {
+          "commentId": "3",
+          "userId": "4",
+          "comment": "This video made me hungry.",
+          "Date": "2024-02-27T16:00:00.000Z"
         }
       ],
       "likedBy": ["1", "2"],
@@ -35,31 +42,47 @@
       "videoFile": "/videos/2.mp4",
       "thumbnail": "/videos/2.jpg",
       "title": "כאן סקרנים _ איך נולד השניצל הישראלי",
-      "description": "כאן סקרנים _ איך נולד השניצל הישראלי",
+      "description": "כאן סקרנים. איך נולד השניצל הישראלי. מסע מרתק אל ההיסטוריה של אחד המאכלים הפופולריים בישראל.",
       "userId": "2",
       "views": 20000,
-      "likes": 2000,
-      "dislikes": 200,
-      "tags": ["Ediocasional"],
-      "uploadDate": "23.2.2023",
-      "comments": [],
-      "likedBy": ["1", "2"],
+      "likes": 3,
+      "dislikes": 1,
+      "tags": ["Educational", "History", "Israeli Food"],
+      "category": "Schnitzel",
+      "uploadDate": "2023-02-23T11:00:00.000Z",
+      "comments": [
+        {
+          "commentId": "1",
+          "userId": "5",
+          "comment": "Very informative!",
+          "Date": "2023-03-21T12:15:00.000Z"
+        }
+      ],
+      "likedBy": ["1", "2", "5"],
       "dislikedBy": ["3"]
     },
     {
       "videoId": "3",
       "videoFile": "/videos/3.mp4",
       "thumbnail": "/videos/3.jpg",
-      "title": "טירוף השניצל בחלה _ איפה הכי טעים, מה המחירים ומי המנצח ב_מדד הקריספיות",
-      "description": "טירוף השניצל בחלה _ איפה הכי טעים, מה המחירים ומי המנצח ב_מדד הקריספיות",
+      "title": "טירוף השניצל בחלה _ איפה הכי טעים, מה המחירים ומי המנצח במדד הקריספיות",
+      "description": "טירוף השניצל בחלה. איפה הכי טעים? מה המחירים? ומי המנצח במדד הקריספיות? כל התשובות בסרטון הזה.",
       "userId": "3",
       "views": 30000,
-      "likes": 3000,
-      "dislikes": 300,
-      "tags": ["Review"],
-      "uploadDate": "23.3.2023",
-      "comments": [],
-      "likedBy": ["1", "2"],
+      "likes": 3,
+      "dislikes": 1,
+      "tags": ["Review", "Food Tasting", "Price Comparison"],
+      "category": "Schnitzel",
+      "uploadDate": "2023-03-23T12:00:00.000Z",
+      "comments": [
+        {
+          "commentId": "1",
+          "userId": "6",
+          "comment": "Loved the comparison!",
+          "Date": "2023-04-23T13:30:00.000Z"
+        }
+      ],
+      "likedBy": ["1", "2", "6"],
       "dislikedBy": ["3"]
     },
     {
@@ -67,29 +90,47 @@
       "videoFile": "/videos/4.mp4",
       "thumbnail": "/videos/4.jpg",
       "title": "שניצל ביסלי כשר לפסח הכי טעים אבר #לאיודעת חלק 5",
-      "description": "שניצל ביסלי כשר לפסח הכי טעים אבר #לאיודעת חלק 5",
+      "description": "שניצל ביסלי כשר לפסח הכי טעים אי פעם! בסרטון זה אנו בוחנים את הטעמים המיוחדים של השניצל.",
       "userId": "4",
       "views": 40000,
-      "likes": 4000,
-      "dislikes": 400,
-      "tags": ["Recipe"],
-      "uploadDate": "23.4.2023",
-      "comments": []
+      "likes": 2,
+      "dislikes": 1,
+      "tags": ["Recipe", "Kosher", "Holiday"],
+      "category": "Schnitzel",
+      "uploadDate": "2023-04-23T14:00:00.000Z",
+      "comments": [
+        {
+          "commentId": "1",
+          "userId": "7",
+          "comment": "Perfect for Passover!",
+          "Date": "2023-04-24T15:00:00.000Z"
+        }
+      ],
+      "likedBy": ["1", "2"],
+      "dislikedBy": ["3"]
     },
     {
       "videoId": "5",
       "videoFile": "/videos/5.mp4",
       "thumbnail": "/videos/5.jpg",
       "title": "Schnitzel",
-      "description": "Schnitzel",
+      "description": "Schnitzel - A delightful dish that everyone loves. Watch as we dive into the making of this crispy treat.",
       "userId": "5",
       "views": 50000,
-      "likes": 5000,
-      "dislikes": 500,
-      "tags": ["Animation"],
-      "uploadDate": "23.5.2023",
-      "comments": [],
-      "likedBy": ["1", "2"],
+      "likes": 3,
+      "dislikes": 1,
+      "tags": ["Animation", "Food", "Cooking"],
+      "category": "Schnitzel",
+      "uploadDate": "2023-05-23T16:00:00.000Z",
+      "comments": [
+        {
+          "commentId": "1",
+          "userId": "8",
+          "comment": "Great animation!",
+          "Date": "2023-05-24T17:00:00.000Z"
+        }
+      ],
+      "likedBy": ["1", "2", "8"],
       "dislikedBy": ["3"]
     },
     {
@@ -97,15 +138,23 @@
       "videoFile": "/videos/6.mp4",
       "thumbnail": "/videos/6.jpg",
       "title": "שניצל זה טעים. (אנימציה)",
-      "description": "שניצל זה טעים. (אנימציה)",
+      "description": "שניצל זה טעים. (אנימציה) - סרטון קצר שמסביר בצורה משעשעת למה שניצל הוא המאכל האהוב על כולם.",
       "userId": "6",
       "views": 60000,
-      "likes": 6000,
-      "dislikes": 600,
-      "tags": ["Music"],
-      "uploadDate": "23.6.2023",
-      "comments": [],
-      "likedBy": ["1", "2"],
+      "likes": 3,
+      "dislikes": 1,
+      "tags": ["Music", "Animation", "Food"],
+      "category": "Schnitzel",
+      "uploadDate": "2023-06-23T18:00:00.000Z",
+      "comments": [
+        {
+          "commentId": "1",
+          "userId": "9",
+          "comment": "Catchy tune!",
+          "Date": "2023-06-24T19:00:00.000Z"
+        }
+      ],
+      "likedBy": ["1", "2", "9"],
       "dislikedBy": ["3"]
     },
     {
@@ -113,15 +162,23 @@
       "videoFile": "/videos/7.mp4",
       "thumbnail": "/videos/7.jpg",
       "title": "פרק 1- שניצל מושלם",
-      "description": "פרק 1- שניצל מושלם",
+      "description": "פרק 1- שניצל מושלם. בסדרה זו נלמד כיצד להכין את השניצל המושלם שלב אחר שלב.",
       "userId": "7",
       "views": 70000,
-      "likes": 7000,
-      "dislikes": 700,
-      "tags": ["Recipe"],
-      "uploadDate": "23.7.2023",
-      "comments": [],
-      "likedBy": ["1", "2"],
+      "likes": 3,
+      "dislikes": 1,
+      "tags": ["Recipe", "Cooking", "Tutorial"],
+      "category": "Schnitzel",
+      "uploadDate": "2023-07-23T20:00:00.000Z",
+      "comments": [
+        {
+          "commentId": "1",
+          "userId": "7",
+          "comment": "Can't wait to try this recipe!",
+          "Date": "2023-07-24T21:00:00.000Z"
+        }
+      ],
+      "likedBy": ["1", "2", "7"],
       "dislikedBy": ["3"]
     },
     {
@@ -129,15 +186,23 @@
       "videoFile": "/videos/8.mp4",
       "thumbnail": "/videos/8.jpg",
       "title": "טיפ השבוע - איך לטגן שניצל מושלם",
-      "description": "טיפ השבוע - איך לטגן שניצל מושלם",
+      "description": "טיפ השבוע - איך לטגן שניצל מושלם. כל מה שצריך לדעת על טיגון שניצל מושלם.",
       "userId": "8",
       "views": 80000,
-      "likes": 8000,
-      "dislikes": 800,
-      "tags": ["Recipe"],
-      "uploadDate": "23.8.2023",
-      "comments": [],
-      "likedBy": ["1", "2"],
+      "likes": 3,
+      "dislikes": 1,
+      "tags": ["Recipe", "Cooking", "Tips"],
+      "category": "Schnitzel",
+      "uploadDate": "2023-08-23T22:00:00.000Z",
+      "comments": [
+        {
+          "commentId": "1",
+          "userId": "1",
+          "comment": "Thanks for the tips!",
+          "Date": "2023-08-24T23:00:00.000Z"
+        }
+      ],
+      "likedBy": ["1", "2", "1"],
       "dislikedBy": ["3"]
     },
     {
@@ -145,15 +210,23 @@
       "videoFile": "/videos/9.mp4",
       "thumbnail": "/videos/9.jpg",
       "title": "שניצל",
-      "description": "שניצל",
+      "description": "שניצל - סרטון אנימציה משעשע שמציג את סיפור השניצל בצורה יצירתית.",
       "userId": "9",
       "views": 90000,
-      "likes": 9000,
-      "dislikes": 900,
-      "tags": ["Animetion"],
-      "uploadDate": "23.9.2023",
-      "comments": [],
-      "likedBy": ["1", "2"],
+      "likes": 3,
+      "dislikes": 1,
+      "tags": ["Animation", "Food", "Fun"],
+      "category": "Schnitzel",
+      "uploadDate": "2023-09-23T10:00:00.000Z",
+      "comments": [
+        {
+          "commentId": "1",
+          "userId": "2",
+          "comment": "Loved the creativity!",
+          "Date": "2023-09-24T11:00:00.000Z"
+        }
+      ],
+      "likedBy": ["1", "2", "2"],
       "dislikedBy": ["3"]
     },
     {
@@ -161,15 +234,23 @@
       "videoFile": "/videos/10.mp4",
       "thumbnail": "/videos/10.jpg",
       "title": "0_Tuna-Shnitzels",
-      "description": "Shnitzels by Tuna",
+      "description": "Shnitzels by Tuna. An interesting take on the classic schnitzel with a musical twist.",
       "userId": "6",
-      "views": 100000,
-      "likes": 10000,
-      "dislikes": 1000,
-      "tags": ["Music"],
-      "uploadDate": "22.8.2015",
-      "comments": [],
-      "likedBy": ["1", "2"],
+      "views": 70000,
+      "likes": 3,
+      "dislikes": 1,
+      "tags": ["Music", "Food", "Creative"],
+      "category": "Schnitzel",
+      "uploadDate": "2015-08-22T08:30:00.000Z",
+      "comments": [
+        {
+          "commentId": "1",
+          "userId": "3",
+          "comment": "What a unique idea!",
+          "Date": "2015-08-24T09:30:00.000Z"
+        }
+      ],
+      "likedBy": ["1", "2", "3"],
       "dislikedBy": ["3"]
     }
   ]

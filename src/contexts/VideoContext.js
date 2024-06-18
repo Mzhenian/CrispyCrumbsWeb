@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from "react";
 import videoDB from "../DB/videosDB.json";
-import { AuthContext } from "./AuthContext"; // Adjust the import path if necessary
+import { AuthContext } from "./AuthContext";
 
 const VideoContext = createContext();
 
