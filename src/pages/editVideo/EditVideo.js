@@ -119,9 +119,10 @@ const EditVideo = () => {
           </div>
           <div className="field-container">
             <b>Description</b>
-            <input
+            <textarea
               className={`input-field ${theme}`}
               name="description"
+              id="description-field"
               value={formData.description}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />

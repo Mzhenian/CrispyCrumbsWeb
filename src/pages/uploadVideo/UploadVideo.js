@@ -46,7 +46,7 @@ const UploadVideo = () => {
       ...formData,
       [name]: files[0],
     });
-    setIsPopupOpen(false); // Close the popup once the file is selected or dropped
+    setIsPopupOpen(false);
   };
 
   const handleTagsChange = (name, value) => {
@@ -128,8 +128,9 @@ const UploadVideo = () => {
           </div>
           <div className="field-container">
             <b>Description</b>
-            <input
+            <textarea
               className={`input-field ${theme}`}
+              id="description-field"
               name="description"
               value={formData.description}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
@@ -166,7 +167,7 @@ const UploadVideo = () => {
           </div>
           <div className="buttons-container">
             <GenericButton text="Upload" type="submit" onClick={handleSubmit} icon={uploadIcon} />
-            <LightButton text="Cancel" link="/" icon={cancelIcon}/>
+            <LightButton text="Cancel" link="/" icon={cancelIcon} />
           </div>
         </form>
       </Container>

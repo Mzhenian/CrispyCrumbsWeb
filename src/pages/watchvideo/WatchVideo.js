@@ -110,7 +110,7 @@ const WatchVideo = () => {
         </div>
         <div className="details-section">
           <p className="note">{`${video.views} views`}</p>
-          <p className="note">{new Date(video.uploadDate).toLocaleString()}</p>
+          <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
           {video.tags.slice(0, 5).map((t, index) => (
             <p key={index} className="note">
               #{t}

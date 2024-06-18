@@ -70,7 +70,7 @@ const Home = () => {
                     <p className="note">{author.userName}</p>
                   </div>
                   <p className="note">{video.views} views</p>
-                  <p className="note">{new Date(video.uploadDate).toLocaleString()}</p>
+                  <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
                 </div>
               </div>
             </div>
