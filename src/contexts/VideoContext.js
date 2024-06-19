@@ -100,6 +100,12 @@ const VideoProvider = ({ children }) => {
     );
   };
 
+  const incrementViews = (videoId) => {
+    setVideos((prevVideos) =>
+      prevVideos.map((video) => (video.videoId === videoId ? { ...video, views: video.views + 1 } : video))
+    );
+  };
+
   return (
     <VideoContext.Provider
       value={{
@@ -112,6 +118,7 @@ const VideoProvider = ({ children }) => {
         dislikeVideo,
         addComment,
         editComment,
+        incrementViews,
       }}
     >
       {children}

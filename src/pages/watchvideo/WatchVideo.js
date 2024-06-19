@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { VideoContext } from "../../contexts/VideoContext";
@@ -15,13 +15,14 @@ const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
   const { currentUser } = useContext(AuthContext);
   const { videoId } = useParams();
-  const { getVideoById, getUserById, likeVideo, dislikeVideo } = useContext(VideoContext);
+  const { getVideoById, getUserById, likeVideo, dislikeVideo, incrementViews } = useContext(VideoContext);
   const [video, setVideo] = useState(null);
   const [author, setAuthor] = useState(null);
   const [likeSelected, setLikeSelected] = useState(false);
   const [dislikeSelected, setDislikeSelected] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const navigate = useNavigate();
+  const hasIncrementedView = useRef({});
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -38,8 +39,13 @@ const WatchVideo = () => {
         setLikeSelected(false);
         setDislikeSelected(false);
       }
+
+      if (!hasIncrementedView.current[videoId]) {
+        incrementViews(videoId);
+        hasIncrementedView.current[videoId] = true;
+      }
     }
-  }, [videoId, currentUser, getVideoById, getUserById]);
+  }, [videoId, currentUser, getVideoById, getUserById, incrementViews]);
 
   const handleLike = () => {
     if (!currentUser) return navigate("/login");

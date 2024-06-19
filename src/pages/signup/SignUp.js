@@ -129,7 +129,7 @@ const SignUp = () => {
       phoneNumber: formData.phoneNumber,
       birthday: `${formData.birthday.year}-${formData.birthday.month}-${formData.birthday.day}`,
       country: formData.country,
-      profilePhoto: formData.profilePhoto ? URL.createObjectURL(formData.profilePhoto) : defaultPhoto,
+      profilePhoto: formData.profilePhoto ? formData.profilePhoto : defaultPhoto,
       followers: [],
       following: [],
       videosIds: [],
