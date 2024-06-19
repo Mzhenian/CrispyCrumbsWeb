@@ -11,11 +11,14 @@ import TermsOfUse from "./components/TermsOfUse.js";
 import OnOffToggle from "../../components/inputs/toggle/OnOffToggle.js";
 import { months, days, years } from "./SignUpData.js";
 import countries from "../../DB/Countries/CountriesListsData.js";
+import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto.js";
 
 const SignUp = () => {
   const { theme } = useContext(ThemeContext);
   const { signup, isUsernameAvailable } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const defaultPhoto = process.env.PUBLIC_URL + "/users/default.png";
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -126,7 +129,7 @@ const SignUp = () => {
       phoneNumber: formData.phoneNumber,
       birthday: `${formData.birthday.year}-${formData.birthday.month}-${formData.birthday.day}`,
       country: formData.country,
-      profilePhoto: formData.profilePhoto || "/default-profile.png",
+      profilePhoto: formData.profilePhoto ? formData.profilePhoto : defaultPhoto,
       followers: [],
       following: [],
       videosIds: [],
@@ -255,6 +258,9 @@ const SignUp = () => {
                 }}
               />
             </div>
+            {formData.profilePhoto && (
+              <ProfilePhoto img={formData.profilePhoto} profilePhotoStyle="profilePhotoStyle" />
+            )}
           </div>
           <div className="field-container">
             <div className="linear-layout-2">
@@ -268,7 +274,7 @@ const SignUp = () => {
             </div>
           </div>
           <div className="buttons-container">
-            <GenericButton text="Sign up" type="submit" />
+            <GenericButton text="Sign up" type="submit" onClick={handleSubmit} />
             <LightButton text="Login" link="/login" />
           </div>
         </form>

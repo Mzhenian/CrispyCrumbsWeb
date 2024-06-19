@@ -11,9 +11,10 @@ import WatchVideo from "../pages/watchvideo/WatchVideo.js";
 import UserProfile from "../pages/userProfile/UserProfile.js";
 import { AuthProvider } from "../contexts/AuthContext.js";
 import { VideoProvider } from "../contexts/VideoContext.js";
-import PrivateRoute from "../routs/PrivateRoute.js";
-import SignedRoute from "../routs/SignedRoute.js";
+import PrivateRoute from "../routes/PrivateRoute.js";
+import SignedRoute from "../routes/SignedRoute.js";
 import EditVideo from "../pages/editVideo/EditVideo.js";
+import NotFound from "../routes/NotFoundRoute.js"; // Import the NotFound component
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
                   <Route path="/watch/:videoId" element={<WatchVideo />} />
                   <Route path="/crumb/:userId" element={<UserProfile />} />
                   <Route path="/edit/:videoId" element={<EditVideo />} />
+                  <Route path="*" element={<NotFound />} /> {/* Add the 404 route */}
                 </Routes>
               </div>
             </VideoProvider>

@@ -9,7 +9,7 @@ import editIcon from "../../../../components/iconsLab/edit.svg";
 
 const CommentsSection = ({ currentUser, videoId }) => {
   const { theme } = useContext(ThemeContext);
-  const { getUserById, getVideoById, addComment, editComment } = useContext(VideoContext);
+  const { getUserById, getVideoById, addComment, editComment, deleteComment } = useContext(VideoContext);
   const video = getVideoById(videoId);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
@@ -52,6 +52,10 @@ const CommentsSection = ({ currentUser, videoId }) => {
     setEditingText("");
   };
 
+  const handleDeleteClick = (commentId) => {
+    deleteComment(videoId, commentId);
+  };
+
   const writeComment = currentUser && (
     <div className={`comment-box ${theme}`} id="write-comment">
       <textarea
@@ -83,9 +87,11 @@ const CommentsSection = ({ currentUser, videoId }) => {
                 onChange={(e) => setEditingText(e.target.value)}
                 rows="4"
               />
+
               <div className="comment-buttons">
                 <GenericButton text="Save" onClick={() => handleSaveEdit(comment.commentId)} />
                 <LightButton text="Cancel" onClick={handleCancelEdit} />
+                <LightButton text="Delete" onClick={() => handleDeleteClick(comment.commentId, comment.comment)} />
               </div>
             </div>
           ) : (

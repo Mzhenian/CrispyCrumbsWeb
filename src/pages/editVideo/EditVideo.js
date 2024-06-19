@@ -16,7 +16,7 @@ import editIcon from "../../components/iconsLab/edit.svg";
 
 const EditVideo = () => {
   const { theme } = useContext(ThemeContext);
-  const { editVideo, getVideoById } = useContext(VideoContext);
+  const { editVideo, getVideoById, deleteVideo } = useContext(VideoContext);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const { videoId } = useParams();
@@ -40,7 +40,9 @@ const EditVideo = () => {
     setVideo(video);
 
     if (video && currentUser) {
-      if (video.userId === currentUser.userId) {
+      if (!currentUser) {
+        navigate("/login");
+      } else if (video.userId === currentUser.userId) {
         setIsAuthorized(true);
         setFormData({
           title: video.title,
@@ -54,7 +56,7 @@ const EditVideo = () => {
         setIsAuthorized(false);
       }
     }
-  }, [videoId, getVideoById, video, currentUser]);
+  }, [videoId, navigate, getVideoById, video, currentUser]);
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -66,7 +68,7 @@ const EditVideo = () => {
   const handleFileChange = (name, files) => {
     setFormData({
       ...formData,
-      [name]: files[0],
+      [name]: URL.createObjectURL(files[0]),
     });
   };
 
@@ -92,6 +94,11 @@ const EditVideo = () => {
 
     // Update video if all checks pass
     editVideo(videoId, updatedVideo);
+    navigate(`/watch/${videoId}`);
+  };
+
+  const handleDelete = () => {
+    deleteVideo(videoId);
     navigate("/");
   };
 
@@ -155,10 +162,16 @@ const EditVideo = () => {
               />
               <GenericButton text="Upload Thumbnail" onClick={() => thumbnailInputRef.current.click()} />
             </div>
+            {formData.thumbnail && (
+              <div className="thumbnail-container">
+                <img src={formData.thumbnail} alt="Thumbnail preview" className="home-video-thumbnail" />
+              </div>
+            )}
           </div>
           <div className="buttons-container">
-            <GenericButton text="Update" type="submit" onClick={handleSubmit} icon={editIcon} />
-            <LightButton text="Cancel" link="/" icon={cancelIcon} />
+            <GenericButton text="Update" onClick={handleSubmit} type="submit" icon={editIcon} />
+            <LightButton text="Cancel" onClick={() => navigate(`/watch/${videoId}`)} icon={cancelIcon} />
+            <LightButton text="Delete" onClick={handleDelete} />
           </div>
         </form>
       </Container>

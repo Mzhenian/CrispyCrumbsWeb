@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { VideoContext } from "../../contexts/VideoContext";
@@ -10,18 +10,22 @@ import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import CommentsSection from "./watchVideoComponents/commentsSection/CommentsSection";
 import SubscribeButton from "../../components/buttons/SubscribeButton";
 import GenericButton from "../../components/buttons/GenericButton";
+import SharePopup from "./watchVideoComponents/shareVideoPopup/SharePopup";
+import NotFoundRoute from "../../routes/NotFoundRoute";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
   const { currentUser } = useContext(AuthContext);
   const { videoId } = useParams();
-  const { getVideoById, getUserById, likeVideo, dislikeVideo } = useContext(VideoContext);
+  const { getVideoById, getUserById, likeVideo, dislikeVideo, incrementViews } = useContext(VideoContext);
   const [video, setVideo] = useState(null);
   const [author, setAuthor] = useState(null);
   const [likeSelected, setLikeSelected] = useState(false);
   const [dislikeSelected, setDislikeSelected] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const navigate = useNavigate();
+  const hasIncrementedView = useRef(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -38,8 +42,18 @@ const WatchVideo = () => {
         setLikeSelected(false);
         setDislikeSelected(false);
       }
+
+      if (!hasIncrementedView.current) {
+        incrementViews(videoId);
+        hasIncrementedView.current = true;
+      }
     }
-  }, [videoId, currentUser, getVideoById, getUserById]);
+  }, [videoId, currentUser, getVideoById, getUserById, incrementViews]);
+
+  // Reset the view increment flag when videoId changes
+  useEffect(() => {
+    hasIncrementedView.current = false;
+  }, [videoId]);
 
   const handleLike = () => {
     if (!currentUser) return navigate("/login");
@@ -77,6 +91,9 @@ const WatchVideo = () => {
         <div className="linear-layout-watch">
           <h1 className="single-line-text">{video.title}</h1>
           <div className="buttons">
+            <div>
+              <GenericButton text="Share" onClick={() => setIsShareOpen(true)} />
+            </div>
             <LikeButton
               dislikeCounter={video.dislikes}
               likeCounter={video.likes}
@@ -130,12 +147,13 @@ const WatchVideo = () => {
   );
 
   if (!video) {
-    return <div>404 Video not found</div>;
+    return <NotFoundRoute/>;
   }
 
   return (
     <div className="watch-video-container">
       <div className="main-video-section">
+        <SharePopup isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} />
         {videoSection}
         <div className="video-details">
           <CommentsSection videoId={videoId} currentUser={currentUser} />

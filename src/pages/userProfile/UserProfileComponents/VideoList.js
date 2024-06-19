@@ -59,7 +59,9 @@ const VideoList = ({ userId }) => {
               </div>
             </Link>
             <div className="video-list-edit-icon">
-              {currentUser.userId === userId && <GenericButton icon={editIcon} link={`/edit/${video.videoId}`} />}
+              {currentUser && currentUser.userId === userId && (
+                <GenericButton icon={editIcon} link={`/edit/${video.videoId}`} />
+              )}
             </div>
           </div>
         );
