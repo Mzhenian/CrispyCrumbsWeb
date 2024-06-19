@@ -17,10 +17,6 @@ const ProfilePhoto = () => {
     }
   }, [currentUser]);
 
-  const handleMenu = () => {
-    setIsMenuVisible(!isMenuVisible);
-  };
-
   const popup = (
     <div className={`popup ${theme}`}>
       <div className="popup-row" onClick={() => navigate(`/crumb/${currentUser.userId}`)}>
@@ -38,7 +34,8 @@ const ProfilePhoto = () => {
         <img
           src={process.env.PUBLIC_URL + profilePhoto}
           className={`profile-photo ${theme}`}
-          onClick={handleMenu}
+          onMouseEnter={() => setIsMenuVisible(true)}
+          onMouseLeave={() => setIsMenuVisible(false)}
           alt={currentUser.userName}
         />
       )}

@@ -37,6 +37,7 @@
 
 #subscribe-button {
     width: 120px;
+    color: var(--white-color);
 }
 
 .generic-button:hover {
