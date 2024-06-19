@@ -2,6 +2,12 @@
 
 Welcome to the **Crispy Crumbs** website, a dedicated video sharing platform showcasing only the finest Crispy Crumbs content. This website is built with React to ensure a smooth, interactive, and tasty user experience.
 
+
+### Crispy Crumbs - founders
+Ofek Avan Danan 211824727
+Zohar Mzhen 314621806
+Dolev Menajem 207272220
+
 ## Running the Crispy Crumbs Website
 
 Follow these steps to get the Crispy Crumbs website up and running on your local machine:

@@ -5,7 +5,7 @@ import "./Routs.css";
 const NotFoundRoute = () => {
   return (
     <div className="route">
-      <img src={sad404} />
+      <img src={sad404} alt="not-found" />
       <h1>404</h1>
       <p>Page Not Found</p>
     </div>
