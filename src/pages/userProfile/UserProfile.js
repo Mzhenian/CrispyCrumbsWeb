@@ -4,6 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import SubscribeButton from "../../components/buttons/SubscribeButton";
 import Container from "../../components/container/Container";
+import NotFoundRoute from "../../routes/NotFoundRoute";
 import "./UserProfile.css";
 import VideoList from "./UserProfileComponents/VideoList";
 
@@ -18,7 +19,7 @@ const UserProfile = () => {
   }, [userId, getUserById]);
 
   if (!user) {
-    return <div>User not found</div>;
+    return <NotFoundRoute />;
   }
 
   return (

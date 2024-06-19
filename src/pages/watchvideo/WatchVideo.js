@@ -11,6 +11,7 @@ import CommentsSection from "./watchVideoComponents/commentsSection/CommentsSect
 import SubscribeButton from "../../components/buttons/SubscribeButton";
 import GenericButton from "../../components/buttons/GenericButton";
 import SharePopup from "./watchVideoComponents/shareVideoPopup/SharePopup";
+import NotFoundRoute from "../../routes/NotFoundRoute";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
@@ -146,7 +147,7 @@ const WatchVideo = () => {
   );
 
   if (!video) {
-    return <div>404 Video not found</div>;
+    return <NotFoundRoute/>;
   }
 
   return (
