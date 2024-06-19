@@ -11,7 +11,7 @@ import { VideoContext } from "../../contexts/VideoContext.js";
 import { AuthContext } from "../../contexts/AuthContext.js";
 import { categories } from "./UploadVideoData.js";
 import uploadLight from "./components/uploadLogo/uploadLight.svg";
-import uploadDark from "./components/uploadLogo/uploadLight.svg";
+import uploadDark from "./components/uploadLogo/uploadDark.svg";
 import uploadIcon from "../../components/iconsLab/upload.svg";
 import cancelIcon from "../../components/iconsLab/closeOrange.svg";
 
@@ -44,11 +44,16 @@ const UploadVideo = () => {
   };
 
   const handleFileChange = (name, files) => {
-    setFormData({
-      ...formData,
-      [name]: files[0],
-    });
-    setIsPopupOpen(false);
+    const file = files[0];
+    if (file && file.type.startsWith("video/")) {
+      setFormData({
+        ...formData,
+        [name]: file,
+      });
+      setIsPopupOpen(false);
+    } else {
+      setErrorMessage("Please upload a valid video file.");
+    }
   };
 
   const handleTagsChange = (name, value) => {
@@ -59,6 +64,7 @@ const UploadVideo = () => {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent default form submission
     if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
       setErrorMessage("Please fill in all required fields.");
       return;
@@ -97,7 +103,6 @@ const UploadVideo = () => {
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         title="Upload Video"
-        accept="video/*"
         onFileDrop={(files) => handleFileChange("videoFile", files)}
         canClose={false}
       >
