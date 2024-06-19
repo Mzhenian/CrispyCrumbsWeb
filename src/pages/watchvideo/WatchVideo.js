@@ -10,6 +10,7 @@ import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import CommentsSection from "./watchVideoComponents/commentsSection/CommentsSection";
 import SubscribeButton from "../../components/buttons/SubscribeButton";
 import GenericButton from "../../components/buttons/GenericButton";
+import SharePopup from "./watchVideoComponents/shareVideoPopup/SharePopup";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
@@ -23,6 +24,7 @@ const WatchVideo = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const navigate = useNavigate();
   const hasIncrementedView = useRef(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -88,6 +90,9 @@ const WatchVideo = () => {
         <div className="linear-layout-watch">
           <h1 className="single-line-text">{video.title}</h1>
           <div className="buttons">
+            <div>
+              <GenericButton text="Share" onClick={() => setIsShareOpen(true)} />
+            </div>
             <LikeButton
               dislikeCounter={video.dislikes}
               likeCounter={video.likes}
@@ -147,6 +152,7 @@ const WatchVideo = () => {
   return (
     <div className="watch-video-container">
       <div className="main-video-section">
+        <SharePopup isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} />
         {videoSection}
         <div className="video-details">
           <CommentsSection videoId={videoId} currentUser={currentUser} />

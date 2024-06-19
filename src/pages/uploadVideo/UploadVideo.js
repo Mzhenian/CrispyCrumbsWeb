@@ -97,6 +97,7 @@ const UploadVideo = () => {
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         title="Upload Video"
+        accept="video/*"
         onFileDrop={(files) => handleFileChange("videoFile", files)}
         canClose={false}
       >
