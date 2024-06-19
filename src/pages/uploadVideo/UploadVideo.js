@@ -101,7 +101,12 @@ const UploadVideo = () => {
         canClose={false}
       >
         <div className="popup-body-content">
-          <img className="upload-img" src={theme === "light" ? uploadLight : uploadDark} alt="upload" />
+          <img
+            className="upload-img"
+            src={theme === "light" ? uploadLight : uploadDark}
+            onClick={() => videoInputRef.current.click()}
+            alt="upload"
+          />
           <p className="upload-click-here" onClick={() => videoInputRef.current.click()}>
             Click to here upload a file or drag and drop a file here.
           </p>

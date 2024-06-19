@@ -22,7 +22,7 @@ const WatchVideo = () => {
   const [dislikeSelected, setDislikeSelected] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const navigate = useNavigate();
-  const hasIncrementedView = useRef({});
+  const hasIncrementedView = useRef(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,12 +40,17 @@ const WatchVideo = () => {
         setDislikeSelected(false);
       }
 
-      if (!hasIncrementedView.current[videoId]) {
+      if (!hasIncrementedView.current) {
         incrementViews(videoId);
-        hasIncrementedView.current[videoId] = true;
+        hasIncrementedView.current = true;
       }
     }
   }, [videoId, currentUser, getVideoById, getUserById, incrementViews]);
+
+  // Reset the view increment flag when videoId changes
+  useEffect(() => {
+    hasIncrementedView.current = false;
+  }, [videoId]);
 
   const handleLike = () => {
     if (!currentUser) return navigate("/login");

@@ -16,7 +16,7 @@ import editIcon from "../../components/iconsLab/edit.svg";
 
 const EditVideo = () => {
   const { theme } = useContext(ThemeContext);
-  const { editVideo, getVideoById } = useContext(VideoContext);
+  const { editVideo, getVideoById, deleteVideo } = useContext(VideoContext);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const { videoId } = useParams();
@@ -92,6 +92,11 @@ const EditVideo = () => {
 
     // Update video if all checks pass
     editVideo(videoId, updatedVideo);
+    navigate(`/watch/${videoId}`);
+  };
+
+  const handleDelete = () => {
+    deleteVideo(videoId);
     navigate("/");
   };
 
@@ -162,8 +167,9 @@ const EditVideo = () => {
             )}
           </div>
           <div className="buttons-container">
-            <GenericButton text="Update" type="submit" onClick={handleSubmit} icon={editIcon} />
-            <LightButton text="Cancel" link="/" icon={cancelIcon} />
+            <GenericButton text="Update" onClick={handleSubmit} type="submit" icon={editIcon} />
+            <LightButton text="Cancel" onClick={() => navigate(`/watch/${videoId}`)} icon={cancelIcon} />
+            <LightButton text="Delete" onClick={handleDelete} />
           </div>
         </form>
       </Container>

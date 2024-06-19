@@ -54,16 +54,14 @@ The photos are not enough, you should go and explore the website by yourself :>
 
 5. **Video Page**
    
-   This page shows a video player at the top left, playing the selected video. Below the video, there are details about the video, including the uploader's name, upload date, views, and tags. Users can see and add comments below the video. On the right side, there is a list of suggested or related videos with thumbnails and view counts.
+   This page shows a video player at the top left, playing the selected video. Below the video, there are details about the video, including the uploader's name, upload date, views, and tags. Users can see and add comments below the video. On the right side, there is a list of suggested or related videos with thumbnails and view counts. if the comment is yours you can edit or delete that comment.
 
 ![alt text](<readme photos/Video example.png>)
-![alt text](<readme photos/edit comment example.png>)
 
 6. **Edit Video**
    
-   This page is very similar to the Video Upload page but is used for updating an existing video. It includes the same fields: video title, description, category, and tags, along with the option to upload a thumbnail image. Additional options for editing existing content may be present.
+   This page is very similar to the Video Upload page but is used for updating an existing video. It includes the same fields: video title, description, category, and tags, along with the option to upload a thumbnail image. Additional options for editing existing content may be present. you can also delete videos in this page.
 
-![alt text](<readme photos/Edit video - dark mode example.png>)
 
 7. **Profile Page**
    

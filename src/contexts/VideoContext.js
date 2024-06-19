@@ -100,6 +100,23 @@ const VideoProvider = ({ children }) => {
     );
   };
 
+  const deleteComment = (videoId, commentId) => {
+    setVideos((prevVideos) =>
+      prevVideos.map((video) =>
+        video.videoId === videoId
+          ? {
+              ...video,
+              comments: video.comments.filter((comment) => comment.commentId !== commentId),
+            }
+          : video
+      )
+    );
+  };
+
+  const deleteVideo = (videoId) => {
+    setVideos((prevVideos) => prevVideos.filter((video) => video.videoId !== videoId));
+  };
+
   const incrementViews = (videoId) => {
     setVideos((prevVideos) =>
       prevVideos.map((video) => (video.videoId === videoId ? { ...video, views: video.views + 1 } : video))
@@ -118,6 +135,8 @@ const VideoProvider = ({ children }) => {
         dislikeVideo,
         addComment,
         editComment,
+        deleteComment,
+        deleteVideo,
         incrementViews,
       }}
     >
