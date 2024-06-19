@@ -40,7 +40,9 @@ const EditVideo = () => {
     setVideo(video);
 
     if (video && currentUser) {
-      if (video.userId === currentUser.userId) {
+      if (!currentUser) {
+        navigate("/login");
+      } else if (video.userId === currentUser.userId) {
         setIsAuthorized(true);
         setFormData({
           title: video.title,
@@ -54,7 +56,7 @@ const EditVideo = () => {
         setIsAuthorized(false);
       }
     }
-  }, [videoId, getVideoById, video, currentUser]);
+  }, [videoId, navigate, getVideoById, video, currentUser]);
 
   const handleInputChange = (name, value) => {
     setFormData({

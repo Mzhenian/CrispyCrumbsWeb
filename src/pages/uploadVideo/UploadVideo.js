@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
 import DropDownMenu from "../../components/inputs/DropDownMenu.js";
@@ -24,6 +24,12 @@ const UploadVideo = () => {
   const { uploadVideo } = useContext(VideoContext);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+    }
+  }, [currentUser, navigate]);
 
   const [formData, setFormData] = useState({
     title: "",
