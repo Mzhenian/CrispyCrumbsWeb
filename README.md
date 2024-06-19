@@ -27,6 +27,10 @@ Follow these steps to get the Crispy Crumbs website up and running on your local
    
    This command will launch the app and open [http://localhost:3000](http://localhost:3000) in your browser. The page will automatically reload if you make changes to the source code. Additionally, you may see any lint errors in the console.
 
+3. You can sign up or login using an existing user - for example:
+   **Username:** Tuna
+   **Password:** password6
+
 ## Website Pages
 The photos are not enough, you should go and explore the website by yourself :>
 
