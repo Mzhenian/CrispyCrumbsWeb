@@ -17,6 +17,8 @@ import cancelIcon from "../../components/iconsLab/closeOrange.svg";
 
 import "./UploadVideo.css";
 
+const defaultThumbnail = process.env.PUBLIC_URL + "/videos/default.png";
+
 const UploadVideo = () => {
   const { theme } = useContext(ThemeContext);
   const { uploadVideo } = useContext(VideoContext);
@@ -57,7 +59,7 @@ const UploadVideo = () => {
   };
 
   const handleSubmit = (e) => {
-    if (!formData.title || !formData.description || !formData.category || !formData.videoFile || !formData.thumbnail) {
+    if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
@@ -69,7 +71,7 @@ const UploadVideo = () => {
       category: formData.category,
       tags: formData.tags,
       videoFile: URL.createObjectURL(formData.videoFile),
-      thumbnail: URL.createObjectURL(formData.thumbnail),
+      thumbnail: formData.thumbnail ? URL.createObjectURL(formData.thumbnail) : defaultThumbnail,
       userId: currentUser.userId,
       views: 0,
       likes: 0,
@@ -164,6 +166,15 @@ const UploadVideo = () => {
               />
               <GenericButton text="Upload Thumbnail" onClick={() => thumbnailInputRef.current.click()} />
             </div>
+            {formData.thumbnail && (
+              <div className="thumbnail-container">
+                <img
+                  src={URL.createObjectURL(formData.thumbnail)}
+                  alt="Thumbnail preview"
+                  className="home-video-thumbnail"
+                />
+              </div>
+            )}
           </div>
           <div className="buttons-container">
             <GenericButton text="Upload" type="submit" onClick={handleSubmit} icon={uploadIcon} />

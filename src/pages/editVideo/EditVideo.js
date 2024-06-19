@@ -66,7 +66,7 @@ const EditVideo = () => {
   const handleFileChange = (name, files) => {
     setFormData({
       ...formData,
-      [name]: files[0],
+      [name]: URL.createObjectURL(files[0]),
     });
   };
 
@@ -155,6 +155,11 @@ const EditVideo = () => {
               />
               <GenericButton text="Upload Thumbnail" onClick={() => thumbnailInputRef.current.click()} />
             </div>
+            {formData.thumbnail && (
+              <div className="thumbnail-container">
+                <img src={formData.thumbnail} alt="Thumbnail preview" className="home-video-thumbnail" />
+              </div>
+            )}
           </div>
           <div className="buttons-container">
             <GenericButton text="Update" type="submit" onClick={handleSubmit} icon={editIcon} />
