@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { VideoContext } from "../../contexts/VideoContext";
@@ -9,18 +9,23 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import CommentsSection from "./watchVideoComponents/commentsSection/CommentsSection";
 import SubscribeButton from "../../components/buttons/SubscribeButton";
+import GenericButton from "../../components/buttons/GenericButton";
+import SharePopup from "./watchVideoComponents/shareVideoPopup/SharePopup";
+import NotFoundRoute from "../../routes/NotFoundRoute";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
   const { currentUser } = useContext(AuthContext);
   const { videoId } = useParams();
-  const { getVideoById, getUserById, likeVideo, dislikeVideo } = useContext(VideoContext);
+  const { getVideoById, getUserById, likeVideo, dislikeVideo, incrementViews } = useContext(VideoContext);
   const [video, setVideo] = useState(null);
   const [author, setAuthor] = useState(null);
   const [likeSelected, setLikeSelected] = useState(false);
   const [dislikeSelected, setDislikeSelected] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const navigate = useNavigate();
+  const hasIncrementedView = useRef(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -37,8 +42,18 @@ const WatchVideo = () => {
         setLikeSelected(false);
         setDislikeSelected(false);
       }
+
+      if (!hasIncrementedView.current) {
+        incrementViews(videoId);
+        hasIncrementedView.current = true;
+      }
     }
-  }, [videoId, currentUser, getVideoById, getUserById]);
+  }, [videoId, currentUser, getVideoById, getUserById, incrementViews]);
+
+  // Reset the view increment flag when videoId changes
+  useEffect(() => {
+    hasIncrementedView.current = false;
+  }, [videoId]);
 
   const handleLike = () => {
     if (!currentUser) return navigate("/login");
@@ -68,14 +83,17 @@ const WatchVideo = () => {
 
   const videoSection = video && (
     <div className={`container ${theme}`}>
-      <video key={video.videoId} controls className="container-video">
+      <video key={video.videoId} controls className="container-video" autoPlay>
         <source src={process.env.PUBLIC_URL + video.videoFile} type="video/mp4" />
-        Your browser does not support the video tag.
+        Not supported
       </video>
       <div className={`container-body ${theme}`}>
         <div className="linear-layout-watch">
           <h1 className="single-line-text">{video.title}</h1>
           <div className="buttons">
+            <div>
+              <GenericButton text="Share" onClick={() => setIsShareOpen(true)} />
+            </div>
             <LikeButton
               dislikeCounter={video.dislikes}
               likeCounter={video.likes}
@@ -90,22 +108,26 @@ const WatchVideo = () => {
         <div className="author-section">
           {author && (
             <>
-              <Link to={`/crumb/${author.userId}`}>
-                <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />{" "}
-              </Link>{" "}
+              <Link to={`/crumb/${author.userId}`} className="no-link-style">
+                <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />
+              </Link>
               <Link to={`/crumb/${author.userId}`} className="no-link-style">
                 <div className="author-details">
                   <b className="author-name">{author.userName}</b>
-                  <p>{author.followers.length} followers</p>
+                  <p>{author.followers?.length || 0} followers</p>
                 </div>
               </Link>
-              <SubscribeButton userToSubscribe={author.userId} />
+              {currentUser && currentUser.userId === author.userId ? (
+                <GenericButton text="Edit this video" link={`/edit/${videoId}`} />
+              ) : (
+                <SubscribeButton userToSubscribe={author.userId} />
+              )}
             </>
           )}
         </div>
         <div className="details-section">
           <p className="note">{`${video.views} views`}</p>
-          <p className="note">{video.uploadDate}</p>
+          <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
           {video.tags.slice(0, 5).map((t, index) => (
             <p key={index} className="note">
               #{t}
@@ -125,12 +147,13 @@ const WatchVideo = () => {
   );
 
   if (!video) {
-    return <div>404 Video not found</div>;
+    return <NotFoundRoute/>;
   }
 
   return (
     <div className="watch-video-container">
       <div className="main-video-section">
+        <SharePopup isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} />
         {videoSection}
         <div className="video-details">
           <CommentsSection videoId={videoId} currentUser={currentUser} />

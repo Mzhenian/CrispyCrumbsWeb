@@ -1,8 +1,8 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import DropDownMenu from "../../components/Inputs/DropDownMenu.js";
-import ListInput from "../../components/Inputs/ListInput.js";
+import { ThemeContext } from "../../contexts/ThemeContext.js";
+import DropDownMenu from "../../components/inputs/DropDownMenu.js";
+import ListInput from "../../components/inputs/ListInput.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
@@ -11,14 +11,25 @@ import { VideoContext } from "../../contexts/VideoContext.js";
 import { AuthContext } from "../../contexts/AuthContext.js";
 import { categories } from "./UploadVideoData.js";
 import uploadLight from "./components/uploadLogo/uploadLight.svg";
-import uploadDark from "./components/uploadLogo/uploadLight.svg";
+import uploadDark from "./components/uploadLogo/uploadDark.svg";
+import uploadIcon from "../../components/iconsLab/upload.svg";
+import cancelIcon from "../../components/iconsLab/closeOrange.svg";
+
 import "./UploadVideo.css";
+
+const defaultThumbnail = process.env.PUBLIC_URL + "/videos/default.png";
 
 const UploadVideo = () => {
   const { theme } = useContext(ThemeContext);
   const { uploadVideo } = useContext(VideoContext);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+    }
+  }, [currentUser, navigate]);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -39,11 +50,16 @@ const UploadVideo = () => {
   };
 
   const handleFileChange = (name, files) => {
-    setFormData({
-      ...formData,
-      [name]: files[0],
-    });
-    setIsPopupOpen(false); // Close the popup once the file is selected or dropped
+    const file = files[0];
+    if (file && file.type.startsWith("video/")) {
+      setFormData({
+        ...formData,
+        [name]: file,
+      });
+      setIsPopupOpen(false);
+    } else {
+      setErrorMessage("Please upload a valid video file.");
+    }
   };
 
   const handleTagsChange = (name, value) => {
@@ -54,7 +70,8 @@ const UploadVideo = () => {
   };
 
   const handleSubmit = (e) => {
-    if (!formData.title || !formData.description || !formData.category || !formData.videoFile || !formData.thumbnail) {
+    e.preventDefault(); // Prevent default form submission
+    if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
@@ -66,7 +83,7 @@ const UploadVideo = () => {
       category: formData.category,
       tags: formData.tags,
       videoFile: URL.createObjectURL(formData.videoFile),
-      thumbnail: URL.createObjectURL(formData.thumbnail),
+      thumbnail: formData.thumbnail ? URL.createObjectURL(formData.thumbnail) : defaultThumbnail,
       userId: currentUser.userId,
       views: 0,
       likes: 0,
@@ -96,7 +113,12 @@ const UploadVideo = () => {
         canClose={false}
       >
         <div className="popup-body-content">
-          <img className="upload-img" src={theme === "light" ? uploadLight : uploadDark} alt="upload" />
+          <img
+            className="upload-img"
+            src={theme === "light" ? uploadLight : uploadDark}
+            onClick={() => videoInputRef.current.click()}
+            alt="upload"
+          />
           <p className="upload-click-here" onClick={() => videoInputRef.current.click()}>
             Click to here upload a file or drag and drop a file here.
           </p>
@@ -125,8 +147,9 @@ const UploadVideo = () => {
           </div>
           <div className="field-container">
             <b>Description</b>
-            <input
+            <textarea
               className={`input-field ${theme}`}
+              id="description-field"
               name="description"
               value={formData.description}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
@@ -160,10 +183,19 @@ const UploadVideo = () => {
               />
               <GenericButton text="Upload Thumbnail" onClick={() => thumbnailInputRef.current.click()} />
             </div>
+            {formData.thumbnail && (
+              <div className="thumbnail-container">
+                <img
+                  src={URL.createObjectURL(formData.thumbnail)}
+                  alt="Thumbnail preview"
+                  className="home-video-thumbnail"
+                />
+              </div>
+            )}
           </div>
           <div className="buttons-container">
-            <GenericButton text="Upload" type="submit" onClick={handleSubmit} />
-            <LightButton text="Cancel" link="/" />
+            <GenericButton text="Upload" type="submit" onClick={handleSubmit} icon={uploadIcon} />
+            <LightButton text="Cancel" link="/" icon={cancelIcon} />
           </div>
         </form>
       </Container>

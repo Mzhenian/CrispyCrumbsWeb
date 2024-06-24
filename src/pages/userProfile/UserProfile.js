@@ -4,6 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import SubscribeButton from "../../components/buttons/SubscribeButton";
 import Container from "../../components/container/Container";
+import NotFoundRoute from "../../routes/NotFoundRoute";
 import "./UserProfile.css";
 import VideoList from "./UserProfileComponents/VideoList";
 
@@ -18,7 +19,7 @@ const UserProfile = () => {
   }, [userId, getUserById]);
 
   if (!user) {
-    return <div>User not found</div>;
+    return <NotFoundRoute />;
   }
 
   return (
@@ -27,13 +28,15 @@ const UserProfile = () => {
         <VideoList userId={userId} />
       </div>
       <div className="profile-details">
-        <Container>
-          <ProfilePhoto profilePhoto={user.profilePhoto} userName={user.userName} />
-          <h1>{user.fullName}</h1>
-          <p>Username: {user.userName}</p>
+        <Container id="container-style">
+          <ProfilePhoto profilePhoto={user.profilePhoto} userName={user.userName} profilePhotoStyle={"profile-style"} />
+          <h1>{user.userName}</h1>
+          <div className="linear-layout-2">
+            <p>Followers: {user.followers.length}</p>
+            <p>Following: {user.following.length}</p>
+          </div>
           <p>Country: {user.country}</p>
-          <p>Followers: {user.followers.length}</p>
-          <p>Following: {user.following.length}</p>
+
           <SubscribeButton userToSubscribe={user.userId} />
         </Container>
       </div>

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import "./VideoList.css";
 import { ThemeContext } from "../../contexts/ThemeContext";
@@ -12,9 +12,16 @@ const Home = () => {
   const { videos, getUserById } = useContext(VideoContext);
   const { currentUser } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
+  const navigate = useNavigate();
 
   const handleSortChange = (value) => {
     setSortOption(value);
+  };
+
+  const handleAuthorClick = (e, profileId) => {
+    e.stopPropagation();
+    e.preventDefault();
+    navigate(`/crumb/${profileId}`);
   };
 
   const sortedVideos = () => {
@@ -43,38 +50,42 @@ const Home = () => {
     <div className={`watch-home-video-section ${theme}`}>
       {sortedVideos().map((video) => {
         const author = getUserById(video.userId);
-        return (
-          <Link to={`/watch/${video.videoId}`} key={video.videoId} className={`home-video-card ${theme}`}>
-            <div className="thumbnail-container">
-              <img src={video.thumbnail} alt={video.title} className="home-video-thumbnail" />
-            </div>
+        return author ? (
+          <div key={video.videoId} className={`home-video-card ${theme}`}>
+            <Link to={`/watch/${video.videoId}`} className="thumbnail-link">
+              <div className="thumbnail-container">
+                <img src={video.thumbnail} alt={video.title} className="home-video-thumbnail" />
+              </div>
+            </Link>
             <div className="home-video-b">
               <div className="home-video-details">
-                <Link to={`/crumb/${author.userId}`}>
+                <div className="author-link" onClick={(e) => handleAuthorClick(e, author.userId)}>
                   <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />
-                </Link>
+                </div>
                 <div className="home-video-info">
-                  <p className="home-video-title">{video.title}</p>
-                  <Link to={`/crumb/${author.userId}`}>
-                    <p className="note">{author.userName}</p>
+                  <Link to={`/watch/${video.videoId}`} className="title-link">
+                    <p className="home-video-title">{video.title}</p>
                   </Link>
-
+                  <div className="author-link" onClick={(e) => handleAuthorClick(e, author.userId)}>
+                    <p className="note">{author.userName}</p>
+                  </div>
                   <p className="note">{video.views} views</p>
                   <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
                 </div>
               </div>
             </div>
-          </Link>
-        );
+          </div>
+        ) : null;
       })}
     </div>
   );
+
   return (
     <div>
       <div className="sorting-filtering-options">
         {currentUser && <GenericButton text="Subscribed" onClick={() => handleSortChange("subscribed")} />}
-        <GenericButton text="Must delicious" onClick={() => handleSortChange("most-watched")} />
-        <GenericButton text="Hot food" onClick={() => handleSortChange("date")} />
+        <GenericButton text="Most Watched" onClick={() => handleSortChange("most-watched")} />
+        <GenericButton text="Newest" onClick={() => handleSortChange("date")} />
       </div>
       {videosList}
     </div>

@@ -6,7 +6,7 @@ import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
 import { AuthContext } from "../../contexts/AuthContext.js";
 import "./Login.css";
-import OnOffToggle from "../../components/Inputs/toggle/OnOffToggle.js";
+import OnOffToggle from "../../components/inputs/toggle/OnOffToggle.js";
 
 const Login = () => {
   const { theme } = useContext(ThemeContext);

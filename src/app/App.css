@@ -3,6 +3,8 @@ h1 {
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
+  margin-bottom: 0px;
+  margin-top: 10px;
 }
 
 h2 {
@@ -90,6 +92,13 @@ b {
 }
 
 .field:focus {
+  border: none;
+  outline: none;
+}
+
+
+.field:valid {
+  background-color: inherit;
   border: none;
   outline: none;
 }

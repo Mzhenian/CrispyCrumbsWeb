@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./suggestedVideos.css";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 import { VideoContext } from "../../../../contexts/VideoContext";
@@ -7,6 +7,13 @@ import { VideoContext } from "../../../../contexts/VideoContext";
 const SuggestedVideos = () => {
   const { theme } = useContext(ThemeContext);
   const { videos, getUserById } = useContext(VideoContext);
+  const navigate = useNavigate();
+
+  const handleAuthorClick = (e, profileId) => {
+    e.stopPropagation();
+    e.preventDefault();
+    navigate(`/crumb/${profileId}`);
+  };
 
   return (
     <div className={`watch-suggested-video-section ${theme}`}>
@@ -17,9 +24,9 @@ const SuggestedVideos = () => {
             <img src={video.thumbnail} alt={video.title} className="suggested-video-thumbnail" />
             <div className="suggested-video-details">
               <p className="suggested-video-title">{video.title}</p>
-              <Link to={`/crumb/${author.userId}`}>
-                <p className="note">{author.userName} </p>
-              </Link>
+              <p className="note author-link" onClick={(e) => handleAuthorClick(e, author.userId)}>
+                {author.userName}
+              </p>
               <p className="note">{video.views} views</p>
             </div>
           </Link>
@@ -28,4 +35,5 @@ const SuggestedVideos = () => {
     </div>
   );
 };
+
 export default SuggestedVideos;

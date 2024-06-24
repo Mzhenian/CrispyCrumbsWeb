@@ -1,5 +1,7 @@
 #signup-container {
     width: 800px;
+    display: flex;
+    flex-direction: column;
 }
 
 .field-container {
@@ -29,4 +31,27 @@
 
 .terms-text.dark {
     color: var(--primary-color-dark)
+}
+
+#profilePhotoStyle {
+    width: 200px;
+    height: 200px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+    border-top-left-radius: 200px 300px;
+    border-top-right-radius: 300px 200px;
+    border-bottom-right-radius: 200px 300px;
+    border-bottom-left-radius: 300px 200px;
+    scale: 100%;
+}
+
+
+
+#profilePhotoStyle:hover {
+    border-top-left-radius: 300px 200px;
+    border-top-right-radius: 200px 300px;
+    border-bottom-right-radius: 300px 200px;
+    border-bottom-left-radius: 200px 300px;
+    scale: 102%;
 }

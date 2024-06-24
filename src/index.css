@@ -50,15 +50,15 @@ body.dark {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 6px;
-  background-color: rgba(118, 117, 115, 0.1);
+  background-color: rgba(118, 117, 115, 0.5);
+  border-style: none;
+  transition: 0.3s ease-in-out;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(118, 117, 115, 0.2);
+  background-color: var(--primary-color-dark);
 }
 
-/* Hide scrollbar track */
 ::-webkit-scrollbar-track {
   background: transparent;
 }
@@ -83,7 +83,26 @@ textarea {
   width: 100%;
 }
 
+textarea:focus {
+  border: none;
+  outline: none;
+}
+
 .no-link-style {
   text-decoration: none;
   color: inherit;
 }
+
+#no-link-style {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+
+video::-webkit-media-controls-timeline {
+  background-color: var(--primary-color-dark);
+  padding-bottom: 0;
+  margin-bottom: 20px;
+}
+
