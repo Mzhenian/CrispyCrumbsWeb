@@ -1,3 +1,5 @@
+// NOTE: A very small fix that caused a very big bug, I noticed it much later after posting, it was 2 lines that made the difference
+
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
@@ -51,7 +53,7 @@ const UploadVideo = () => {
 
   const handleFileChange = (name, files) => {
     const file = files[0];
-    if (file && file.type.startsWith("video/")) {
+    if (file) {
       setFormData({
         ...formData,
         [name]: file,
@@ -70,7 +72,6 @@ const UploadVideo = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission
     if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
       setErrorMessage("Please fill in all required fields.");
       return;
