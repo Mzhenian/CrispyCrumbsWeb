@@ -158,10 +158,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getUserById = async (userId) => {
+    try {
+      const response = await fetch(`${apiUrl}/${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      console.error("Get user by ID failed:", err);
+      return null;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
         currentUser,
+        getUserById,
         login,
         logout,
         signup,

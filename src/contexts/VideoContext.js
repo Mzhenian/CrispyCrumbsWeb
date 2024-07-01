@@ -5,11 +5,9 @@ import { AuthContext } from "./AuthContext";
 const VideoContext = createContext();
 
 const VideoProvider = ({ children }) => {
-  const { users } = useContext(AuthContext);
   const [videos, setVideos] = useState(videoDB.videos);
 
   const getVideoById = (videoId) => videos.find((video) => video.videoId === videoId);
-  const getUserById = (userId) => users.find((user) => user.userId === userId);
 
   const editVideo = (videoId, updatedVideo) => {
     setVideos((prevVideos) =>
