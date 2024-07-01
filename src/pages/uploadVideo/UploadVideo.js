@@ -49,7 +49,7 @@ const UploadVideo = () => {
     });
   };
 
-  const handleFileChange = (name, files) => {
+  const handleVideoFileChange = (name, files) => {
     const file = files[0];
     if (file && file.type.startsWith("video/")) {
       setFormData({
@@ -62,6 +62,17 @@ const UploadVideo = () => {
     }
   };
 
+  const handleFileChange = (name, files) => {
+    const file = files[0];
+    if (file) {
+      setFormData({
+        ...formData,
+        [name]: file,
+      });
+      setIsPopupOpen(false);
+    }
+  };
+
   const handleTagsChange = (name, value) => {
     setFormData({
       ...formData,
@@ -70,7 +81,6 @@ const UploadVideo = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission
     if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
       setErrorMessage("Please fill in all required fields.");
       return;
@@ -109,7 +119,7 @@ const UploadVideo = () => {
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         title="Upload Video"
-        onFileDrop={(files) => handleFileChange("videoFile", files)}
+        onFileDrop={(files) => handleVideoFileChange("videoFile", files)}
         canClose={false}
       >
         <div className="popup-body-content">
