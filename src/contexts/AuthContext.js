@@ -1,92 +1,160 @@
 import React, { createContext, useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import axiosInstance from "../utils/AxiosInstance";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const apiUrl = "http://localhost:1324/api/users";
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const response = await axiosInstance.get("/users/current-user");
-        setCurrentUser(response.data.user);
-      } catch (error) {
-        console.log("No user is logged in");
-      }
-    };
-    fetchCurrentUser();
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch(`${apiUrl}/validateToken`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.valid) {
+            setCurrentUser(data.user);
+          } else {
+            localStorage.removeItem("token");
+          }
+        })
+        .catch((err) => console.error("Token validation failed:", err));
+    }
   }, []);
 
   const login = async (username, password) => {
     try {
-      const response = await axiosInstance.post("/users/login", { username, password });
-      setCurrentUser(response.data.user);
-      return true;
-    } catch (error) {
-      console.error("Login failed:", error);
+      const response = await fetch(`${apiUrl}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userName: username, password }), // Ensure correct field names
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        setCurrentUser(data.user);
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error("Login failed:", err);
       return false;
     }
   };
 
-  const logout = async () => {
-    try {
-      await axiosInstance.post("/users/logout");
-      setCurrentUser(null);
-      Cookies.remove("session");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+  const logout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem("token");
   };
 
   const signup = async (userData) => {
     try {
-      const response = await axiosInstance.post("/users/signup", userData);
-      setCurrentUser(response.data.user);
-      Cookies.set("session", response.data.session, { expires: 1 });
-    } catch (error) {
-      console.error("Signup failed:", error);
-    }
-  };
-
-  const isUsernameAvailable = async (username) => {
-    try {
-      const response = await axiosInstance.get(`/users/check-username/${username}`);
-      return response.data.available;
-    } catch (error) {
-      console.error("Username check failed:", error);
-      return false;
+      const response = await fetch(`${apiUrl}/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        setCurrentUser(data.user);
+      }
+    } catch (err) {
+      console.error("Signup failed:", err);
     }
   };
 
   const followUser = async (userIdToFollow) => {
-    if (!currentUser) return false;
     try {
-      const response = await axiosInstance.post("/users/follow", { userIdToFollow });
-      setCurrentUser(response.data.updatedUser);
-      return true;
-    } catch (error) {
-      console.error("Follow user failed:", error);
-      return false;
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${apiUrl}/follow`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({ userIdToFollow }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.success) {
+        setCurrentUser((prevUser) => ({
+          ...prevUser,
+          following: [...prevUser.following, userIdToFollow],
+        }));
+      }
+    } catch (err) {
+      console.error("Follow user failed:", err);
     }
   };
 
   const unfollowUser = async (userIdToUnfollow) => {
-    if (!currentUser) return false;
     try {
-      const response = await axiosInstance.post("/users/unfollow", { userIdToUnfollow });
-      setCurrentUser(response.data.updatedUser);
-      return true;
-    } catch (error) {
-      console.error("Unfollow user failed:", error);
-      return false;
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${apiUrl}/unfollow`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({ userIdToUnfollow }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.success) {
+        setCurrentUser((prevUser) => ({
+          ...prevUser,
+          following: prevUser.following.filter((id) => id !== userIdToUnfollow),
+        }));
+      }
+    } catch (err) {
+      console.error("Unfollow user failed:", err);
     }
   };
 
   const isFollowing = (userIdToCheck) => {
     if (!currentUser) return false;
     return currentUser.following.includes(userIdToCheck);
+  };
+
+  const isUsernameAvailable = async (username) => {
+    try {
+      const response = await fetch(`${apiUrl}/isUsernameAvailable`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.available;
+    } catch (err) {
+      console.error("Check username availability failed:", err);
+      return false;
+    }
   };
 
   return (
