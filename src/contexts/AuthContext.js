@@ -1,118 +1,87 @@
 import React, { createContext, useState, useEffect } from "react";
-import usersDB from "../DB/usersDB.json";
+import Cookies from "js-cookie";
+import axiosInstance from "../utils/AxiosInstance";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [users, setUsers] = useState(usersDB.users || []);
 
   useEffect(() => {
-    const loggedUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (loggedUser) {
-      setCurrentUser(loggedUser);
-    }
-
-    const savedUsers = JSON.parse(localStorage.getItem("usersDB"));
-    if (savedUsers) {
-      setUsers(savedUsers.users);
-    }
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await axiosInstance.get("/users/current-user");
+        setCurrentUser(response.data.user);
+      } catch (error) {
+        console.log("No user is logged in");
+      }
+    };
+    fetchCurrentUser();
   }, []);
 
-  const login = (username, password) => {
-    const user = users.find((user) => user.userName === username && user.password === password);
-    if (user) {
-      setCurrentUser(user);
-      localStorage.setItem("currentUser", JSON.stringify(user));
+  const login = async (username, password) => {
+    try {
+      const response = await axiosInstance.post("/users/login", { username, password });
+      setCurrentUser(response.data.user);
       return true;
+    } catch (error) {
+      console.error("Login failed:", error);
+      return false;
     }
-    return false;
   };
 
-  const logout = () => {
-    setCurrentUser(null);
-    localStorage.removeItem("currentUser");
+  const logout = async () => {
+    try {
+      await axiosInstance.post("/users/logout");
+      setCurrentUser(null);
+      Cookies.remove("session");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
-  const signup = (userData) => {
-    const newUser = {
-      ...userData,
-      userId: (users.length + 1).toString(),
-      followers: [],
-      following: [],
-      videosIds: [],
-      likedVideoIds: [],
-      dislikedVideoIds: [],
-    };
-    const updatedUsers = [...users, newUser];
-    setUsers(updatedUsers);
-    setCurrentUser(newUser);
-    localStorage.setItem("currentUser", JSON.stringify(newUser));
-    localStorage.setItem("usersDB", JSON.stringify({ users: updatedUsers }));
+  const signup = async (userData) => {
+    try {
+      const response = await axiosInstance.post("/users/signup", userData);
+      setCurrentUser(response.data.user);
+      Cookies.set("session", response.data.session, { expires: 1 });
+    } catch (error) {
+      console.error("Signup failed:", error);
+    }
   };
 
-  const isUsernameAvailable = (username) => {
-    return !users.some((user) => user.userName === username);
+  const isUsernameAvailable = async (username) => {
+    try {
+      const response = await axiosInstance.get(`/users/check-username/${username}`);
+      return response.data.available;
+    } catch (error) {
+      console.error("Username check failed:", error);
+      return false;
+    }
   };
 
-  const getUserById = (userId) => {
-    return users.find((user) => user.userId === userId);
-  };
-
-  const followUser = (userIdToFollow) => {
+  const followUser = async (userIdToFollow) => {
     if (!currentUser) return false;
-    if (currentUser.following.includes(userIdToFollow)) return false;
-
-    const updatedCurrentUser = {
-      ...currentUser,
-      following: [...currentUser.following, userIdToFollow],
-    };
-
-    const updatedUsers = users.map((user) => {
-      if (user.userId === currentUser.userId) {
-        return updatedCurrentUser;
-      } else if (user.userId === userIdToFollow) {
-        return {
-          ...user,
-          followers: [...user.followers, currentUser.userId],
-        };
-      }
-      return user;
-    });
-
-    setUsers(updatedUsers);
-    setCurrentUser(updatedCurrentUser);
-    localStorage.setItem("currentUser", JSON.stringify(updatedCurrentUser));
-    localStorage.setItem("usersDB", JSON.stringify({ users: updatedUsers }));
-    return true;
+    try {
+      const response = await axiosInstance.post("/users/follow", { userIdToFollow });
+      setCurrentUser(response.data.updatedUser);
+      return true;
+    } catch (error) {
+      console.error("Follow user failed:", error);
+      return false;
+    }
   };
 
-  const unfollowUser = (userIdToUnfollow) => {
+  const unfollowUser = async (userIdToUnfollow) => {
     if (!currentUser) return false;
-    if (!currentUser.following.includes(userIdToUnfollow)) return false;
-
-    const updatedCurrentUser = {
-      ...currentUser,
-      following: currentUser.following.filter((id) => id !== userIdToUnfollow),
-    };
-
-    const updatedUsers = users.map((user) => {
-      if (user.userId === currentUser.userId) {
-        return updatedCurrentUser;
-      } else if (user.userId === userIdToUnfollow) {
-        return {
-          ...user,
-          followers: user.followers.filter((id) => id !== currentUser.userId),
-        };
-      }
-      return user;
-    });
-
-    setUsers(updatedUsers);
-    setCurrentUser(updatedCurrentUser);
-    localStorage.setItem("currentUser", JSON.stringify(updatedCurrentUser));
-    localStorage.setItem("usersDB", JSON.stringify({ users: updatedUsers }));
-    return true;
+    try {
+      const response = await axiosInstance.post("/users/unfollow", { userIdToUnfollow });
+      setCurrentUser(response.data.updatedUser);
+      return true;
+    } catch (error) {
+      console.error("Unfollow user failed:", error);
+      return false;
+    }
   };
 
   const isFollowing = (userIdToCheck) => {
@@ -124,12 +93,10 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         currentUser,
-        users,
         login,
         logout,
         signup,
         isUsernameAvailable,
-        getUserById,
         followUser,
         unfollowUser,
         isFollowing,

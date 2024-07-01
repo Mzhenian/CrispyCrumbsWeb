@@ -9,7 +9,7 @@ import GenericButton from "../../components/buttons/GenericButton";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
-  const { videos, getUserById } = useContext(VideoContext);
+  const { videos } = useContext(VideoContext);
   const { currentUser } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const Home = () => {
   const videosList = (
     <div className={`watch-home-video-section ${theme}`}>
       {sortedVideos().map((video) => {
-        const author = getUserById(video.userId);
+        const author = null; // change it
         return author ? (
           <div key={video.videoId} className={`home-video-card ${theme}`}>
             <Link to={`/watch/${video.videoId}`} className="thumbnail-link">
