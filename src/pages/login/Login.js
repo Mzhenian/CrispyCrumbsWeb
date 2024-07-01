@@ -28,9 +28,10 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    const { username, password } = formData;
-    if (login(username, password)) {
+  const handleSubmit = async (e) => {
+    const { username, password, rememberMe } = formData;
+    const success = await login(username, password, rememberMe);
+    if (success) {
       const targetRoute = "/";
       navigate(targetRoute);
     } else {

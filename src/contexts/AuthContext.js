@@ -38,7 +38,8 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ userName: username, password }), // Ensure correct field names
       });
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       if (data.token) {
@@ -48,7 +49,7 @@ export const AuthProvider = ({ children }) => {
       }
       return false;
     } catch (err) {
-      console.error("Login failed:", err);
+      console.error("Login error:", err);
       return false;
     }
   };

@@ -9,7 +9,7 @@ const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState(videoDB.videos);
 
   const getVideoById = (videoId) => videos.find((video) => video.videoId === videoId);
-  //const getUserById = (userId) => users.find((user) => user.userId === userId);
+  const getUserById = (userId) => users.find((user) => user.userId === userId);
 
   const editVideo = (videoId, updatedVideo) => {
     setVideos((prevVideos) =>
