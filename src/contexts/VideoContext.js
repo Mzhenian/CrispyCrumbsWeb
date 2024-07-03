@@ -1,124 +1,204 @@
 import React, { createContext, useState, useContext } from "react";
-import videoDB from "../DB/videosDB.json";
 import { AuthContext } from "./AuthContext";
 
 const VideoContext = createContext();
 
 const VideoProvider = ({ children }) => {
-  const [videos, setVideos] = useState(videoDB.videos);
+  const [videos, setVideos] = useState([]);
+  const { currentUser } = useContext(AuthContext);
+  const apiUrl = "http://localhost:1324/api/videos";
 
-  const getVideoById = (videoId) => videos.find((video) => video.videoId === videoId);
-
-  const editVideo = (videoId, updatedVideo) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) => (video.videoId === videoId ? { ...video, ...updatedVideo } : video))
-    );
+  const getVideoById = async (videoId) => {
+    try {
+      const response = await fetch(`${apiUrl}/${videoId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      console.error("Get video by ID failed:", err);
+      return null;
+    }
   };
 
-  const uploadVideo = (newVideo) => {
-    setVideos((prevVideos) => [newVideo, ...prevVideos]);
+  const editVideo = async (videoId, updatedVideo) => {
+    try {
+      const response = await fetch(`${apiUrl}/edit/${videoId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedVideo),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos((prevVideos) => prevVideos.map((video) => (video._id === videoId ? data : video)));
+    } catch (err) {
+      console.error("Edit video failed:", err);
+    }
   };
 
-  const likeVideo = (videoId, userId) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) => {
-        if (video.videoId === videoId) {
-          const liked = video.likedBy.includes(userId);
-          const disliked = video.dislikedBy.includes(userId);
-
-          if (liked) {
-            return {
-              ...video,
-              likes: video.likes - 1,
-              likedBy: video.likedBy.filter((id) => id !== userId),
-            };
-          } else {
-            return {
-              ...video,
-              likes: video.likes + 1,
-              dislikes: disliked ? video.dislikes - 1 : video.dislikes,
-              likedBy: [...video.likedBy, userId],
-              dislikedBy: video.dislikedBy.filter((id) => id !== userId),
-            };
-          }
-        }
-        return video;
-      })
-    );
+  const uploadVideo = async (newVideo) => {
+    try {
+      const response = await fetch(`${apiUrl}/upload`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newVideo),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos((prevVideos) => [data, ...prevVideos]);
+    } catch (err) {
+      console.error("Upload video failed:", err);
+    }
   };
 
-  const dislikeVideo = (videoId, userId) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) => {
-        if (video.videoId === videoId) {
-          const liked = video.likedBy.includes(userId);
-          const disliked = video.dislikedBy.includes(userId);
-
-          if (disliked) {
-            return {
-              ...video,
-              dislikes: video.dislikes - 1,
-              dislikedBy: video.dislikedBy.filter((id) => id !== userId),
-            };
-          } else {
-            return {
-              ...video,
-              dislikes: video.dislikes + 1,
-              likes: liked ? video.likes - 1 : video.likes,
-              dislikedBy: [...video.dislikedBy, userId],
-              likedBy: video.likedBy.filter((id) => id !== userId),
-            };
-          }
-        }
-        return video;
-      })
-    );
+  const likeVideo = async (videoId) => {
+    if (!currentUser) return;
+    try {
+      const response = await fetch(`${apiUrl}/like`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId, userId: currentUser._id }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos((prevVideos) => prevVideos.map((video) => (video._id === videoId ? data : video)));
+    } catch (err) {
+      console.error("Like video failed:", err);
+    }
   };
 
-  const addComment = (videoId, comment) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) =>
-        video.videoId === videoId ? { ...video, comments: [comment, ...video.comments] } : video
-      )
-    );
+  const dislikeVideo = async (videoId) => {
+    if (!currentUser) return;
+    try {
+      const response = await fetch(`${apiUrl}/dislike`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId, userId: currentUser._id }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos((prevVideos) => prevVideos.map((video) => (video._id === videoId ? data : video)));
+    } catch (err) {
+      console.error("Dislike video failed:", err);
+    }
   };
 
-  const editComment = (videoId, updatedComment) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) =>
-        video.videoId === videoId
-          ? {
-              ...video,
-              comments: video.comments.map((comment) =>
-                comment.commentId === updatedComment.commentId ? updatedComment : comment
-              ),
-            }
-          : video
-      )
-    );
+  const addComment = async (videoId, comment) => {
+    try {
+      const response = await fetch(`${apiUrl}/comment/add${videoId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId, comment }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos((prevVideos) => prevVideos.map((video) => (video._id === videoId ? data : video)));
+    } catch (err) {
+      console.error("Add comment failed:", err);
+    }
   };
 
-  const deleteComment = (videoId, commentId) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) =>
-        video.videoId === videoId
-          ? {
-              ...video,
-              comments: video.comments.filter((comment) => comment.commentId !== commentId),
-            }
-          : video
-      )
-    );
+  const editComment = async (videoId, updatedComment) => {
+    try {
+      const response = await fetch(`${apiUrl}/comment/edit${videoId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId, updatedComment }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos((prevVideos) =>
+        prevVideos.map((video) => (video._id === videoId ? { ...video, comments: data.comments } : video))
+      );
+    } catch (err) {
+      console.error("Edit comment failed:", err);
+    }
   };
 
-  const deleteVideo = (videoId) => {
-    setVideos((prevVideos) => prevVideos.filter((video) => video.videoId !== videoId));
+  const deleteComment = async (videoId, commentId) => {
+    try {
+      const response = await fetch(`${apiUrl}/comment/delete${videoId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId, commentId }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos((prevVideos) =>
+        prevVideos.map((video) => (video._id === videoId ? { ...video, comments: data.comments } : video))
+      );
+    } catch (err) {
+      console.error("Delete comment failed:", err);
+    }
   };
 
-  const incrementViews = (videoId) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) => (video.videoId === videoId ? { ...video, views: video.views + 1 } : video))
-    );
+  const deleteVideo = async (videoId) => {
+    try {
+      const response = await fetch(`${apiUrl}/delete/${videoId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setVideos((prevVideos) => prevVideos.filter((video) => video._id !== videoId));
+    } catch (err) {
+      console.error("Delete video failed:", err);
+    }
+  };
+
+  const incrementViews = async (videoId) => {
+    try {
+      const response = await fetch(`${apiUrl}/views/${videoId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos((prevVideos) => prevVideos.map((video) => (video._id === videoId ? data : video)));
+    } catch (err) {
+      console.error("Increment views failed:", err);
+    }
   };
 
   return (

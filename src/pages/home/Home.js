@@ -49,7 +49,7 @@ const Home = () => {
   const videosList = (
     <div className={`watch-home-video-section ${theme}`}>
       {sortedVideos().map((video) => {
-        const author = null; // change it
+        const author = video.userId;
         return author ? (
           <div key={video.videoId} className={`home-video-card ${theme}`}>
             <Link to={`/watch/${video.videoId}`} className="thumbnail-link">
