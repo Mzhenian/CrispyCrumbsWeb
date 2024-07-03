@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { AuthContext } from "./AuthContext";
 
 const VideoContext = createContext();
@@ -7,6 +7,22 @@ const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
   const { currentUser } = useContext(AuthContext);
   const apiUrl = "http://localhost:1324/api/videos";
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setVideos(data);
+      } catch (err) {
+        console.error("Fetch videos failed:", err);
+      }
+    };
+    fetchVideos();
+  }, [apiUrl]);
 
   const getVideoById = async (videoId) => {
     try {
