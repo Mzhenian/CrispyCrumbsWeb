@@ -8,6 +8,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log("Token found in localStorage:", token); // Log the token
+
     if (token) {
       fetch(`${apiUrl}/validateToken`, {
         method: "POST",
@@ -16,8 +18,15 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       })
-        .then((response) => response.json())
+        .then((response) => {
+          console.log("Response status:", response.status); // Log response status
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then((data) => {
+          console.log("Response data:", data); // Log response data
           if (data.valid) {
             setCurrentUser(data.user);
           } else {
@@ -160,7 +169,7 @@ export const AuthProvider = ({ children }) => {
 
   const getUserById = async (userId) => {
     try {
-      const response = await fetch(`${apiUrl}/${userId}`, {
+      const response = await fetch(`${apiUrl}/user/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
