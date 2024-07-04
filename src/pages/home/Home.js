@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import "./VideoList.css";
@@ -12,7 +12,24 @@ const Home = () => {
   const { videos } = useContext(VideoContext);
   const { currentUser, getUserById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
+  const [videoAuthors, setVideoAuthors] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchAuthors = async () => {
+      const authorPromises = videos.map(async (video) => {
+        const author = await getUserById(video.userId);
+        return { [video.videoId]: author };
+      });
+      const authors = await Promise.all(authorPromises);
+      const authorsMap = authors.reduce((acc, author) => ({ ...acc, ...author }), {});
+      setVideoAuthors(authorsMap);
+    };
+
+    if (videos.length > 0) {
+      fetchAuthors();
+    }
+  }, [videos]);
 
   const handleSortChange = (value) => {
     setSortOption(value);
@@ -49,7 +66,7 @@ const Home = () => {
   const videosList = (
     <div className={`watch-home-video-section ${theme}`}>
       {sortedVideos().map((video) => {
-        const author = getUserById(video.userId);
+        const author = videoAuthors[video.videoId];
         return author ? (
           <div key={video.videoId} className={`home-video-card ${theme}`}>
             <Link to={`/watch/${video.videoId}`} className="thumbnail-link">

@@ -181,7 +181,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       return data;
     } catch (err) {
-      console.error("Get user by ID failed:", err);
+      console.error(`Get user by ID failed: ${userId}`, err);
       return null;
     }
   };
