@@ -15,9 +15,9 @@ import NotFoundRoute from "../../routes/NotFoundRoute";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, getUserById } = useContext(AuthContext);
   const { videoId } = useParams();
-  const { getVideoById, getUserById, likeVideo, dislikeVideo, incrementViews } = useContext(VideoContext);
+  const { getVideoById, likeVideo, dislikeVideo, incrementViews } = useContext(VideoContext);
   const [video, setVideo] = useState(null);
   const [author, setAuthor] = useState(null);
   const [likeSelected, setLikeSelected] = useState(false);
@@ -28,29 +28,35 @@ const WatchVideo = () => {
   const [isShareOpen, setIsShareOpen] = useState(false);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    const foundVideo = getVideoById(videoId);
-    if (foundVideo) {
-      setVideo(foundVideo);
-      const videoAuthor = getUserById(foundVideo.userId);
-      setAuthor(videoAuthor);
+    const fetchVideoAndAuthor = async () => {
+      try {
+        const foundVideo = await getVideoById(videoId);
+        if (foundVideo) {
+          setVideo(foundVideo);
+          const videoAuthor = await getUserById(foundVideo.userId);
+          setAuthor(videoAuthor);
 
-      if (currentUser && Array.isArray(foundVideo.likedBy)) {
-        setLikeSelected(foundVideo.likedBy.includes(currentUser.userId));
-        setDislikeSelected(foundVideo.dislikedBy.includes(currentUser.userId));
-      } else if (!currentUser) {
-        setLikeSelected(false);
-        setDislikeSelected(false);
-      }
+          if (currentUser && Array.isArray(foundVideo.likedBy)) {
+            setLikeSelected(foundVideo.likedBy.includes(currentUser.userId));
+            setDislikeSelected(foundVideo.dislikedBy.includes(currentUser.userId));
+          } else if (!currentUser) {
+            setLikeSelected(false);
+            setDislikeSelected(false);
+          }
 
-      if (!hasIncrementedView.current) {
-        incrementViews(videoId);
-        hasIncrementedView.current = true;
+          if (!hasIncrementedView.current) {
+            await incrementViews(videoId);
+            hasIncrementedView.current = true;
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching video or author:", error);
       }
-    }
+    };
+
+    fetchVideoAndAuthor();
   }, [videoId, currentUser, getVideoById, getUserById, incrementViews]);
 
-  // Reset the view increment flag when videoId changes
   useEffect(() => {
     hasIncrementedView.current = false;
   }, [videoId]);
@@ -147,7 +153,7 @@ const WatchVideo = () => {
   );
 
   if (!video) {
-    return <NotFoundRoute/>;
+    return <NotFoundRoute />;
   }
 
   return (
