@@ -96,7 +96,7 @@ const CommentsSection = ({ currentUser, videoId }) => {
             </div>
           ) : (
             <div id="comment">
-              <ProfilePhoto profilePhoto={commentAuthor.profilePhoto} userName={commentAuthor.userName} />
+              <ProfilePhoto user={commentAuthor} />
               <div className="comment-data">
                 <div className="comment-title">
                   <b>@{commentAuthor.userName}</b> {comment.date}

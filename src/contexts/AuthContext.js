@@ -4,7 +4,8 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const apiUrl = "http://localhost:1324/api/users";
+
+  const apiUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }) => {
         })
         .catch((err) => console.error("Token validation failed:", err));
     }
-  }, []);
+  }, [apiUrl]);
 
   const login = async (username, password) => {
     try {
@@ -44,7 +45,7 @@ export const AuthProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userName: username, password }), // Ensure correct field names
+        body: JSON.stringify({ userName: username, password: password }), // Ensure correct field names
       });
       if (!response.ok) {
         const errorData = await response.json();

@@ -6,6 +6,7 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import { VideoContext } from "../../contexts/VideoContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import GenericButton from "../../components/buttons/GenericButton";
+import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
@@ -29,7 +30,7 @@ const Home = () => {
     if (videos.length > 0) {
       fetchAuthors();
     }
-  }, [videos]);
+  }, [videos, getUserById]);
 
   const handleSortChange = (value) => {
     setSortOption(value);
@@ -70,14 +71,12 @@ const Home = () => {
         return author ? (
           <div key={video.videoId} className={`home-video-card ${theme}`}>
             <Link to={`/watch/${video.videoId}`} className="thumbnail-link">
-              <div className="thumbnail-container">
-                <img src={video.thumbnail} alt={video.title} className="home-video-thumbnail" />
-              </div>
+              <VideoThumbnail video={video} />
             </Link>
             <div className="home-video-b">
               <div className="home-video-details">
                 <div className="author-link" onClick={(e) => handleAuthorClick(e, author.userId)}>
-                  <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />
+                  <ProfilePhoto user={author} />
                 </div>
                 <div className="home-video-info">
                   <Link to={`/watch/${video.videoId}`} className="title-link">

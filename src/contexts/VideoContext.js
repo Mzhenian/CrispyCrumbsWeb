@@ -6,7 +6,7 @@ const VideoContext = createContext();
 const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
   const { currentUser } = useContext(AuthContext);
-  const apiUrl = "http://localhost:1324/api/videos";
+  const apiUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -220,6 +220,7 @@ const VideoProvider = ({ children }) => {
   return (
     <VideoContext.Provider
       value={{
+        apiUrl,
         videos,
         getVideoById,
         editVideo,

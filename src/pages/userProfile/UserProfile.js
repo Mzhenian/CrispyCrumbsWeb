@@ -29,7 +29,7 @@ const UserProfile = () => {
       </div>
       <div className="profile-details">
         <Container id="container-style">
-          <ProfilePhoto profilePhoto={user.profilePhoto} userName={user.userName} profilePhotoStyle={"profile-style"} />
+          <ProfilePhoto user={user} profilePhotoStyle={"profile-style"} />
           <h1>{user.userName}</h1>
           <div className="linear-layout-2">
             <p>Followers: {user.followers.length}</p>

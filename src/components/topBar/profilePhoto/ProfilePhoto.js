@@ -11,9 +11,11 @@ const ProfilePhoto = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const navigate = useNavigate();
 
+  console.log(process.env); // This will list all available environment variables
+
   useEffect(() => {
     if (currentUser && currentUser.profilePhoto) {
-      setProfilePhoto(currentUser.profilePhoto);
+      setProfilePhoto(`${process.env.REACT_APP_API_URL}/api/db${currentUser.profilePhoto}`);
     }
   }, [currentUser]);
 

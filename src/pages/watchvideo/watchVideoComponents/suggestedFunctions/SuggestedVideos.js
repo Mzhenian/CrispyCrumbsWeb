@@ -26,7 +26,7 @@ const SuggestedVideos = () => {
     if (videos.length > 0) {
       fetchAuthors();
     }
-  }, [videos]);
+  }, [videos, getUserById]);
 
   const handleAuthorClick = (e, profileId) => {
     e.stopPropagation();
