@@ -30,7 +30,6 @@ const WatchVideo = () => {
   useEffect(() => {
     const fetchVideoAndAuthor = async () => {
       try {
-        console.log("been herre");
         const foundVideo = await getVideoById(videoId);
         if (foundVideo) {
           setVideo(foundVideo);
@@ -57,8 +56,6 @@ const WatchVideo = () => {
     fetchVideoAndAuthor();
   }, [videoId, currentUser, getVideoById, getUserById, incrementViews]);
 
-  console.log(video);
-
   useEffect(() => {
     hasIncrementedView.current = false;
   }, [videoId]);
@@ -81,12 +78,12 @@ const WatchVideo = () => {
     setShowFullDescription(!showFullDescription);
   };
 
-  /*   const videoTags = () =>
+  const videoTags = () =>
     video.tags.slice(0, 5).map((t, index) => (
       <p key={index} className="note">
         #{t}
       </p>
-    )); */
+    ));
 
   const MAX_LENGTH = 100;
   const truncatedDescription =
@@ -99,7 +96,7 @@ const WatchVideo = () => {
   const videoSection = video && (
     <div className={`container ${theme}`}>
       <video key={video.videoId} controls className="container-video" autoPlay>
-        <source src={`${process.env.REACT_APP_API_URL}/db/videos/${video.videoFile}`} type="video/mp4" />
+        <source src={`${process.env.REACT_APP_API_URL}/api/db${video.videoFile}`} type="video/mp4" />
         Not supported
       </video>
       <div className={`container-body ${theme}`}>
@@ -132,12 +129,10 @@ const WatchVideo = () => {
                   <p>{author.followers?.length || 0} followers</p>
                 </div>
               </Link>
-              {currentUser && currentUser.userId === author.userId ? (
+              {currentUser && author && currentUser.userId === author.userId ? (
                 <GenericButton text="Edit this video" link={`/edit/${videoId}`} />
               ) : (
-                {
-                  /* <SubscribeButton userToSubscribe={author.userId} /> */
-                }
+                <SubscribeButton userToSubscribe={author.userId} />
               )}
             </>
           )}
@@ -145,7 +140,7 @@ const WatchVideo = () => {
         <div className="details-section">
           <p className="note">{`${video.views} views`}</p>
           <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
-          {/*  {videoTags()} */}
+          {videoTags}
         </div>
         <p className="video-description">
           {truncatedDescription}
@@ -168,9 +163,9 @@ const WatchVideo = () => {
       <div className="main-video-section">
         <SharePopup isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} />
         {videoSection}
-        <div className="video-details">{/* <CommentsSection videoId={videoId} currentUser={currentUser} /> */}</div>
+        <div className="video-details">{<CommentsSection videoId={videoId} currentUser={currentUser} />}</div>
       </div>
-      {/* <SuggestedVideos /> */}
+      <SuggestedVideos />
     </div>
   );
 };

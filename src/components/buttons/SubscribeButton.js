@@ -13,10 +13,12 @@ const SubscribeButton = ({ userToSubscribe, displayNum = false }) => {
   useEffect(() => {
     setSubscribed(isFollowing(userToSubscribe));
     const user = getUserById(userToSubscribe);
-    if (user) {
+    console.log();
+
+    if (currentUser && user) {
       setFollowerCount(user.followers.length);
     }
-  }, [userToSubscribe, isFollowing, getUserById]);
+  }, [userToSubscribe, isFollowing, getUserById, currentUser]);
 
   const handleClick = (e) => {
     e.preventDefault();
