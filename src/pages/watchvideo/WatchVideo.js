@@ -140,7 +140,7 @@ const WatchVideo = () => {
         <div className="details-section">
           <p className="note">{`${video.views} views`}</p>
           <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
-          {videoTags}
+          {videoTags()}
         </div>
         <p className="video-description">
           {truncatedDescription}

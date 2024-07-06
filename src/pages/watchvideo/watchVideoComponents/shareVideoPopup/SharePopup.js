@@ -13,7 +13,7 @@ const SharePopup = ({ isOpen, onClose }) => {
     <Popup isOpen={isOpen} onClose={onClose} title="Share this video">
       <div className="social-photos-layout">
         {arr.map((icon) => (
-          <div className="thumbnail-container" id="social-container">
+          <div className="thumbnail-container" id="social-container" key={icon}>
             <img src={icon} alt="SocialIcon" className="social-thumbnail" />
           </div>
         ))}
