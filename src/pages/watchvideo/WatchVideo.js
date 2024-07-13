@@ -26,6 +26,7 @@ const WatchVideo = () => {
   const navigate = useNavigate();
   const hasIncrementedView = useRef(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [showNotFound, setShowNotFound] = useState(false);
 
   useEffect(() => {
     const fetchVideoAndAuthor = async () => {
@@ -59,6 +60,23 @@ const WatchVideo = () => {
   useEffect(() => {
     hasIncrementedView.current = false;
   }, [videoId]);
+
+  useEffect(() => {
+    if (!video) {
+      const timer = setTimeout(() => {
+        setShowNotFound(true);
+      }, 3000); // Delay of 3000 milliseconds (3 seconds)
+
+      // Cleanup the timer if the component unmounts or if video changes
+      return () => clearTimeout(timer);
+    } else {
+      setShowNotFound(false);
+    }
+  }, [video]);
+
+  if (showNotFound) {
+    return <NotFoundRoute />;
+  }
 
   const handleLike = () => {
     if (!currentUser) return navigate("/login");
@@ -153,10 +171,6 @@ const WatchVideo = () => {
       </div>
     </div>
   );
-
-  if (!video) {
-    return <NotFoundRoute />;
-  }
 
   return (
     <div className="watch-video-container">

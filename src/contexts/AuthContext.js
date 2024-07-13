@@ -4,38 +4,39 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-
   const apiUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("Token found in localStorage:", token); // Log the token
-
-    if (token) {
-      fetch(`${apiUrl}/validateToken`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => {
-          console.log("Response status:", response.status); // Log response status
+    let isMounted = true; // flag to indicate if the component is mounted
+    const validateToken = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await fetch(`${apiUrl}/validateToken`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Response data:", data); // Log response data
-          if (data.valid) {
+          const data = await response.json();
+          if (isMounted && data.valid) {
             setCurrentUser(data.user);
           } else {
             localStorage.removeItem("token");
           }
-        })
-        .catch((err) => console.error("Token validation failed:", err));
-    }
+        } catch (err) {
+          if (isMounted) console.error("Token validation failed:", err);
+        }
+      }
+    };
+    validateToken();
+    return () => {
+      isMounted = false; // cleanup function to set isMounted to false when the component unmounts
+    };
   }, [apiUrl]);
 
   const login = async (username, password) => {
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userName: username, password: password }), // Ensure correct field names
+        body: JSON.stringify({ userName: username, password: password }),
       });
       if (!response.ok) {
         const errorData = await response.json();
@@ -144,7 +145,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isFollowing = (userIdToCheck) => {
-    if (!currentUser) return false;
+    if (!currentUser || !Array.isArray(currentUser.following)) return false;
     return currentUser.following.includes(userIdToCheck);
   };
 
