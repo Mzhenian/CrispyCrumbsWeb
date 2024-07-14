@@ -13,7 +13,7 @@ const ProfilePhoto = () => {
 
   useEffect(() => {
     if (currentUser && currentUser.profilePhoto) {
-      setProfilePhoto(currentUser.profilePhoto);
+      setProfilePhoto(`${process.env.REACT_APP_API_URL}/api/db${currentUser.profilePhoto}`);
     }
   }, [currentUser]);
 

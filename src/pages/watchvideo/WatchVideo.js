@@ -15,9 +15,9 @@ import NotFoundRoute from "../../routes/NotFoundRoute";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, getUserById } = useContext(AuthContext);
   const { videoId } = useParams();
-  const { getVideoById, getUserById, likeVideo, dislikeVideo, incrementViews } = useContext(VideoContext);
+  const { getVideoById, likeVideo, dislikeVideo, incrementViews } = useContext(VideoContext);
   const [video, setVideo] = useState(null);
   const [author, setAuthor] = useState(null);
   const [likeSelected, setLikeSelected] = useState(false);
@@ -26,34 +26,57 @@ const WatchVideo = () => {
   const navigate = useNavigate();
   const hasIncrementedView = useRef(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [showNotFound, setShowNotFound] = useState(false);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    const foundVideo = getVideoById(videoId);
-    if (foundVideo) {
-      setVideo(foundVideo);
-      const videoAuthor = getUserById(foundVideo.userId);
-      setAuthor(videoAuthor);
+    const fetchVideoAndAuthor = async () => {
+      try {
+        const foundVideo = await getVideoById(videoId);
+        if (foundVideo) {
+          setVideo(foundVideo);
+          const videoAuthor = await getUserById(foundVideo.userId);
+          setAuthor(videoAuthor);
 
-      if (currentUser && Array.isArray(foundVideo.likedBy)) {
-        setLikeSelected(foundVideo.likedBy.includes(currentUser.userId));
-        setDislikeSelected(foundVideo.dislikedBy.includes(currentUser.userId));
-      } else if (!currentUser) {
-        setLikeSelected(false);
-        setDislikeSelected(false);
-      }
+          if (currentUser && Array.isArray(foundVideo.likedBy)) {
+            setLikeSelected(foundVideo.likedBy.includes(currentUser.userId));
+            setDislikeSelected(foundVideo.dislikedBy.includes(currentUser.userId));
+          } else if (!currentUser) {
+            setLikeSelected(false);
+            setDislikeSelected(false);
+          }
 
-      if (!hasIncrementedView.current) {
-        incrementViews(videoId);
-        hasIncrementedView.current = true;
+          if (!hasIncrementedView.current) {
+            await incrementViews(videoId);
+            hasIncrementedView.current = true;
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching video or author:", error);
       }
-    }
+    };
+    fetchVideoAndAuthor();
   }, [videoId, currentUser, getVideoById, getUserById, incrementViews]);
 
-  // Reset the view increment flag when videoId changes
   useEffect(() => {
     hasIncrementedView.current = false;
   }, [videoId]);
+
+  useEffect(() => {
+    if (!video) {
+      const timer = setTimeout(() => {
+        setShowNotFound(true);
+      }, 3000); // Delay of 3000 milliseconds (3 seconds)
+
+      // Cleanup the timer if the component unmounts or if video changes
+      return () => clearTimeout(timer);
+    } else {
+      setShowNotFound(false);
+    }
+  }, [video]);
+
+  if (showNotFound) {
+    return <NotFoundRoute />;
+  }
 
   const handleLike = () => {
     if (!currentUser) return navigate("/login");
@@ -73,6 +96,13 @@ const WatchVideo = () => {
     setShowFullDescription(!showFullDescription);
   };
 
+  const videoTags = () =>
+    video.tags.slice(0, 5).map((t, index) => (
+      <p key={index} className="note">
+        #{t}
+      </p>
+    ));
+
   const MAX_LENGTH = 100;
   const truncatedDescription =
     video && video.description.length < MAX_LENGTH
@@ -84,7 +114,7 @@ const WatchVideo = () => {
   const videoSection = video && (
     <div className={`container ${theme}`}>
       <video key={video.videoId} controls className="container-video" autoPlay>
-        <source src={process.env.PUBLIC_URL + video.videoFile} type="video/mp4" />
+        <source src={`${process.env.REACT_APP_API_URL}/api/db${video.videoFile}`} type="video/mp4" />
         Not supported
       </video>
       <div className={`container-body ${theme}`}>
@@ -109,7 +139,7 @@ const WatchVideo = () => {
           {author && (
             <>
               <Link to={`/crumb/${author.userId}`} className="no-link-style">
-                <ProfilePhoto profilePhoto={author.profilePhoto} userName={author.userName} />
+                <ProfilePhoto user={author} />
               </Link>
               <Link to={`/crumb/${author.userId}`} className="no-link-style">
                 <div className="author-details">
@@ -117,7 +147,7 @@ const WatchVideo = () => {
                   <p>{author.followers?.length || 0} followers</p>
                 </div>
               </Link>
-              {currentUser && currentUser.userId === author.userId ? (
+              {currentUser && author && currentUser.userId === author.userId ? (
                 <GenericButton text="Edit this video" link={`/edit/${videoId}`} />
               ) : (
                 <SubscribeButton userToSubscribe={author.userId} />
@@ -128,11 +158,7 @@ const WatchVideo = () => {
         <div className="details-section">
           <p className="note">{`${video.views} views`}</p>
           <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
-          {video.tags.slice(0, 5).map((t, index) => (
-            <p key={index} className="note">
-              #{t}
-            </p>
-          ))}
+          {videoTags()}
         </div>
         <p className="video-description">
           {truncatedDescription}
@@ -146,18 +172,12 @@ const WatchVideo = () => {
     </div>
   );
 
-  if (!video) {
-    return <NotFoundRoute/>;
-  }
-
   return (
     <div className="watch-video-container">
       <div className="main-video-section">
         <SharePopup isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} />
         {videoSection}
-        <div className="video-details">
-          <CommentsSection videoId={videoId} currentUser={currentUser} />
-        </div>
+        <div className="video-details">{<CommentsSection videoId={videoId} currentUser={currentUser} />}</div>
       </div>
       <SuggestedVideos />
     </div>

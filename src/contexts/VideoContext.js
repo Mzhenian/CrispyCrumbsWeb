@@ -1,134 +1,78 @@
-import React, { createContext, useState, useContext } from "react";
-import videoDB from "../DB/videosDB.json";
-import { AuthContext } from "./AuthContext";
+import React, { createContext, useState, useEffect } from "react";
+//import { AuthContext } from "./AuthContext";
 
 const VideoContext = createContext();
 
 const VideoProvider = ({ children }) => {
-  const { users } = useContext(AuthContext);
-  const [videos, setVideos] = useState(videoDB.videos);
+  const [videos, setVideos] = useState([]);
+  //const { currentUser } = useContext(AuthContext);
+  const apiUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
 
-  const getVideoById = (videoId) => videos.find((video) => video.videoId === videoId);
-  const getUserById = (userId) => users.find((user) => user.userId === userId);
-
-  const editVideo = (videoId, updatedVideo) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) => (video.videoId === videoId ? { ...video, ...updatedVideo } : video))
-    );
-  };
-
-  const uploadVideo = (newVideo) => {
-    setVideos((prevVideos) => [newVideo, ...prevVideos]);
-  };
-
-  const likeVideo = (videoId, userId) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) => {
-        if (video.videoId === videoId) {
-          const liked = video.likedBy.includes(userId);
-          const disliked = video.dislikedBy.includes(userId);
-
-          if (liked) {
-            return {
-              ...video,
-              likes: video.likes - 1,
-              likedBy: video.likedBy.filter((id) => id !== userId),
-            };
-          } else {
-            return {
-              ...video,
-              likes: video.likes + 1,
-              dislikes: disliked ? video.dislikes - 1 : video.dislikes,
-              likedBy: [...video.likedBy, userId],
-              dislikedBy: video.dislikedBy.filter((id) => id !== userId),
-            };
-          }
+  useEffect(() => {
+    let isMounted = true; // flag to indicate if the component is mounted
+    const fetchVideos = async () => {
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return video;
-      })
-    );
-  };
-
-  const dislikeVideo = (videoId, userId) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) => {
-        if (video.videoId === videoId) {
-          const liked = video.likedBy.includes(userId);
-          const disliked = video.dislikedBy.includes(userId);
-
-          if (disliked) {
-            return {
-              ...video,
-              dislikes: video.dislikes - 1,
-              dislikedBy: video.dislikedBy.filter((id) => id !== userId),
-            };
-          } else {
-            return {
-              ...video,
-              dislikes: video.dislikes + 1,
-              likes: liked ? video.likes - 1 : video.likes,
-              dislikedBy: [...video.dislikedBy, userId],
-              likedBy: video.likedBy.filter((id) => id !== userId),
-            };
-          }
+        const data = await response.json();
+        if (isMounted) {
+          setVideos(data);
         }
-        return video;
-      })
-    );
+      } catch (err) {
+        if (isMounted) console.error("Fetch videos failed:", err);
+      }
+    };
+    fetchVideos();
+    return () => {
+      isMounted = false; // cleanup function to set isMounted to false when the component unmounts
+    };
+  }, [apiUrl]);
+
+  const getVideoById = async (videoId) => {
+    try {
+      const response = await fetch(`${apiUrl}/${videoId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      console.error("Get video by ID failed:", err);
+      return null;
+    }
   };
 
-  const addComment = (videoId, comment) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) =>
-        video.videoId === videoId ? { ...video, comments: [comment, ...video.comments] } : video
-      )
-    );
-  };
+  const editVideo = async (videoId, updatedVideo) => {};
 
-  const editComment = (videoId, updatedComment) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) =>
-        video.videoId === videoId
-          ? {
-              ...video,
-              comments: video.comments.map((comment) =>
-                comment.commentId === updatedComment.commentId ? updatedComment : comment
-              ),
-            }
-          : video
-      )
-    );
-  };
+  const uploadVideo = async (newVideo) => {};
 
-  const deleteComment = (videoId, commentId) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) =>
-        video.videoId === videoId
-          ? {
-              ...video,
-              comments: video.comments.filter((comment) => comment.commentId !== commentId),
-            }
-          : video
-      )
-    );
-  };
+  const likeVideo = async (videoId) => {};
 
-  const deleteVideo = (videoId) => {
-    setVideos((prevVideos) => prevVideos.filter((video) => video.videoId !== videoId));
-  };
+  const dislikeVideo = async (videoId) => {};
 
-  const incrementViews = (videoId) => {
-    setVideos((prevVideos) =>
-      prevVideos.map((video) => (video.videoId === videoId ? { ...video, views: video.views + 1 } : video))
-    );
-  };
+  const addComment = async (videoId, comment) => {};
+
+  const editComment = async (videoId, updatedComment) => {};
+
+  const deleteComment = async (videoId, commentId) => {};
+
+  const deleteVideo = async (videoId) => {};
+
+  const incrementViews = async (videoId) => {};
 
   return (
     <VideoContext.Provider
       value={{
+        apiUrl,
         videos,
         getVideoById,
-        getUserById,
         editVideo,
         uploadVideo,
         likeVideo,

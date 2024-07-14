@@ -51,7 +51,7 @@ const UploadVideo = () => {
     });
   };
 
-  const handleFileChange = (name, files) => {
+  const handleVideoFileChange = (name, files) => {
     const file = files[0];
     if (file) {
       setFormData({
@@ -61,6 +61,17 @@ const UploadVideo = () => {
       setIsPopupOpen(false);
     } else {
       setErrorMessage("Please upload a valid video file.");
+    }
+  };
+
+  const handleFileChange = (name, files) => {
+    const file = files[0];
+    if (file) {
+      setFormData({
+        ...formData,
+        [name]: file,
+      });
+      setIsPopupOpen(false);
     }
   };
 
@@ -110,7 +121,7 @@ const UploadVideo = () => {
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         title="Upload Video"
-        onFileDrop={(files) => handleFileChange("videoFile", files)}
+        onFileDrop={(files) => handleVideoFileChange("videoFile", files)}
         canClose={false}
       >
         <div className="popup-body-content">
