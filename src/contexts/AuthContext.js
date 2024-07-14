@@ -171,7 +171,7 @@ export const AuthProvider = ({ children }) => {
 
   const getUserById = async (userId) => {
     try {
-      const response = await fetch(`${apiUrl}/user/${userId}`, {
+      const response = await fetch(`${apiUrl}/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
