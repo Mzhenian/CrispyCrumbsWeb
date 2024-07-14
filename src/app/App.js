@@ -15,13 +15,11 @@ import PrivateRoute from "../routes/PrivateRoute.js";
 import SignedRoute from "../routes/SignedRoute.js";
 import EditVideo from "../pages/editVideo/EditVideo.js";
 import NotFound from "../routes/NotFoundRoute.js"; // Import the NotFound component
-import ErrorBoundary from "../contexts/ErrorBoundary.js";
 
 function App() {
   return (
     <React.StrictMode>
       <BrowserRouter>
-        <ErrorBoundary>
           <ThemeProvider>
             <AuthProvider>
               <VideoProvider>
@@ -41,7 +39,6 @@ function App() {
               </VideoProvider>
             </AuthProvider>
           </ThemeProvider>
-        </ErrorBoundary>
       </BrowserRouter>
     </React.StrictMode>
   );
