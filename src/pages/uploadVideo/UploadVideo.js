@@ -96,7 +96,7 @@ const UploadVideo = () => {
       tags: formData.tags,
       videoFile: URL.createObjectURL(formData.videoFile),
       thumbnail: formData.thumbnail ? URL.createObjectURL(formData.thumbnail) : defaultThumbnail,
-      userId: currentUser.userId,
+      userId: currentUser._id.toString(),
       views: 0,
       likes: 0,
       dislikes: 0,

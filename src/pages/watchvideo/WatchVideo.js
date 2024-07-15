@@ -38,8 +38,8 @@ const WatchVideo = () => {
           setAuthor(videoAuthor);
 
           if (currentUser && Array.isArray(foundVideo.likedBy)) {
-            setLikeSelected(foundVideo.likedBy.includes(currentUser.userId));
-            setDislikeSelected(foundVideo.dislikedBy.includes(currentUser.userId));
+            setLikeSelected(foundVideo.likedBy.includes(currentUser._id.toString()));
+            setDislikeSelected(foundVideo.dislikedBy.includes(currentUser._id.toString()));
           } else if (!currentUser) {
             setLikeSelected(false);
             setDislikeSelected(false);
@@ -80,14 +80,14 @@ const WatchVideo = () => {
 
   const handleLike = () => {
     if (!currentUser) return navigate("/login");
-    likeVideo(videoId, currentUser.userId);
+    likeVideo(videoId, currentUser._id.toString());
     setLikeSelected(!likeSelected);
     if (dislikeSelected) setDislikeSelected(false);
   };
 
   const handleDislike = () => {
     if (!currentUser) return navigate("/login");
-    dislikeVideo(videoId, currentUser.userId);
+    dislikeVideo(videoId, currentUser._id.toString());
     setDislikeSelected(!dislikeSelected);
     if (likeSelected) setLikeSelected(false);
   };
@@ -138,19 +138,19 @@ const WatchVideo = () => {
         <div className="author-section">
           {author && (
             <>
-              <Link to={`/crumb/${author.userId}`} className="no-link-style">
+              <Link to={`/crumb/${author._id.toString()}`} className="no-link-style">
                 <ProfilePhoto user={author} />
               </Link>
-              <Link to={`/crumb/${author.userId}`} className="no-link-style">
+              <Link to={`/crumb/${author._id.toString()}`} className="no-link-style">
                 <div className="author-details">
                   <b className="author-name">{author.userName}</b>
                   <p>{author.followers?.length || 0} followers</p>
                 </div>
               </Link>
-              {currentUser && author && currentUser.userId === author.userId ? (
+              {currentUser && author && currentUser._id.toString() === author._id.toString() ? (
                 <GenericButton text="Edit this video" link={`/edit/${videoId}`} />
               ) : (
-                <SubscribeButton userToSubscribe={author.userId} />
+                <SubscribeButton userToSubscribe={author._id.toString()} />
               )}
             </>
           )}

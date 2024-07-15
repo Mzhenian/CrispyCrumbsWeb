@@ -19,7 +19,7 @@ const CommentsSection = ({ currentUser, videoId }) => {
     if (newComment.trim()) {
       const newCommentObj = {
         commentId: Date.now().toString(),
-        userId: currentUser.userId,
+        userId: currentUser._id.toString(),
         comment: newComment,
         date: new Date().toLocaleDateString(),
       };
@@ -105,7 +105,7 @@ const CommentsSection = ({ currentUser, videoId }) => {
               </div>
             </div>
           )}
-          {currentUser && currentUser.userId === comment.userId && editingCommentId !== comment.commentId && (
+          {currentUser && currentUser._id.toString() === comment.userId && editingCommentId !== comment.commentId && (
             <div className="edit-button-container">
               <GenericButton icon={editIcon} onClick={() => handleEditClick(comment.commentId, comment.comment)} />
             </div>

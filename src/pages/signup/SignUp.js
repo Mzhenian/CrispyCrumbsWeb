@@ -121,8 +121,6 @@ const SignUp = () => {
     }
 
     const newUser = {
-      //todo remove
-      //userId: Date.now().toString(),
       userName: formData.username,
       email: formData.email,
       password: formData.password,

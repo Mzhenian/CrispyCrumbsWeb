@@ -19,7 +19,7 @@ const Home = () => {
   useEffect(() => {
     const fetchAuthors = async () => {
       const authorPromises = videos.map(async (video) => {
-        const author = await getUserById(video.userId);
+        const author = await getUserById(video.userId.toString());
         return { [video.videoId]: author };
       });
       const authors = await Promise.all(authorPromises);
