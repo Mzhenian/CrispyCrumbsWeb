@@ -42,10 +42,20 @@ const VideoList = ({ userId }) => {
     <div className={`watch-user-profile-video-section ${theme}`}>
       {sortedVideos().map((video) => {
         return (
-          <div key={video.videoId} className={`user-profile-video-card ${theme}`}>
-            <Link to={`/watch/${video.videoId}`} className="no-link-style">
+          <div
+            key={video._id.toString()}
+            className={`user-profile-video-card ${theme}`}
+          >
+            <Link
+              to={`/watch/${video._id.toString()}`}
+              className="no-link-style"
+            >
               <div className="thumbnail-container">
-                <img src={video.thumbnail} alt={video.title} className="user-profile-video-thumbnail" />
+                <img
+                  src={video.thumbnail}
+                  alt={video.title}
+                  className="user-profile-video-thumbnail"
+                />
               </div>
 
               <div>
@@ -53,14 +63,19 @@ const VideoList = ({ userId }) => {
                   <div className="user-profile-video-info">
                     <p className="user-profile-video-title">{video.title}</p>
                     <p className="note">{video.views} views</p>
-                    <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
+                    <p className="note">
+                      {new Date(video.uploadDate).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
               </div>
             </Link>
             <div className="video-list-edit-icon">
               {currentUser && currentUser._id.toString() === userId && (
-                <GenericButton icon={editIcon} link={`/edit/${video.videoId}`} />
+                <GenericButton
+                  icon={editIcon}
+                  link={`/edit/${video._id.toString()}`}
+                />
               )}
             </div>
           </div>

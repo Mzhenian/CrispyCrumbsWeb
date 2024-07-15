@@ -89,7 +89,6 @@ const UploadVideo = () => {
     }
 
     const newVideo = {
-      videoId: Date.now().toString(),
       title: formData.title,
       description: formData.description,
       category: formData.category,
