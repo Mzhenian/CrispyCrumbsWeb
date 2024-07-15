@@ -107,6 +107,28 @@ const UploadVideo = () => {
         setIsUploading(false);
       }
     }
+
+    const newVideo = {
+      title: formData.title,
+      description: formData.description,
+      category: formData.category,
+      tags: formData.tags,
+      videoFile: URL.createObjectURL(formData.videoFile),
+      thumbnail: URL.createObjectURL(formData.thumbnail),
+      userId: currentUser._id.toString(),
+      views: 0,
+      likes: 0,
+      dislikes: 0,
+      uploadDate: new Date().toLocaleDateString(),
+      comments: [],
+      likedBy: [],
+      dislikedBy: [],
+    };
+
+    // Upload video if all checks pass
+    uploadVideo(newVideo);
+
+    navigate("/");
   };
 
   const videoInputRef = useRef(null);
