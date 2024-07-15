@@ -19,8 +19,8 @@ const Home = () => {
   useEffect(() => {
     const fetchAuthors = async () => {
       const authorPromises = videos.map(async (video) => {
-        const author = await getUserById(video.userId);
-        return { [video.videoId]: author };
+        const author = await getUserById(video.userId.toString());
+        return { [video._id.toString()]: author };
       });
       const authors = await Promise.all(authorPromises);
       const authorsMap = authors.reduce((acc, author) => ({ ...acc, ...author }), {});
@@ -41,6 +41,8 @@ const Home = () => {
     e.preventDefault();
     navigate(`/crumb/${profileId}`);
   };
+
+  console.log(videos);
 
   const sortedVideos = () => {
     let sorted = [...videos];
@@ -67,10 +69,10 @@ const Home = () => {
   const videosList = (
     <div className={`watch-home-video-section ${theme}`}>
       {sortedVideos().map((video) => {
-        const author = videoAuthors[video.videoId];
+        const author = videoAuthors[video._id.toString()];
         return author ? (
-          <div key={video.videoId} className={`home-video-card ${theme}`}>
-            <Link to={`/watch/${video.videoId}`} className="thumbnail-link">
+          <div key={video._id.toString()} className={`home-video-card ${theme}`}>
+            <Link to={`/watch/${video._id.toString()}`} className="thumbnail-link">
               <VideoThumbnail video={video} />
             </Link>
             <div className="home-video-b">
@@ -79,7 +81,7 @@ const Home = () => {
                   <ProfilePhoto user={author} />
                 </div>
                 <div className="home-video-info">
-                  <Link to={`/watch/${video.videoId}`} className="title-link">
+                  <Link to={`/watch/${video._id.toString()}`} className="title-link">
                     <p className="home-video-title">{video.title}</p>
                   </Link>
                   <div className="author-link" onClick={(e) => handleAuthorClick(e, author.userId)}>

@@ -1,3 +1,5 @@
+// NOTE: A very small fix that caused a very big bug, I noticed it much later after posting, it was 2 lines that made the difference
+
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
@@ -49,7 +51,7 @@ const UploadVideo = () => {
 
   const handleVideoFileChange = (name, files) => {
     const file = files[0];
-    if (file && file.type.startsWith("video/")) {
+    if (file) {
       setFormData({
         ...formData,
         [name]: file,
@@ -86,18 +88,25 @@ const UploadVideo = () => {
 
     const videoData = new FormData();
     videoData.append("videoFile", formData.videoFile);
-    videoData.append("thumbnail", formData.thumbnail);
+    if (formData.thumbnail) {
+      videoData.append("thumbnail", formData.thumbnail);
+    }
     videoData.append("title", formData.title);
     videoData.append("description", formData.description);
     videoData.append("category", formData.category);
     videoData.append("tags", formData.tags.join(","));
+    videoData.append("userId", currentUser._id); // Add userId to FormData
+
+    console.log(videoData);
 
     try {
-      await uploadVideo(currentUser.token, videoData, parseInt(currentUser.userId, 10));
+      await uploadVideo(currentUser.token, videoData, currentUser._id); // Ensure userId is passed correctly
       navigate("/");
     } catch (error) {
       setErrorMessage(error.message);
     }
+    console.log(currentUser);
+    console.log(videoData);
   };
 
   const videoInputRef = useRef(null);

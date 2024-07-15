@@ -17,7 +17,7 @@ const SuggestedVideos = () => {
     const fetchAuthors = async () => {
       const authorPromises = videos.map(async (video) => {
         const author = await getUserById(video.userId);
-        return { [video.videoId]: author };
+        return { [video._id.toString()]: author };
       });
       const authors = await Promise.all(authorPromises);
       const authorsMap = authors.reduce((acc, author) => ({ ...acc, ...author }), {});
@@ -38,7 +38,7 @@ const SuggestedVideos = () => {
   return (
     <div className={`watch-suggested-video-section ${theme}`}>
       {videos.slice(0, 17).map((video) => {
-        const author = videoAuthors[video.videoId];
+        const author = videoAuthors[video._id];
         const thumbnailUrl = video.thumbnail
           ? `${process.env.REACT_APP_API_URL}/api/db${video.thumbnail}`
           : defaultVideoThumbnail;
@@ -48,7 +48,7 @@ const SuggestedVideos = () => {
             <img src={thumbnailUrl} alt={video.title} className="suggested-video-thumbnail" />
             <div className="suggested-video-details">
               <p className="suggested-video-title">{video.title}</p>
-              <p className="note author-link" onClick={(e) => handleAuthorClick(e, author.userId)}>
+              <p className="note author-link" onClick={(e) => handleAuthorClick(e, author._id.toString())}>
                 {author.userName}
               </p>
               <p className="note">{video.views} views</p>

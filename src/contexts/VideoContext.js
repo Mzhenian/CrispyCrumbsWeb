@@ -6,13 +6,14 @@ const VideoContext = createContext();
 const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
   //const { currentUser } = useContext(AuthContext);
-  const apiUrl = `${process.env.REACT_APP_API_URL}/api`;
+  const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
+  const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
   useEffect(() => {
     let isMounted = true; // flag to indicate if the component is mounted
     const fetchVideos = async () => {
       try {
-        const response = await fetch(`${apiUrl}/videos/`);
+        const response = await fetch(apiVideosUrl);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -28,11 +29,11 @@ const VideoProvider = ({ children }) => {
     return () => {
       isMounted = false; // cleanup function to set isMounted to false when the component unmounts
     };
-  }, [apiUrl]);
+  }, [apiVideosUrl]);
 
   const getVideoById = async (videoId) => {
     try {
-      const response = await fetch(`${apiUrl}/videos/${videoId}`, {
+      const response = await fetch(`${apiVideosUrl}/${videoId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -49,31 +50,30 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-const getVideosByUserId = async (userId) => {
-  try {
-    const response = await fetch(`${apiUrl}/users/${userId}/videos/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+  const getVideosByUserId = async (userId) => {
+    try {
+      const response = await fetch(`${apiUsersUrl}/${userId}/videos/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      console.error("Get videos by user ID failed:", err);
+      return null;
     }
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error("Get videos by user ID failed:", err);
-    return null;
-  }
-};
-
+  };
 
   const editVideo = async (videoId, updatedVideo) => {};
 
   const uploadVideo = async (token, videoData, userId) => {
     try {
-      const response = await fetch(`${apiUrl}/users/${parseInt(userId)}/videos`, {
+      const response = await fetch(`${apiUsersUrl}/${parseInt(userId)}/videos`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -109,7 +109,7 @@ const getVideosByUserId = async (userId) => {
   return (
     <VideoContext.Provider
       value={{
-        apiUrl,
+        apiUrl: apiVideosUrl,
         videos,
         getVideoById,
         getVideosByUserId,

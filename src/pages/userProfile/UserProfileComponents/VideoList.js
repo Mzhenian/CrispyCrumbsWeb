@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import ProfilePhoto from "../../../components/profilePhoto/ProfilePhoto";
+import { Link } from "react-router-dom";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { VideoContext } from "../../../contexts/VideoContext";
 import { AuthContext } from "../../../contexts/AuthContext";
@@ -15,7 +14,6 @@ const VideoList = ({ userId }) => {
   const [sortOption, setSortOption] = useState("newest");
   const [userVideos, setUserVideos] = useState([]);
   const [videoAuthors, setVideoAuthors] = useState({});
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -43,12 +41,6 @@ const VideoList = ({ userId }) => {
 
   const handleSortChange = (value) => {
     setSortOption(value);
-  };
-
-  const handleAuthorClick = (e, profileId) => {
-    e.stopPropagation();
-    e.preventDefault();
-    navigate(`/crumb/${profileId}`);
   };
 
   const sortedVideos = () => {
@@ -85,8 +77,8 @@ const VideoList = ({ userId }) => {
               </div>
             </Link>
             <div className="video-list-edit-icon">
-              {currentUser && currentUser.userId === userId && (
-                <GenericButton icon={editIcon} link={`/edit/${video.videoId}`} />
+              {currentUser && currentUser._id.toString() === userId && (
+                <GenericButton icon={editIcon} link={`/edit/${video._id.toString()}`} />
               )}
             </div>
           </div>

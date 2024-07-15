@@ -42,7 +42,7 @@ const EditVideo = () => {
     if (video && currentUser) {
       if (!currentUser) {
         navigate("/login");
-      } else if (video.userId === currentUser.userId) {
+      } else if (video.userId === currentUser._id.toString()) {
         setIsAuthorized(true);
         setFormData({
           title: video.title,
@@ -89,7 +89,7 @@ const EditVideo = () => {
       ...formData,
       videoFile: formData.videoFile,
       thumbnail: formData.thumbnail,
-      userId: currentUser.userId,
+      userId: currentUser._id.toString(),
     };
 
     // Update video if all checks pass

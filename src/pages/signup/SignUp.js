@@ -121,7 +121,6 @@ const SignUp = () => {
     }
 
     const newUser = {
-      userId: Date.now().toString(),
       userName: formData.username,
       email: formData.email,
       password: formData.password,
@@ -130,11 +129,6 @@ const SignUp = () => {
       birthday: `${formData.birthday.year}-${formData.birthday.month}-${formData.birthday.day}`,
       country: formData.country,
       profilePhoto: formData.profilePhoto ? formData.profilePhoto : defaultPhoto,
-      followers: [],
-      following: [],
-      videosIds: [],
-      likedVideoIds: [],
-      dislikedVideoIds: [],
     };
 
     signup(newUser);
