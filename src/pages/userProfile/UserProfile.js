@@ -12,11 +12,23 @@ const UserProfile = () => {
   const { userId } = useParams();
   const { getUserById } = useContext(AuthContext);
   const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchedUser = getUserById(userId);
-    setUser(fetchedUser);
+    const fetchUser = async () => {
+      try {
+        const fetchedUser = await getUserById(userId);
+        setUser(fetchedUser);
+      } catch (err) {
+        setError(err);
+      }
+    };
+    fetchUser();
   }, [userId, getUserById]);
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   if (!user) {
     return <NotFoundRoute />;

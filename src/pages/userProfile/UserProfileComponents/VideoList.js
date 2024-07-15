@@ -1,26 +1,54 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ProfilePhoto from "../../../components/profilePhoto/ProfilePhoto";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { VideoContext } from "../../../contexts/VideoContext";
-import GenericButton from "../../../components/buttons/GenericButton";
-import "../../home/VideoList.css";
 import { AuthContext } from "../../../contexts/AuthContext";
+import GenericButton from "../../../components/buttons/GenericButton";
+import VideoThumbnail from "../../../components/videoThumbnail/VideoThumbnail";
 import editIcon from "../../../components/iconsLab/edit.svg";
 
 const VideoList = ({ userId }) => {
   const { theme } = useContext(ThemeContext);
-  const { currentUser } = useContext(AuthContext);
-  const { videos } = useContext(VideoContext);
+  const { getVideosByUserId } = useContext(VideoContext);
+  const { currentUser, getUserById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("newest");
   const [userVideos, setUserVideos] = useState([]);
+  const [videoAuthors, setVideoAuthors] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const userSpecificVideos = videos.filter((video) => video.userId === userId);
-    setUserVideos(userSpecificVideos);
-  }, [videos, userId]);
+    const fetchVideos = async () => {
+      try {
+        const videos = await getVideosByUserId(userId);
+        if (videos) {
+          setUserVideos(videos);
+
+          const authorPromises = videos.map(async (video) => {
+            const author = await getUserById(video.userId);
+            return { [video.videoId]: author };
+          });
+
+          const authors = await Promise.all(authorPromises);
+          const authorsMap = authors.reduce((acc, author) => ({ ...acc, ...author }), {});
+          setVideoAuthors(authorsMap);
+        }
+      } catch (error) {
+        console.error("Failed to fetch videos and authors:", error);
+      }
+    };
+
+    fetchVideos();
+  }, [userId, getVideosByUserId, getUserById]);
 
   const handleSortChange = (value) => {
     setSortOption(value);
+  };
+
+  const handleAuthorClick = (e, profileId) => {
+    e.stopPropagation();
+    e.preventDefault();
+    navigate(`/crumb/${profileId}`);
   };
 
   const sortedVideos = () => {
@@ -41,13 +69,11 @@ const VideoList = ({ userId }) => {
   const videosList = (
     <div className={`watch-user-profile-video-section ${theme}`}>
       {sortedVideos().map((video) => {
-        return (
+        const author = videoAuthors[video.videoId];
+        return author ? (
           <div key={video.videoId} className={`user-profile-video-card ${theme}`}>
             <Link to={`/watch/${video.videoId}`} className="no-link-style">
-              <div className="thumbnail-container">
-                <img src={video.thumbnail} alt={video.title} className="user-profile-video-thumbnail" />
-              </div>
-
+              <VideoThumbnail video={video} />
               <div>
                 <div className="user-profile-video-details">
                   <div className="user-profile-video-info">
@@ -64,7 +90,7 @@ const VideoList = ({ userId }) => {
               )}
             </div>
           </div>
-        );
+        ) : null;
       })}
     </div>
   );

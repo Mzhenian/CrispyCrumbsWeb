@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
           }
           const data = await response.json();
           if (isMounted && data.valid) {
-            setCurrentUser(data.user);
+            setCurrentUser({ ...data.user, token });
           } else {
             localStorage.removeItem("token");
           }
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (data.token) {
         localStorage.setItem("token", data.token);
-        setCurrentUser(data.user);
+        setCurrentUser({ ...data.user, token: data.token });
         return true;
       }
       return false;
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (data.token) {
         localStorage.setItem("token", data.token);
-        setCurrentUser(data.user);
+        setCurrentUser({ ...data.user, token: data.token });
       }
     } catch (err) {
       console.error("Signup failed:", err);

@@ -9,7 +9,6 @@
   border-bottom-left-radius: 30px 20px;
   background-color: var(--tertiary-color-dark);
   transition: 0.3s ease-in-out;
-  width: 100px;
 }
 
 .thumbnail-container:hover {

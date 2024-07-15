@@ -17,8 +17,6 @@ import cancelIcon from "../../components/iconsLab/closeOrange.svg";
 
 import "./UploadVideo.css";
 
-const defaultThumbnail = process.env.PUBLIC_URL + "/videos/default.png";
-
 const UploadVideo = () => {
   const { theme } = useContext(ThemeContext);
   const { uploadVideo } = useContext(VideoContext);
@@ -80,34 +78,26 @@ const UploadVideo = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
 
-    const newVideo = {
-      videoId: Date.now().toString(),
-      title: formData.title,
-      description: formData.description,
-      category: formData.category,
-      tags: formData.tags,
-      videoFile: URL.createObjectURL(formData.videoFile),
-      thumbnail: formData.thumbnail ? URL.createObjectURL(formData.thumbnail) : defaultThumbnail,
-      userId: currentUser.userId,
-      views: 0,
-      likes: 0,
-      dislikes: 0,
-      uploadDate: new Date().toLocaleDateString(),
-      comments: [],
-      likedBy: [],
-      dislikedBy: [],
-    };
+    const videoData = new FormData();
+    videoData.append("videoFile", formData.videoFile);
+    videoData.append("thumbnail", formData.thumbnail);
+    videoData.append("title", formData.title);
+    videoData.append("description", formData.description);
+    videoData.append("category", formData.category);
+    videoData.append("tags", formData.tags.join(","));
 
-    // Upload video if all checks pass
-    uploadVideo(newVideo);
-
-    navigate("/");
+    try {
+      await uploadVideo(currentUser.token, videoData, parseInt(currentUser.userId, 10));
+      navigate("/");
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
   };
 
   const videoInputRef = useRef(null);

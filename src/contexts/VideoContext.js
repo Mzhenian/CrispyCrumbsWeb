@@ -6,13 +6,13 @@ const VideoContext = createContext();
 const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
   //const { currentUser } = useContext(AuthContext);
-  const apiUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
+  const apiUrl = `${process.env.REACT_APP_API_URL}/api`;
 
   useEffect(() => {
     let isMounted = true; // flag to indicate if the component is mounted
     const fetchVideos = async () => {
       try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(`${apiUrl}/videos/`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -32,7 +32,7 @@ const VideoProvider = ({ children }) => {
 
   const getVideoById = async (videoId) => {
     try {
-      const response = await fetch(`${apiUrl}/${videoId}`, {
+      const response = await fetch(`${apiUrl}/videos/${videoId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -49,9 +49,48 @@ const VideoProvider = ({ children }) => {
     }
   };
 
+const getVideosByUserId = async (userId) => {
+  try {
+    const response = await fetch(`${apiUrl}/users/${userId}/videos/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("Get videos by user ID failed:", err);
+    return null;
+  }
+};
+
+
   const editVideo = async (videoId, updatedVideo) => {};
 
-  const uploadVideo = async (newVideo) => {};
+  const uploadVideo = async (token, videoData, userId) => {
+    try {
+      const response = await fetch(`${apiUrl}/users/${parseInt(userId)}/videos`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: videoData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      throw new Error(error.message || "An error occurred while uploading the video.");
+    }
+  };
 
   const likeVideo = async (videoId) => {};
 
@@ -73,6 +112,7 @@ const VideoProvider = ({ children }) => {
         apiUrl,
         videos,
         getVideoById,
+        getVideosByUserId,
         editVideo,
         uploadVideo,
         likeVideo,

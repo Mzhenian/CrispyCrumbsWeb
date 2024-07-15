@@ -16,8 +16,9 @@ import NotFoundRoute from "../../routes/NotFoundRoute";
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
   const { currentUser, getUserById } = useContext(AuthContext);
-  const { videoId } = useParams();
   const { getVideoById, likeVideo, dislikeVideo, incrementViews } = useContext(VideoContext);
+
+  const { videoId } = useParams();
   const [video, setVideo] = useState(null);
   const [author, setAuthor] = useState(null);
   const [likeSelected, setLikeSelected] = useState(false);
