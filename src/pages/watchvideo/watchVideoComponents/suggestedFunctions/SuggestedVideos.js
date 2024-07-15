@@ -38,9 +38,11 @@ const SuggestedVideos = () => {
     <div className={`watch-suggested-video-section ${theme}`}>
       {videos.slice(0, 17).map((video) => {
         const author = videoAuthors[video.videoId];
+        const thumbnailUrl = `${process.env.REACT_APP_API_URL}/api/db${video.thumbnail}`;
+
         return author ? (
           <Link to={`/watch/${video.videoId}`} key={video.videoId} className={`suggested-video-card ${theme}`}>
-            <img src={video.thumbnail} alt={video.title} className="suggested-video-thumbnail" />
+            <img src={thumbnailUrl} alt={video.title} className="suggested-video-thumbnail" />
             <div className="suggested-video-details">
               <p className="suggested-video-title">{video.title}</p>
               <p className="note author-link" onClick={(e) => handleAuthorClick(e, author.userId)}>
