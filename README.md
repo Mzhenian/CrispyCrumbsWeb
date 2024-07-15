@@ -8,10 +8,15 @@ Ofek Avan Danan 211824727
 Zohar Mzhen 314621806
 Dolev Menajem 207272220
 
-## Running the Crispy Crumbs Website
+## Running the Crispy Crumbs website
 
 Follow these steps to get the Crispy Crumbs website up and running on your local machine:
 
+0. **server**
+
+   First setup the server from [CrispyCrumbsServer](https://github.com/Mzhenian/CrispyCrumbsServer).
+
+   
 1. **Initial Setup**
    
    On the first time opening this project, run the following command in your terminal to install all necessary node modules:
