@@ -7,6 +7,7 @@ import { VideoContext } from "../../contexts/VideoContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import GenericButton from "../../components/buttons/GenericButton";
 import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail";
+import NotFoundRoute from "../../routes/NotFoundRoute";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
