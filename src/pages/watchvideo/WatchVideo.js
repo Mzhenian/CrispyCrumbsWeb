@@ -118,16 +118,8 @@ const WatchVideo = () => {
 
   const videoSection = video && (
     <div className={`container ${theme}`}>
-      <video
-        key={video._id.toString()}
-        controls
-        className="container-video"
-        autoPlay
-      >
-        <source
-          src={`${process.env.REACT_APP_API_URL}/api/db${video.videoFile}`}
-          type="video/mp4"
-        />
+      <video key={video._id.toString()} controls className="container-video" autoPlay>
+        <source src={`${process.env.REACT_APP_API_URL}/api/db${video.videoFile}`} type="video/mp4" />
         Not supported
       </video>
       <div className={`container-body ${theme}`}>
@@ -135,10 +127,7 @@ const WatchVideo = () => {
           <h1 className="single-line-text">{video.title}</h1>
           <div className="buttons">
             <div>
-              <GenericButton
-                text="Share"
-                onClick={() => setIsShareOpen(true)}
-              />
+              <GenericButton text="Share" onClick={() => setIsShareOpen(true)} />
             </div>
             <LikeButton
               dislikeCounter={video.dislikes}
@@ -154,28 +143,17 @@ const WatchVideo = () => {
         <div className="author-section">
           {author && (
             <>
-              <Link
-                to={`/crumb/${author._id.toString()}`}
-                className="no-link-style"
-              >
+              <Link to={`/crumb/${author._id.toString()}`} className="no-link-style">
                 <ProfilePhoto user={author} />
               </Link>
-              <Link
-                to={`/crumb/${author._id.toString()}`}
-                className="no-link-style"
-              >
+              <Link to={`/crumb/${author._id.toString()}`} className="no-link-style">
                 <div className="author-details">
                   <b className="author-name">{author.userName}</b>
                   <p>{author.followers?.length || 0} followers</p>
                 </div>
               </Link>
-              {currentUser &&
-              author &&
-              currentUser._id.toString() === author._id.toString() ? (
-                <GenericButton
-                  text="Edit this video"
-                  link={`/edit/${videoId}`}
-                />
+              {currentUser && author && currentUser._id.toString() === author._id.toString() ? (
+                <GenericButton text="Edit this video" link={`/edit/${videoId}`} />
               ) : (
                 <SubscribeButton userToSubscribe={author._id.toString()} />
               )}
@@ -184,9 +162,7 @@ const WatchVideo = () => {
         </div>
         <div className="details-section">
           <p className="note">{`${video.views} views`}</p>
-          <p className="note">
-            {new Date(video.uploadDate).toLocaleDateString()}
-          </p>
+          <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
           {videoTags()}
         </div>
         <p className="video-description">

@@ -56,7 +56,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     if (currentUser?.profilePhoto) {
-      setProfilePhotoURL(`${process.env.REACT_APP_API_URL}${currentUser.profilePhoto}`);
+      setProfilePhotoURL(`${process.env.REACT_APP_API_URL}/api/db${currentUser.profilePhoto}`);
     }
   }, [currentUser]);
 
