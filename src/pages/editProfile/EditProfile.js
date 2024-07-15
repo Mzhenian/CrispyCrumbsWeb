@@ -34,14 +34,19 @@ const EditProfile = () => {
         year: "1990",
       };
 
-  const [formData, setFormData] = useState({
-    fullName: currentUser?.fullName || "",
-    email: currentUser?.email || "",
-    birthday: initialBirthday,
-    username: currentUser?.userName || "",
-    country: currentUser?.country || "Israel",
-    profilePhoto: currentUser?.profilePhoto || null,
-    phoneNumber: currentUser?.phoneNumber || "",
+  const [formData, setFormData] = useState(() => {
+    const savedFormData = JSON.parse(localStorage.getItem("editProfileFormData"));
+    return (
+      savedFormData || {
+        fullName: currentUser?.fullName || "",
+        email: currentUser?.email || "",
+        birthday: initialBirthday,
+        username: currentUser?.userName || "",
+        country: currentUser?.country || "Israel",
+        profilePhoto: currentUser?.profilePhoto || null,
+        phoneNumber: currentUser?.phoneNumber || "",
+      }
+    );
   });
 
   const [profilePhotoURL, setProfilePhotoURL] = useState("");
@@ -54,6 +59,10 @@ const EditProfile = () => {
       setProfilePhotoURL(`${process.env.REACT_APP_API_URL}${currentUser.profilePhoto}`);
     }
   }, [currentUser]);
+
+  useEffect(() => {
+    localStorage.setItem("editProfileFormData", JSON.stringify(formData));
+  }, [formData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -131,6 +140,7 @@ const EditProfile = () => {
     };
 
     await updateUser(currentUser._id, updatedUser);
+    localStorage.removeItem("editProfileFormData");
     navigate(`/crumb/${currentUser._id}`);
   };
 
@@ -138,7 +148,6 @@ const EditProfile = () => {
     await deleteUser(currentUser._id);
     navigate("/");
   };
-
 
   return (
     <div className={`page ${theme}`}>
