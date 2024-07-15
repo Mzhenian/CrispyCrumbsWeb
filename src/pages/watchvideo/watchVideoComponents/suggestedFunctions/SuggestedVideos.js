@@ -4,6 +4,7 @@ import "./suggestedVideos.css";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 import { VideoContext } from "../../../../contexts/VideoContext";
 import { AuthContext } from "../../../../contexts/AuthContext";
+import defaultVideoThumbnail from "../../../../components/iconsLab/defaultVideoThumbnail.png";
 
 const SuggestedVideos = () => {
   const { theme } = useContext(ThemeContext);
@@ -38,7 +39,9 @@ const SuggestedVideos = () => {
     <div className={`watch-suggested-video-section ${theme}`}>
       {videos.slice(0, 17).map((video) => {
         const author = videoAuthors[video.videoId];
-        const thumbnailUrl = `${process.env.REACT_APP_API_URL}/api/db${video.thumbnail}`;
+        const thumbnailUrl = video.thumbnail
+          ? `${process.env.REACT_APP_API_URL}/api/db${video.thumbnail}`
+          : defaultVideoThumbnail;
 
         return author ? (
           <Link to={`/watch/${video.videoId}`} key={video.videoId} className={`suggested-video-card ${theme}`}>
