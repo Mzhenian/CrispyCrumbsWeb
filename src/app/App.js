@@ -14,7 +14,7 @@ import { VideoProvider } from "../contexts/VideoContext.js";
 import PrivateRoute from "../routes/PrivateRoute.js";
 import SignedRoute from "../routes/SignedRoute.js";
 import EditVideo from "../pages/editVideo/EditVideo.js";
-import NotFound from "../routes/NotFoundRoute.js"; // Import the NotFound component
+import NotFound from "../routes/NotFoundRoute.js";
 import ErrorBoundary from "../contexts/ErrorBoundary.js";
 
 function App() {

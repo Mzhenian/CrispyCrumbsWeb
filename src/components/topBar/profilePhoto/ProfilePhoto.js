@@ -23,7 +23,7 @@ const ProfilePhoto = () => {
 
   const popup = (
     <div className={`popup ${theme}`}>
-      <div className="popup-row" onClick={() => navigate(`/crumb/${currentUser.userId}`)}>
+      <div className="popup-row" onClick={() => navigate(`/crumb/${currentUser._id.toString()}`)}>
         View my profile
       </div>
       <div className="popup-row" onClick={logout}>

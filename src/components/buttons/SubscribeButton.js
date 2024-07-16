@@ -47,7 +47,7 @@ const SubscribeButton = ({ userToSubscribe, displayNum = false }) => {
     );
   }
 
-  if (userToSubscribe === currentUser.userId) {
+  if (userToSubscribe === currentUser._id.toString()) {
     return null;
   }
 

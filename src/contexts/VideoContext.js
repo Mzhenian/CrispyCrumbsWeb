@@ -6,13 +6,13 @@ const VideoContext = createContext();
 const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
   //const { currentUser } = useContext(AuthContext);
-  const apiUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
+  const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
 
   useEffect(() => {
     let isMounted = true; // flag to indicate if the component is mounted
     const fetchVideos = async () => {
       try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiVideosUrl);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -28,11 +28,11 @@ const VideoProvider = ({ children }) => {
     return () => {
       isMounted = false; // cleanup function to set isMounted to false when the component unmounts
     };
-  }, [apiUrl]);
+  }, [apiVideosUrl]);
 
   const getVideoById = async (videoId) => {
     try {
-      const response = await fetch(`${apiUrl}/${videoId}`, {
+      const response = await fetch(`${apiVideosUrl}/${videoId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ const VideoProvider = ({ children }) => {
   return (
     <VideoContext.Provider
       value={{
-        apiUrl,
+        apiUrl: apiVideosUrl,
         videos,
         getVideoById,
         editVideo,

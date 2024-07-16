@@ -4,7 +4,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const apiUrl = `${process.env.REACT_APP_API_URL}/api/users`;
+  const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
   useEffect(() => {
     let isMounted = true; // flag to indicate if the component is mounted
@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem("token");
       if (token) {
         try {
-          const response = await fetch(`${apiUrl}/validateToken`, {
+          const response = await fetch(`${apiUsersUrl}/validateToken`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -37,11 +37,11 @@ export const AuthProvider = ({ children }) => {
     return () => {
       isMounted = false; // cleanup function to set isMounted to false when the component unmounts
     };
-  }, [apiUrl]);
+  }, [apiUsersUrl]);
 
   const login = async (username, password) => {
     try {
-      const response = await fetch(`${apiUrl}/login`, {
+      const response = await fetch(`${apiUsersUrl}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (userData) => {
     try {
-      const response = await fetch(`${apiUrl}/signup`, {
+      const response = await fetch(`${apiUsersUrl}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
   const followUser = async (userIdToFollow) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${apiUrl}/follow`, {
+      const response = await fetch(`${apiUsersUrl}/follow`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }) => {
   const unfollowUser = async (userIdToUnfollow) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${apiUrl}/unfollow`, {
+      const response = await fetch(`${apiUsersUrl}/unfollow`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -151,7 +151,7 @@ export const AuthProvider = ({ children }) => {
 
   const isUsernameAvailable = async (username) => {
     try {
-      const response = await fetch(`${apiUrl}/isUsernameAvailable`, {
+      const response = await fetch(`${apiUsersUrl}/isUsernameAvailable`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -171,7 +171,7 @@ export const AuthProvider = ({ children }) => {
 
   const getUserById = async (userId) => {
     try {
-      const response = await fetch(`${apiUrl}/${userId}`, {
+      const response = await fetch(`${apiUsersUrl}/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

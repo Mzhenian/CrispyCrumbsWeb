@@ -37,7 +37,7 @@ const UserProfile = () => {
           </div>
           <p>Country: {user.country}</p>
 
-          <SubscribeButton userToSubscribe={user.userId} />
+          <SubscribeButton userToSubscribe={user._id.toString()} />
         </Container>
       </div>
     </div>
