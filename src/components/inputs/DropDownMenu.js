@@ -65,25 +65,25 @@ export default function DropDownMenu(props) {
       id={dropdown ? `dropdown-title-on` : `dropdown-title-off`}
       onMouseDown={(e) => onClicking(e)}
     >
-      <div className="title-flag-container">
-        {dropdown ? (
-          <>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              className={`input-empty ${theme}`}
-              onChange={handleSearchChange}
-              onKeyDown={handleKeyDown}
-            />
-          </>
-        ) : (
+      {" "}
+      {dropdown ? (
+        <input
+          type="text"
+          placeholder="Search..."
+          value={search}
+          className={`input-empty ${theme}`}
+          id="dropdown-search"
+          onChange={handleSearchChange}
+          onKeyDown={handleKeyDown}
+        />
+      ) : (
+        <div className="title-flag-container">
           <>
             {props.showFlag && <img src={getFileName(props.value)} className="button-icon" alt="flag icon" />}
             {props.value}
           </>
-        )}
-      </div>
+        </div>
+      )}
       <div className={`input-highlight ${theme}`} onMouseDown={(e) => onClicking(e)}>
         <img
           onMouseDown={(e) => onClicking(e)}
