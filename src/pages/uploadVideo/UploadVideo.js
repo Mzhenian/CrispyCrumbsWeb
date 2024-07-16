@@ -108,27 +108,25 @@ const UploadVideo = () => {
       }
     }
 
-    const newVideo = {
-      title: formData.title,
-      description: formData.description,
-      category: formData.category,
-      tags: formData.tags,
-      videoFile: URL.createObjectURL(formData.videoFile),
-      thumbnail: URL.createObjectURL(formData.thumbnail),
-      userId: currentUser._id.toString(),
-      views: 0,
-      likes: 0,
-      dislikes: 0,
-      uploadDate: new Date().toLocaleDateString(),
-      comments: [],
-      likedBy: [],
-      dislikedBy: [],
-    };
+    setIsUploading(true);
+    const videoData = new FormData();
+    videoData.append("videoFile", formData.videoFile);
+    if (formData.thumbnail) {
+      videoData.append("thumbnail", formData.thumbnail);
+    }
+    videoData.append("title", formData.title);
+    videoData.append("description", formData.description);
+    videoData.append("category", formData.category);
+    videoData.append("tags", formData.tags.join(","));
+    videoData.append("userId", currentUser._id);
 
-    // Upload video if all checks pass
-    uploadVideo(newVideo);
-
-    navigate("/");
+    try {
+      await uploadVideo(currentUser.token, videoData, currentUser._id);
+      navigate("/");
+    } catch (error) {
+      setErrorMessage(error.message);
+      setIsUploading(false);
+    }
   };
 
   const videoInputRef = useRef(null);
