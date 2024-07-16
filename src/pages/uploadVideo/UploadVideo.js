@@ -1,5 +1,3 @@
-// NOTE: A very small fix that caused a very big bug, I noticed it much later after posting, it was 2 lines that made the difference
-
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
@@ -18,6 +16,7 @@ import uploadIcon from "../../components/iconsLab/upload.svg";
 import cancelIcon from "../../components/iconsLab/closeOrange.svg";
 
 import "./UploadVideo.css";
+import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail.js";
 
 const UploadVideo = () => {
   const { theme } = useContext(ThemeContext);
@@ -41,6 +40,7 @@ const UploadVideo = () => {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -86,6 +86,7 @@ const UploadVideo = () => {
       return;
     }
 
+    setIsUploading(true);
     const videoData = new FormData();
     videoData.append("videoFile", formData.videoFile);
     if (formData.thumbnail) {
@@ -95,18 +96,15 @@ const UploadVideo = () => {
     videoData.append("description", formData.description);
     videoData.append("category", formData.category);
     videoData.append("tags", formData.tags.join(","));
-    videoData.append("userId", currentUser._id); // Add userId to FormData
-
-    console.log(videoData);
+    videoData.append("userId", currentUser._id);
 
     try {
-      await uploadVideo(currentUser.token, videoData, currentUser._id); // Ensure userId is passed correctly
+      await uploadVideo(currentUser.token, videoData, currentUser._id);
       navigate("/");
     } catch (error) {
       setErrorMessage(error.message);
+      setIsUploading(false);
     }
-    console.log(currentUser);
-    console.log(videoData);
   };
 
   const videoInputRef = useRef(null);
@@ -193,17 +191,19 @@ const UploadVideo = () => {
               <GenericButton text="Upload Thumbnail" onClick={() => thumbnailInputRef.current.click()} />
             </div>
             {formData.thumbnail && (
-              <div className="thumbnail-container">
-                <img
-                  src={URL.createObjectURL(formData.thumbnail)}
-                  alt="Thumbnail preview"
-                  className="home-video-thumbnail"
-                />
+              <div>
+                <VideoThumbnail img={URL.createObjectURL(formData.thumbnail)} />
               </div>
             )}
           </div>
           <div className="buttons-container">
-            <GenericButton text="Upload" type="submit" onClick={handleSubmit} icon={uploadIcon} />
+            <GenericButton
+              text="Upload"
+              type="submit"
+              onClick={handleSubmit}
+              icon={uploadIcon}
+              disabled={isUploading}
+            />
             <LightButton text="Cancel" link="/" icon={cancelIcon} />
           </div>
         </form>
