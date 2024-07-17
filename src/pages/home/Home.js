@@ -10,11 +10,15 @@ import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
-  const { videos } = useContext(VideoContext);
+  const { videos, fetchVideos } = useContext(VideoContext);
   const { currentUser, getUserById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
   const [videoAuthors, setVideoAuthors] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchVideos(); 
+  }, [fetchVideos]);
 
   useEffect(() => {
     const fetchAuthors = async () => {

@@ -44,7 +44,7 @@ const SuggestedVideos = () => {
           : defaultVideoThumbnail;
 
         return author ? (
-          <Link to={`/watch/${video.videoId}`} key={video.videoId} className={`suggested-video-card ${theme}`}>
+          <Link to={`/watch/${video._id}`} key={video._id} className={`suggested-video-card ${theme}`}>
             <img src={thumbnailUrl} alt={video.title} className="suggested-video-thumbnail" />
             <div className="suggested-video-details">
               <p className="suggested-video-title">{video.title}</p>
