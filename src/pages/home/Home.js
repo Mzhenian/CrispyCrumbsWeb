@@ -17,7 +17,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchVideos(); 
+    fetchVideos();
   }, [fetchVideos]);
 
   useEffect(() => {
@@ -45,8 +45,6 @@ const Home = () => {
     e.preventDefault();
     navigate(`/crumb/${profileId}`);
   };
-
-  console.log(videos);
 
   const sortedVideos = () => {
     let sorted = [...videos];
@@ -91,8 +89,7 @@ const Home = () => {
                   <div className="author-link" onClick={(e) => handleAuthorClick(e, author.userId)}>
                     <p className="note">{author.userName}</p>
                   </div>
-                  <p className="note">{video.views} views</p>
-                  <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
+                  <p className="note">{`${video.views} views`} </p>
                 </div>
               </div>
             </div>
