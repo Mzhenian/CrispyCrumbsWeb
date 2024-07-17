@@ -101,31 +101,11 @@ const UploadVideo = () => {
 
       try {
         await uploadVideo(currentUser.token, videoData, currentUser._id);
-        navigate(`/crumb/${currentUser._id}`);
+        navigate("/");
       } catch (error) {
         setErrorMessage(error.message);
         setIsUploading(false);
       }
-    }
-
-    setIsUploading(true);
-    const videoData = new FormData();
-    videoData.append("videoFile", formData.videoFile);
-    if (formData.thumbnail) {
-      videoData.append("thumbnail", formData.thumbnail);
-    }
-    videoData.append("title", formData.title);
-    videoData.append("description", formData.description);
-    videoData.append("category", formData.category);
-    videoData.append("tags", formData.tags.join(","));
-    videoData.append("userId", currentUser._id);
-
-    try {
-      await uploadVideo(currentUser.token, videoData, currentUser._id);
-      navigate("/");
-    } catch (error) {
-      setErrorMessage(error.message);
-      setIsUploading(false);
     }
   };
 
