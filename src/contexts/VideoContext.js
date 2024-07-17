@@ -140,12 +140,60 @@ const VideoProvider = ({ children }) => {
     }
   };
    
-  const addComment = async (videoId, comment) => {};
-
-  const editComment = async (videoId, updatedComment) => {};
-
-  const deleteComment = async (videoId, commentId) => {};
-
+  const addComment = async (videoId, comment) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/comment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId, userId: comment.userId, commentText: comment.comment, date: new Date().toISOString() }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+  
+  
+  
+  
+  const editComment = async (videoId, comment) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/comment`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId, ...comment }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error editing comment:", error);
+    }
+  };
+  
+  const deleteComment = async (videoId, commentId, userId) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/comment`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId, commentId, userId }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+  
   const deleteVideo = async (videoId) => {};
 
   const incrementViews = async (videoId) => {
