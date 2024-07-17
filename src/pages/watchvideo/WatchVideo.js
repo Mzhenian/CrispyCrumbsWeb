@@ -46,8 +46,9 @@ const WatchVideo = () => {
           }
 
           if (!hasIncrementedView.current) {
-            await incrementViews(videoId);
             hasIncrementedView.current = true;
+            await incrementViews(videoId);
+            setVideo((prevVideo) => ({ ...prevVideo, views: prevVideo.views + 1 }));
           }
         }
       } catch (error) {
@@ -78,20 +79,58 @@ const WatchVideo = () => {
     return <NotFoundRoute />;
   }
 
-  const handleLike = () => {
+  // Handle likes
+  const handleLike = async () => {
     if (!currentUser) return navigate("/login");
-    likeVideo(videoId, currentUser._id.toString());
-    setLikeSelected(!likeSelected);
-    if (dislikeSelected) setDislikeSelected(false);
+  
+    try {
+      await likeVideo(videoId, currentUser._id.toString());
+  
+      setLikeSelected((prev) => !prev);
+      if (dislikeSelected) {
+        setDislikeSelected(false);
+        setVideo((prevVideo) => ({
+          ...prevVideo,
+          dislikes: prevVideo.dislikes - 1,
+          likes: prevVideo.likes + 1,
+        }));
+      } else {
+        setVideo((prevVideo) => ({
+          ...prevVideo,
+          likes: prevVideo.likes + 1,
+        }));
+      }
+    } catch (error) {
+      console.error("Error liking video:", error);
+    }
   };
-
-  const handleDislike = () => {
+  
+  // Handle dislikes
+  const handleDislike = async () => {
     if (!currentUser) return navigate("/login");
-    dislikeVideo(videoId, currentUser._id.toString());
-    setDislikeSelected(!dislikeSelected);
-    if (likeSelected) setLikeSelected(false);
+  
+    try {
+      await dislikeVideo(videoId, currentUser._id.toString());
+  
+      setDislikeSelected((prev) => !prev);
+      if (likeSelected) {
+        setLikeSelected(false);
+        setVideo((prevVideo) => ({
+          ...prevVideo,
+          likes: prevVideo.likes - 1,
+          dislikes: prevVideo.dislikes + 1,
+        }));
+      } else {
+        setVideo((prevVideo) => ({
+          ...prevVideo,
+          dislikes: prevVideo.dislikes + 1,
+        }));
+      }
+    } catch (error) {
+      console.error("Error disliking video:", error);
+    }
   };
-
+    
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };

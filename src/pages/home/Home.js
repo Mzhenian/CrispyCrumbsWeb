@@ -11,11 +11,15 @@ import NotFoundRoute from "../../routes/NotFoundRoute";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
-  const { videos } = useContext(VideoContext);
+  const { videos, fetchAllVideos } = useContext(VideoContext);
   const { currentUser, getUserById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
   const [videoAuthors, setVideoAuthors] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchAllVideos();
+  }, [fetchAllVideos]);
 
   useEffect(() => {
     const fetchAuthors = async () => {

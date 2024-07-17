@@ -21,12 +21,13 @@ const CommentsSection = ({ currentUser, videoId }) => {
         commentId: Date.now().toString(),
         userId: currentUser._id.toString(),
         comment: newComment,
-        date: new Date().toLocaleDateString(),
+        date: new Date().toISOString(), // Use ISO string for consistent date formatting
       };
       addComment(videoId, newCommentObj);
       setNewComment("");
     }
   };
+  
 
   const handleCancel = () => {
     setNewComment("");
