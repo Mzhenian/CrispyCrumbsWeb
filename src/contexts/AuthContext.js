@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 
 export const AuthContext = createContext();
 
@@ -6,7 +6,7 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
-  const validateToken = async () => {
+  const validateToken = useCallback(async () => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         console.error("Token validation failed:", err);
       }
     }
-  };
+  }, [apiUsersUrl]);
 
   useEffect(() => {
     let isMounted = true; // flag to indicate if the component is mounted
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     return () => {
       isMounted = false; // cleanup function to set isMounted to false when the component unmounts
     };
-  }, [apiUsersUrl]);
+  }, [validateToken]);
 
   const login = async (username, password, rememberMe) => {
     try {
