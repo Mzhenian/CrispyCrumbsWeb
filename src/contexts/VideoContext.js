@@ -50,6 +50,20 @@ const VideoProvider = ({ children }) => {
     }
   };
 
+  const fetchAllVideos = async () => {
+    try {
+      const response = await fetch(apiVideosUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos(data);
+    } catch (error) {
+      console.error("Error fetching all videos:", error);
+    }
+  };
+  
+
   const getVideosByUserId = async (userId) => {
     try {
       const response = await fetch(`${apiUsersUrl}/${userId}/videos/`, {
@@ -92,10 +106,40 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-  const likeVideo = async (videoId) => {};
-
-  const dislikeVideo = async (videoId) => {};
-
+  const likeVideo = async (videoId, userId) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/like`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId, userId }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error liking video:", error);
+    }
+  };
+  
+  const dislikeVideo = async (videoId, userId) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/dislike`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId, userId }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error disliking video:", error);
+    }
+  };
+   
   const addComment = async (videoId, comment) => {};
 
   const editComment = async (videoId, updatedComment) => {};
@@ -104,7 +148,23 @@ const VideoProvider = ({ children }) => {
 
   const deleteVideo = async (videoId) => {};
 
-  const incrementViews = async (videoId) => {};
+  const incrementViews = async (videoId) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/incrementViews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error incrementing views:", error);
+    }
+  };
+  
 
   return (
     <VideoContext.Provider
@@ -113,6 +173,7 @@ const VideoProvider = ({ children }) => {
         videos,
         getVideoById,
         getVideosByUserId,
+        fetchAllVideos,
         editVideo,
         uploadVideo,
         likeVideo,
