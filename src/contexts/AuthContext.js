@@ -6,47 +6,50 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
+  const validateToken = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await fetch(`${apiUsersUrl}/validateToken`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.valid) {
+          setCurrentUser({ ...data.user, token });
+        } else {
+          localStorage.removeItem("token");
+        }
+      } catch (err) {
+        console.error("Token validation failed:", err);
+      }
+    }
+  };
+
   useEffect(() => {
     let isMounted = true; // flag to indicate if the component is mounted
-    const validateToken = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        try {
-          const response = await fetch(`${apiUsersUrl}/validateToken`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
-          if (isMounted && data.valid) {
-            setCurrentUser(data.user);
-          } else {
-            localStorage.removeItem("token");
-          }
-        } catch (err) {
-          if (isMounted) console.error("Token validation failed:", err);
-        }
-      }
-    };
-    validateToken();
+    if (isMounted) {
+      validateToken();
+    }
     return () => {
       isMounted = false; // cleanup function to set isMounted to false when the component unmounts
     };
   }, [apiUsersUrl]);
 
-  const login = async (username, password) => {
+  const login = async (username, password, rememberMe) => {
     try {
       const response = await fetch(`${apiUsersUrl}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userName: username, password: password }),
+        body: JSON.stringify({ userName: username, password: password, rememberMe: rememberMe }),
       });
       if (!response.ok) {
         const errorData = await response.json();
@@ -55,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (data.token) {
         localStorage.setItem("token", data.token);
-        setCurrentUser(data.user);
+        setCurrentUser({ ...data.user, token: data.token });
         return true;
       }
       return false;
@@ -85,7 +88,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (data.token) {
         localStorage.setItem("token", data.token);
-        setCurrentUser(data.user);
+        setCurrentUser({ ...data.user, token: data.token });
       }
     } catch (err) {
       console.error("Signup failed:", err);

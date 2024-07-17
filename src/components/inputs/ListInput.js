@@ -41,9 +41,7 @@ export default function ListInput(props) {
     <div>
       {props.editMode && (
         <div className={`input-field ${theme}`} id="input-title">
-          <div>
             <input className={`input-empty ${theme}`} type="text" value={textBox} onChange={handleTextBoxChange} />
-          </div>
           <div className={`input-highlight ${theme}`}>
             <img
               type="button"

@@ -7,15 +7,18 @@ import { VideoContext } from "../../contexts/VideoContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import GenericButton from "../../components/buttons/GenericButton";
 import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail";
-import NotFoundRoute from "../../routes/NotFoundRoute";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
-  const { videos } = useContext(VideoContext);
+  const { videos, fetchVideos } = useContext(VideoContext);
   const { currentUser, getUserById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
   const [videoAuthors, setVideoAuthors] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchVideos();
+  }, [fetchVideos]);
 
   useEffect(() => {
     const fetchAuthors = async () => {
@@ -86,8 +89,7 @@ const Home = () => {
                   <div className="author-link" onClick={(e) => handleAuthorClick(e, author.userId)}>
                     <p className="note">{author.userName}</p>
                   </div>
-                  <p className="note">{video.views} views</p>
-                  <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
+                  <p className="note">{`${video.views} views`} </p>
                 </div>
               </div>
             </div>

@@ -2,22 +2,42 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { VideoContext } from "../../../contexts/VideoContext";
-import GenericButton from "../../../components/buttons/GenericButton";
-import "../../home/VideoList.css";
 import { AuthContext } from "../../../contexts/AuthContext";
+import GenericButton from "../../../components/buttons/GenericButton";
+import VideoThumbnail from "../../../components/videoThumbnail/VideoThumbnail";
 import editIcon from "../../../components/iconsLab/edit.svg";
 
 const VideoList = ({ userId }) => {
   const { theme } = useContext(ThemeContext);
-  const { currentUser } = useContext(AuthContext);
-  const { videos } = useContext(VideoContext);
+  const { getVideosByUserId } = useContext(VideoContext);
+  const { currentUser, getUserById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("newest");
   const [userVideos, setUserVideos] = useState([]);
+  const [videoAuthors, setVideoAuthors] = useState({});
 
   useEffect(() => {
-    const userSpecificVideos = videos.filter((video) => video.userId === userId);
-    setUserVideos(userSpecificVideos);
-  }, [videos, userId]);
+    const fetchVideos = async () => {
+      try {
+        const videos = await getVideosByUserId(userId);
+        if (videos) {
+          setUserVideos(videos);
+
+          const authorPromises = videos.map(async (video) => {
+            const author = await getUserById(video.userId);
+            return { [video._id]: author };
+          });
+
+          const authors = await Promise.all(authorPromises);
+          const authorsMap = authors.reduce((acc, author) => ({ ...acc, ...author }), {});
+          setVideoAuthors(authorsMap);
+        }
+      } catch (error) {
+        console.error("Failed to fetch videos and authors:", error);
+      }
+    };
+
+    fetchVideos();
+  }, [userId, getVideosByUserId, getUserById]);
 
   const handleSortChange = (value) => {
     setSortOption(value);
@@ -41,45 +61,28 @@ const VideoList = ({ userId }) => {
   const videosList = (
     <div className={`watch-user-profile-video-section ${theme}`}>
       {sortedVideos().map((video) => {
-        return (
-          <div
-            key={video._id.toString()}
-            className={`user-profile-video-card ${theme}`}
-          >
-            <Link
-              to={`/watch/${video._id.toString()}`}
-              className="no-link-style"
-            >
-              <div className="thumbnail-container">
-                <img
-                  src={video.thumbnail}
-                  alt={video.title}
-                  className="user-profile-video-thumbnail"
-                />
-              </div>
-
+        const author = videoAuthors[video._id];
+        return author ? (
+          <div key={video._id} className={`user-profile-video-card ${theme}`}>
+            <Link to={`/watch/${video._id}`} className="no-link-style">
+              <VideoThumbnail video={video} />
               <div>
                 <div className="user-profile-video-details">
                   <div className="user-profile-video-info">
                     <p className="user-profile-video-title">{video.title}</p>
                     <p className="note">{video.views} views</p>
-                    <p className="note">
-                      {new Date(video.uploadDate).toLocaleDateString()}
-                    </p>
+                    <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
                   </div>
                 </div>
               </div>
             </Link>
             <div className="video-list-edit-icon">
               {currentUser && currentUser._id.toString() === userId && (
-                <GenericButton
-                  icon={editIcon}
-                  link={`/edit/${video._id.toString()}`}
-                />
+                <GenericButton icon={editIcon} link={`/edit/${video._id.toString()}`} />
               )}
             </div>
           </div>
-        );
+        ) : null;
       })}
     </div>
   );

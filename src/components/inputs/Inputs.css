@@ -10,9 +10,8 @@
 
 #input-title {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: initial;
+    width: 100%;
 }
 
 #dropdown-title-off {
@@ -169,6 +168,8 @@ form {
     font-size: 14px;
     font-weight: 500;
     line-height: normal;
+    flex-grow: 1;
+    margin-right: 10px;
 }
 
 .input-empty.light {
@@ -195,7 +196,6 @@ form {
     border-top-right-radius: 30px 20px;
     border-bottom-right-radius: 20px 30px;
     border-bottom-left-radius: 30px 20px;
-
     transition: 0.3s ease-in-out;
 
     width: 50px;
@@ -228,4 +228,8 @@ form {
     align-items: center;
     width: initial;
     padding-right: 0px;
+}
+
+#dropdown-search {
+    padding-right: 5px;
 }

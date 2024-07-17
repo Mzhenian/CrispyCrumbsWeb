@@ -4,6 +4,7 @@ import "./suggestedVideos.css";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 import { VideoContext } from "../../../../contexts/VideoContext";
 import { AuthContext } from "../../../../contexts/AuthContext";
+import defaultVideoThumbnail from "../../../../components/iconsLab/defaultVideoThumbnail.png";
 
 const SuggestedVideos = () => {
   const { theme } = useContext(ThemeContext);
@@ -37,24 +38,17 @@ const SuggestedVideos = () => {
   return (
     <div className={`watch-suggested-video-section ${theme}`}>
       {videos.slice(0, 17).map((video) => {
-        const author = videoAuthors[video._id.toString()];
+        const author = videoAuthors[video._id];
+        const thumbnailUrl = video.thumbnail
+          ? `${process.env.REACT_APP_API_URL}/api/db${video.thumbnail}`
+          : defaultVideoThumbnail;
+
         return author ? (
-          <Link
-            to={`/watch/${video._id.toString()}`}
-            key={video._id.toString()}
-            className={`suggested-video-card ${theme}`}
-          >
-            <img
-              src={video.thumbnail}
-              alt={video.title}
-              className="suggested-video-thumbnail"
-            />
+          <Link to={`/watch/${video._id}`} key={video._id} className={`suggested-video-card ${theme}`}>
+            <img src={thumbnailUrl} alt={video.title} className="suggested-video-thumbnail" />
             <div className="suggested-video-details">
               <p className="suggested-video-title">{video.title}</p>
-              <p
-                className="note author-link"
-                onClick={(e) => handleAuthorClick(e, author._id.toString())}
-              >
+              <p className="note author-link" onClick={(e) => handleAuthorClick(e, author._id.toString())}>
                 {author.userName}
               </p>
               <p className="note">{video.views} views</p>

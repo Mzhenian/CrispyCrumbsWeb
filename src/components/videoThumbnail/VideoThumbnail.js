@@ -1,10 +1,20 @@
 import "./VideoThumbnail.css";
+import defaultVideoThumbnail from "../../components/iconsLab/defaultVideoThumbnail.png";
 
-const VideoThumbnail = ({ video }) => {
-  const thumbnailUrl = `${process.env.REACT_APP_API_URL}/api/db${video.thumbnail}`;
+const VideoThumbnail = ({ video, img }) => {
+  let thumbnailUrl;
+  if (img) {
+    thumbnailUrl = img;
+  } else {
+    if (video.thumbnail) {
+      thumbnailUrl = `${process.env.REACT_APP_API_URL}/api/db${video.thumbnail}`;
+    } else {
+      thumbnailUrl = defaultVideoThumbnail;
+    }
+  }
   return (
     <div className="thumbnail-container">
-      <img src={thumbnailUrl} alt={`${video.title}`} className="video-thumbnail" />
+      <img src={thumbnailUrl} alt={img ? "thumbnail" : video.title} className="video-thumbnail" />
     </div>
   );
 };
