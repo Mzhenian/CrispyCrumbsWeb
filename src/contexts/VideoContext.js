@@ -1,16 +1,14 @@
 import React, { createContext, useState, useEffect } from "react";
-//import { AuthContext } from "./AuthContext";
 
 const VideoContext = createContext();
 
 const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
-  //const { currentUser } = useContext(AuthContext);
   const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
   const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
   useEffect(() => {
-    let isMounted = true; // flag to indicate if the component is mounted
+    let isMounted = true;
     const fetchVideos = async () => {
       try {
         const response = await fetch(apiVideosUrl);
@@ -27,7 +25,7 @@ const VideoProvider = ({ children }) => {
     };
     fetchVideos();
     return () => {
-      isMounted = false; // cleanup function to set isMounted to false when the component unmounts
+      isMounted = false;
     };
   }, [apiVideosUrl]);
 
@@ -62,7 +60,6 @@ const VideoProvider = ({ children }) => {
       console.error("Error fetching all videos:", error);
     }
   };
-  
 
   const getVideosByUserId = async (userId) => {
     try {
@@ -83,10 +80,9 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-  // Upload video
   const uploadVideo = async (token, videoData, userId) => {
     try {
-      const response = await fetch(`${apiUsersUrl}/${parseInt(userId)}/videos`, {
+      const response = await fetch(`${apiUsersUrl}/${userId}/videos`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -104,8 +100,7 @@ const VideoProvider = ({ children }) => {
       throw new Error(error.message || "An error occurred while uploading the video.");
     }
   };
-  
-  // Like video
+
   const likeVideo = async (videoId, userId) => {
     try {
       const response = await fetch(`${apiVideosUrl}/like`, {
@@ -122,8 +117,7 @@ const VideoProvider = ({ children }) => {
       console.error("Error liking video:", error);
     }
   };
-  
-  // Dislike video
+
   const dislikeVideo = async (videoId, userId) => {
     try {
       const response = await fetch(`${apiVideosUrl}/dislike`, {
@@ -140,7 +134,7 @@ const VideoProvider = ({ children }) => {
       console.error("Error disliking video:", error);
     }
   };
-  // Add Comment
+
   const addComment = async (videoId, comment) => {
     try {
       const response = await fetch(`${apiVideosUrl}/comment`, {
@@ -157,8 +151,7 @@ const VideoProvider = ({ children }) => {
       console.error("Error adding comment:", error);
     }
   };
-  
-  // Edit Comment
+
   const editComment = async (videoId, comment) => {
     try {
       const response = await fetch(`${apiVideosUrl}/comment`, {
@@ -175,8 +168,7 @@ const VideoProvider = ({ children }) => {
       console.error("Error editing comment:", error);
     }
   };
-  
-  // Delete Comment
+
   const deleteComment = async (videoId, commentId, userId) => {
     try {
       const response = await fetch(`${apiVideosUrl}/comment`, {
@@ -193,8 +185,7 @@ const VideoProvider = ({ children }) => {
       console.error("Error deleting comment:", error);
     }
   };
-  
-  // Increment video views
+
   const incrementViews = async (videoId) => {
     try {
       const response = await fetch(`${apiVideosUrl}/incrementViews`, {
@@ -212,12 +203,15 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-  const editVideo = async (videoId, updatedVideo) => {
+  const editVideo = async (videoId, updatedVideo, token) => {
     try {
+      console.log("Editing video with ID: ", videoId);
+      console.log("Updated Video Data: ", updatedVideo);
       const response = await fetch(`${apiVideosUrl}/${videoId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(updatedVideo),
       });
@@ -234,12 +228,13 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-  const deleteVideo = async (videoId) => {
+  const deleteVideo = async (videoId, token) => {
     try {
       const response = await fetch(`${apiVideosUrl}/${videoId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
       if (!response.ok) {
@@ -250,7 +245,6 @@ const VideoProvider = ({ children }) => {
       console.error("Error deleting video:", error);
     }
   };
-  
 
   return (
     <VideoContext.Provider

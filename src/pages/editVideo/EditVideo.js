@@ -37,53 +37,57 @@ const EditVideo = () => {
 
   useEffect(() => {
     const fetchVideo = async () => {
-      const video = await getVideoById(videoId);
-      setVideo(video);
+      const fetchedVideo = await getVideoById(videoId);
+      setVideo(fetchedVideo);
 
-      if (video && currentUser) {
-        if (!currentUser) {
-          navigate("/login");
-        } else if (video.userId === currentUser._id.toString()) {
+      if (fetchedVideo && currentUser) {
+        if (fetchedVideo.userId === currentUser._id.toString()) {
           setIsAuthorized(true);
           setFormData({
-            title: video.title,
-            description: video.description,
-            category: video.category,
-            tags: video.tags,
-            videoFile: video.videoFile,
-            thumbnail: video.thumbnail,
+            title: fetchedVideo.title,
+            description: fetchedVideo.description,
+            category: fetchedVideo.category,
+            tags: fetchedVideo.tags,
+            videoFile: fetchedVideo.videoFile,
+            thumbnail: fetchedVideo.thumbnail,
           });
         } else {
           setIsAuthorized(false);
         }
       }
     };
-    fetchVideo();
-  }, [videoId, navigate, getVideoById, video, currentUser]);
 
-  const handleInputChange = (name, value) => {
-    setFormData({
-      ...formData,
+    fetchVideo();
+  }, [videoId, getVideoById, currentUser]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
   };
 
-  const handleFileChange = (name, files) => {
-    setFormData({
-      ...formData,
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: URL.createObjectURL(files[0]),
-    });
+    }));
   };
 
   const handleTagsChange = (name, value) => {
-    setFormData({
-      ...formData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
+    console.log("Submit button clicked");
+    console.log("Form Data: ", formData);
+
     if (!formData.title || !formData.description || !formData.category || !formData.videoFile || !formData.thumbnail) {
       setErrorMessage("Please fill in all required fields.");
       return;
@@ -94,8 +98,10 @@ const EditVideo = () => {
       userId: currentUser._id.toString(),
     };
 
+    console.log("Updated Video Data: ", updatedVideo);
+
     try {
-      await editVideo(videoId, updatedVideo);
+      await editVideo(videoId, updatedVideo, currentUser.token);
       navigate(`/watch/${videoId}`);
     } catch (error) {
       setErrorMessage("Error updating video.");
@@ -104,7 +110,7 @@ const EditVideo = () => {
 
   const handleDelete = async () => {
     try {
-      await deleteVideo(videoId);
+      await deleteVideo(videoId, currentUser.token);
       navigate("/");
     } catch (error) {
       setErrorMessage("Error deleting video.");
@@ -130,7 +136,7 @@ const EditVideo = () => {
               className={`input-field ${theme}`}
               name="title"
               value={formData.title}
-              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="field-container">
@@ -140,7 +146,7 @@ const EditVideo = () => {
               name="description"
               id="description-field"
               value={formData.description}
-              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="field-container">
@@ -150,7 +156,7 @@ const EditVideo = () => {
               arr={categories}
               value={formData.category}
               showFlag={false}
-              action={(name, value) => handleInputChange(name, value)}
+              action={(name, value) => handleInputChange({ target: { name, value } })}
             />
           </div>
           <div className="field-container">
@@ -165,7 +171,7 @@ const EditVideo = () => {
                 name="thumbnail"
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleFileChange(e.target.name, e.target.files)}
+                onChange={handleFileChange}
                 ref={thumbnailInputRef}
                 style={{ display: "none" }}
               />
@@ -178,7 +184,7 @@ const EditVideo = () => {
             )}
           </div>
           <div className="buttons-container">
-            <GenericButton text="Update" onClick={handleSubmit} type="submit" icon={editIcon} />
+            <GenericButton text="Update" type="submit" onClick={handleSubmit} icon={editIcon} />
             <LightButton text="Cancel" onClick={() => navigate(`/watch/${videoId}`)} icon={cancelIcon} />
             <LightButton text="Delete" onClick={handleDelete} />
           </div>
