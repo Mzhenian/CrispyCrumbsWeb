@@ -36,26 +36,29 @@ const EditVideo = () => {
   const thumbnailInputRef = useRef(null);
 
   useEffect(() => {
-    const video = getVideoById(videoId);
-    setVideo(video);
+    const fetchVideo = async () => {
+      const video = await getVideoById(videoId);
+      setVideo(video);
 
-    if (video && currentUser) {
-      if (!currentUser) {
-        navigate("/login");
-      } else if (video.userId === currentUser._id.toString()) {
-        setIsAuthorized(true);
-        setFormData({
-          title: video.title,
-          description: video.description,
-          category: video.category,
-          tags: video.tags,
-          videoFile: video.videoFile,
-          thumbnail: video.thumbnail,
-        });
-      } else {
-        setIsAuthorized(false);
+      if (video && currentUser) {
+        if (!currentUser) {
+          navigate("/login");
+        } else if (video.userId === currentUser._id.toString()) {
+          setIsAuthorized(true);
+          setFormData({
+            title: video.title,
+            description: video.description,
+            category: video.category,
+            tags: video.tags,
+            videoFile: video.videoFile,
+            thumbnail: video.thumbnail,
+          });
+        } else {
+          setIsAuthorized(false);
+        }
       }
-    }
+    };
+    fetchVideo();
   }, [videoId, navigate, getVideoById, video, currentUser]);
 
   const handleInputChange = (name, value) => {
@@ -79,7 +82,8 @@ const EditVideo = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!formData.title || !formData.description || !formData.category || !formData.videoFile || !formData.thumbnail) {
       setErrorMessage("Please fill in all required fields.");
       return;
@@ -87,19 +91,24 @@ const EditVideo = () => {
 
     const updatedVideo = {
       ...formData,
-      videoFile: formData.videoFile,
-      thumbnail: formData.thumbnail,
       userId: currentUser._id.toString(),
     };
 
-    // Update video if all checks pass
-    editVideo(videoId, updatedVideo);
-    navigate(`/watch/${videoId}`);
+    try {
+      await editVideo(videoId, updatedVideo);
+      navigate(`/watch/${videoId}`);
+    } catch (error) {
+      setErrorMessage("Error updating video.");
+    }
   };
 
-  const handleDelete = () => {
-    deleteVideo(videoId);
-    navigate("/");
+  const handleDelete = async () => {
+    try {
+      await deleteVideo(videoId);
+      navigate("/");
+    } catch (error) {
+      setErrorMessage("Error deleting video.");
+    }
   };
 
   if (!isAuthorized) {

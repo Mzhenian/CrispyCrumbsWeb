@@ -83,8 +83,7 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-  const editVideo = async (videoId, updatedVideo) => {};
-
+  // Upload video
   const uploadVideo = async (token, videoData, userId) => {
     try {
       const response = await fetch(`${apiUsersUrl}/${parseInt(userId)}/videos`, {
@@ -105,7 +104,8 @@ const VideoProvider = ({ children }) => {
       throw new Error(error.message || "An error occurred while uploading the video.");
     }
   };
-
+  
+  // Like video
   const likeVideo = async (videoId, userId) => {
     try {
       const response = await fetch(`${apiVideosUrl}/like`, {
@@ -123,6 +123,7 @@ const VideoProvider = ({ children }) => {
     }
   };
   
+  // Dislike video
   const dislikeVideo = async (videoId, userId) => {
     try {
       const response = await fetch(`${apiVideosUrl}/dislike`, {
@@ -139,7 +140,7 @@ const VideoProvider = ({ children }) => {
       console.error("Error disliking video:", error);
     }
   };
-   
+  // Add Comment
   const addComment = async (videoId, comment) => {
     try {
       const response = await fetch(`${apiVideosUrl}/comment`, {
@@ -157,9 +158,7 @@ const VideoProvider = ({ children }) => {
     }
   };
   
-  
-  
-  
+  // Edit Comment
   const editComment = async (videoId, comment) => {
     try {
       const response = await fetch(`${apiVideosUrl}/comment`, {
@@ -177,6 +176,7 @@ const VideoProvider = ({ children }) => {
     }
   };
   
+  // Delete Comment
   const deleteComment = async (videoId, commentId, userId) => {
     try {
       const response = await fetch(`${apiVideosUrl}/comment`, {
@@ -194,8 +194,7 @@ const VideoProvider = ({ children }) => {
     }
   };
   
-  const deleteVideo = async (videoId) => {};
-
+  // Increment video views
   const incrementViews = async (videoId) => {
     try {
       const response = await fetch(`${apiVideosUrl}/incrementViews`, {
@@ -210,6 +209,45 @@ const VideoProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error incrementing views:", error);
+    }
+  };
+
+  const editVideo = async (videoId, updatedVideo) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/${videoId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedVideo),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos((prevVideos) =>
+        prevVideos.map((video) => (video._id === videoId ? data : video))
+      );
+      return data;
+    } catch (error) {
+      console.error("Error editing video:", error);
+    }
+  };
+
+  const deleteVideo = async (videoId) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/${videoId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setVideos((prevVideos) => prevVideos.filter((video) => video._id !== videoId));
+    } catch (error) {
+      console.error("Error deleting video:", error);
     }
   };
   
