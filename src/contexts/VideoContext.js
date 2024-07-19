@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 
 const VideoContext = createContext();
 
@@ -7,27 +7,22 @@ const VideoProvider = ({ children }) => {
   const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
   const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
-  useEffect(() => {
-    let isMounted = true;
-    const fetchVideos = async () => {
-      try {
-        const response = await fetch(apiVideosUrl);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        if (isMounted) {
-          setVideos(data);
-        }
-      } catch (err) {
-        if (isMounted) console.error("Fetch videos failed:", err);
+  const fetchVideos = useCallback(async () => {
+    try {
+      const response = await fetch(apiVideosUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
-    fetchVideos();
-    return () => {
-      isMounted = false;
-    };
+      const data = await response.json();
+      setVideos(data);
+    } catch (err) {
+      console.error("Fetch videos failed:", err);
+    }
   }, [apiVideosUrl]);
+
+  useEffect(() => {
+    fetchVideos();
+  }, [fetchVideos]);
 
   const getVideoById = async (videoId) => {
     try {
@@ -95,6 +90,7 @@ const VideoProvider = ({ children }) => {
       }
 
       const data = await response.json();
+      fetchVideos(); // Fetch videos after uploading a new video
       return data;
     } catch (error) {
       throw new Error(error.message || "An error occurred while uploading the video.");
@@ -251,6 +247,7 @@ const VideoProvider = ({ children }) => {
       value={{
         apiUrl: apiVideosUrl,
         videos,
+        fetchVideos,
         getVideoById,
         getVideosByUserId,
         fetchAllVideos,

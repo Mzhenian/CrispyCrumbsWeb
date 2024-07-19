@@ -24,7 +24,7 @@ const VideoList = ({ userId }) => {
 
           const authorPromises = videos.map(async (video) => {
             const author = await getUserById(video.userId);
-            return { [video.videoId]: author };
+            return { [video._id]: author };
           });
 
           const authors = await Promise.all(authorPromises);
@@ -61,10 +61,10 @@ const VideoList = ({ userId }) => {
   const videosList = (
     <div className={`watch-user-profile-video-section ${theme}`}>
       {sortedVideos().map((video) => {
-        const author = videoAuthors[video.videoId];
+        const author = videoAuthors[video._id];
         return author ? (
-          <div key={video.videoId} className={`user-profile-video-card ${theme}`}>
-            <Link to={`/watch/${video.videoId}`} className="no-link-style">
+          <div key={video._id} className={`user-profile-video-card ${theme}`}>
+            <Link to={`/watch/${video._id}`} className="no-link-style">
               <VideoThumbnail video={video} />
               <div>
                 <div className="user-profile-video-details">

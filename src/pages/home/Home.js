@@ -10,15 +10,15 @@ import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
-  const { videos, fetchAllVideos } = useContext(VideoContext);
+  const { videos, fetchVideos } = useContext(VideoContext);
   const { currentUser, getUserById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
   const [videoAuthors, setVideoAuthors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchAllVideos();
-  }, [fetchAllVideos]);
+    fetchVideos();
+  }, [fetchVideos]);
 
   useEffect(() => {
     const fetchAuthors = async () => {
@@ -45,8 +45,6 @@ const Home = () => {
     e.preventDefault();
     navigate(`/crumb/${profileId}`);
   };
-
-  console.log(videos);
 
   const sortedVideos = () => {
     let sorted = [...videos];
@@ -91,8 +89,7 @@ const Home = () => {
                   <div className="author-link" onClick={(e) => handleAuthorClick(e, author.userId)}>
                     <p className="note">{author.userName}</p>
                   </div>
-                  <p className="note">{video.views} views</p>
-                  <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
+                  <p className="note">{`${video.views} views`} </p>
                 </div>
               </div>
             </div>
