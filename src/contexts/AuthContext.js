@@ -75,12 +75,14 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (userData) => {
     try {
+      const formData = new FormData();
+      Object.keys(userData).forEach((key) => {
+        formData.append(key, userData[key]);
+      });
+
       const response = await fetch(`${apiUsersUrl}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
+        body: formData,
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -94,6 +96,7 @@ export const AuthProvider = ({ children }) => {
       console.error("Signup failed:", err);
     }
   };
+
 
   const followUser = async (userIdToFollow) => {
     try {

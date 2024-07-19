@@ -39,52 +39,47 @@ const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState(""); // State to store error messages
   const [isTermsOpen, setIsTermsOpen] = useState(false); // State to manage terms popup
 
-  const handleInputChange = (name, value) => {
-    setFormData({
-      ...formData,
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
       [name]: value,
-    });
+    }));
   };
 
   const handleDropDownChange = (name, value) => {
     if (name in formData.birthday) {
-      setFormData({
-        ...formData,
+      setFormData((prevState) => ({
+        ...prevState,
         birthday: {
-          ...formData.birthday,
+          ...prevState.birthday,
           [name]: value,
         },
-      });
+      }));
     } else {
-      setFormData({
-        ...formData,
+      setFormData((prevState) => ({
+        ...prevState,
         [name]: value,
-      });
+      }));
     }
   };
 
   const handleToggleChange = () => {
-    setFormData({
-      ...formData,
-      acceptTerms: !formData.acceptTerms,
-    });
+    setFormData((prevState) => ({
+      ...prevState,
+      acceptTerms: !prevState.acceptTerms,
+    }));
   };
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData({
-        ...formData,
-        profilePhoto: reader.result,
-      });
-    };
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    setFormData((prevState) => ({
+      ...prevState,
+      profilePhoto: file,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     if (formData.username.length < 8) {
       setErrorMessage("Username must be at least 8 characters long.");
       return;
@@ -100,7 +95,8 @@ const SignUp = () => {
       return;
     }
 
-    if (!isUsernameAvailable(formData.username)) {
+    const usernameAvailable = await isUsernameAvailable(formData.username);
+    if (!usernameAvailable) {
       setErrorMessage("Username already exists. Please choose a different one.");
       return;
     }
@@ -131,7 +127,7 @@ const SignUp = () => {
       profilePhoto: formData.profilePhoto ? formData.profilePhoto : defaultPhoto,
     };
 
-    signup(newUser);
+    await signup(newUser);
     navigate("/");
   };
 
@@ -148,7 +144,7 @@ const SignUp = () => {
               className={`input-field ${theme}`}
               name="fullName"
               value={formData.fullName}
-              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="field-container">
@@ -157,7 +153,7 @@ const SignUp = () => {
               className={`input-field ${theme}`}
               name="username"
               value={formData.username}
-              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="field-container">
@@ -166,7 +162,7 @@ const SignUp = () => {
               className={`input-field ${theme}`}
               name="email"
               value={formData.email}
-              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="field-container">
@@ -176,7 +172,7 @@ const SignUp = () => {
               name="password"
               type="password"
               value={formData.password}
-              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="field-container">
@@ -186,7 +182,7 @@ const SignUp = () => {
               name="password_auth"
               type="password"
               value={formData.password_auth}
-              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="field-container">
@@ -231,7 +227,7 @@ const SignUp = () => {
               className={`input-field ${theme}`}
               name="phoneNumber"
               value={formData.phoneNumber}
-              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="field-container">
@@ -253,7 +249,7 @@ const SignUp = () => {
               />
             </div>
             {formData.profilePhoto && (
-              <ProfilePhoto img={formData.profilePhoto} profilePhotoStyle="profilePhotoStyle" />
+              <ProfilePhoto img={URL.createObjectURL(formData.profilePhoto)} profilePhotoStyle="profilePhotoStyle" />
             )}
           </div>
           <div className="field-container">
@@ -268,7 +264,7 @@ const SignUp = () => {
             </div>
           </div>
           <div className="buttons-container">
-            <GenericButton text="Sign up" type="submit" onClick={handleSubmit} />
+            <GenericButton text="Sign up" type="submit" onClick={(e) => handleSubmit(e)} />
             <LightButton text="Login" link="/login" />
           </div>
         </form>
