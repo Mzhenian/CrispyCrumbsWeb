@@ -23,7 +23,12 @@ const VideoList = ({ userId }) => {
           setUserVideos(videos);
 
           const authorPromises = videos.map(async (video) => {
-            const author = await getUserById(video.userId);
+            const authorId = video.userId?.toString();
+            if (!authorId) {
+              console.error("Video is missing userId:", video);
+              return null;
+            }
+            const author = await getUserById(authorId);
             return { [video._id]: author };
           });
 
@@ -61,8 +66,7 @@ const VideoList = ({ userId }) => {
   const videosList = (
     <div className={`watch-user-profile-video-section ${theme}`}>
       {sortedVideos().map((video) => {
-        const author = videoAuthors[video._id];
-        return author ? (
+        return (
           <div key={video._id} className={`user-profile-video-card ${theme}`}>
             <Link to={`/watch/${video._id}`} className="no-link-style">
               <VideoThumbnail video={video} />
@@ -82,7 +86,7 @@ const VideoList = ({ userId }) => {
               )}
             </div>
           </div>
-        ) : null;
+        );
       })}
     </div>
   );
