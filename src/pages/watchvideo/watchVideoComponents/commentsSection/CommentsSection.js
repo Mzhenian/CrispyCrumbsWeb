@@ -16,28 +16,38 @@ const CommentsSection = ({ currentUser, videoId }) => {
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingText, setEditingText] = useState("");
+  const [commentAuthors, setCommentAuthors] = useState({});
 
-  // Fetch video details including comments
   useEffect(() => {
     const fetchVideo = async () => {
       const fetchedVideo = await getVideoById(videoId);
       setVideo(fetchedVideo);
+
+      const authors = await Promise.all(
+        fetchedVideo.comments.map(async (comment) => {
+          const user = await getUserById(comment.userId);
+          return { [comment.commentId]: user };
+        })
+      );
+
+      const authorsMap = Object.assign({}, ...authors);
+      setCommentAuthors(authorsMap);
     };
+
     fetchVideo();
-  }, [videoId, getVideoById]);
+  }, [videoId, getVideoById, getUserById]);
 
   const handleCommentSubmit = async () => {
     if (newComment.trim()) {
       const newCommentObj = {
         userId: currentUser._id.toString(),
         comment: newComment,
-        date: new Date().toISOString(), // Ensure the date is provided in ISO format
+        date: new Date().toISOString(),
       };
-      console.log("Submitting new comment:", newCommentObj); // Log the new comment object
+      console.log("Submitting new comment:", newCommentObj);
       await addComment(videoId, newCommentObj);
       setNewComment("");
 
-      // Refresh the video to get the latest comments
       const updatedVideo = await getVideoById(videoId);
       setVideo(updatedVideo);
     }
@@ -57,13 +67,12 @@ const CommentsSection = ({ currentUser, videoId }) => {
       commentId,
       userId: currentUser._id.toString(),
       comment: editingText,
-      date: new Date().toISOString(), // Ensure the date is provided in ISO format
+      date: new Date().toISOString(),
     };
     await editComment(videoId, updatedComment);
     setEditingCommentId(null);
     setEditingText("");
 
-    // Refresh the video to get the latest comments
     const updatedVideo = await getVideoById(videoId);
     setVideo(updatedVideo);
   };
@@ -76,7 +85,6 @@ const CommentsSection = ({ currentUser, videoId }) => {
   const handleDeleteClick = async (commentId) => {
     await deleteComment(videoId, commentId, currentUser._id.toString());
 
-    // Refresh the video to get the latest comments
     const updatedVideo = await getVideoById(videoId);
     setVideo(updatedVideo);
   };
@@ -93,7 +101,7 @@ const CommentsSection = ({ currentUser, videoId }) => {
         onChange={(e) => setNewComment(e.target.value)}
         placeholder="Add a comment..."
         rows="4"
-        style={{ resize: "none" }} // Disable resize
+        style={{ resize: "none" }}
       />
       <div className="comment-buttons">
         <GenericButton text="Comment" onClick={handleCommentSubmit} />
@@ -102,8 +110,13 @@ const CommentsSection = ({ currentUser, videoId }) => {
     </div>
   );
 
-  const commentsList = video.comments && video.comments.map((comment) => {
-    const commentAuthor = getUserById(comment.userId);
+  const commentsList = video.comments.map((comment) => {
+    const commentAuthor = commentAuthors[comment.commentId];
+
+    if (!commentAuthor) {
+      return <div key={comment.commentId}>Loading...</div>;
+    }
+
     return (
       <div key={comment.commentId} className={`comment-box ${theme}`} id="comment">
         {editingCommentId === comment.commentId ? (
@@ -126,9 +139,12 @@ const CommentsSection = ({ currentUser, videoId }) => {
             <ProfilePhoto user={commentAuthor} />
             <div className="comment-data">
               <div className="comment-title">
-                <b>@{commentAuthor.userName}</b> {new Date(comment.date).toLocaleDateString()}
+                <b>@{commentAuthor.userName}</b>
               </div>
               <p>{comment.comment}</p>
+              <div className="comment-date">
+                {new Date(comment.date).toLocaleDateString()}
+              </div>
             </div>
           </div>
         )}
