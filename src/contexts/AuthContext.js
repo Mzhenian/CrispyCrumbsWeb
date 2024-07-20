@@ -97,7 +97,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-
   const followUser = async (userIdToFollow) => {
     try {
       const token = localStorage.getItem("token");
@@ -194,6 +193,32 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = async (userId, updatedUser) => {
+    try {
+      const formData = new FormData();
+      Object.keys(updatedUser).forEach((key) => {
+        formData.append(key, updatedUser[key]);
+      });
+
+      const response = await fetch(`${apiUsersUrl}/${userId}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setCurrentUser(data);
+    } catch (err) {
+      console.error("Update user failed:", err);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -206,6 +231,7 @@ export const AuthProvider = ({ children }) => {
         followUser,
         unfollowUser,
         isFollowing,
+        updateUser,
       }}
     >
       {children}

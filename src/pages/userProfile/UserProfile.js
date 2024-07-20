@@ -48,7 +48,7 @@ const UserProfile = () => {
           <p>Country: {user.country}</p>
           <div className="button-container">
             {currentUser && currentUser._id.toString() === userId.toString() ? (
-              <GenericButton text="Edit this profile" />
+              <GenericButton text="Edit your profile" link="/crumb/edit" />
             ) : (
               <SubscribeButton userToSubscribe={userId.toString()} />
             )}
