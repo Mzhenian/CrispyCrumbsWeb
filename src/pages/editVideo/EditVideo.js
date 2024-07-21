@@ -70,10 +70,23 @@ const EditVideo = () => {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: URL.createObjectURL(files[0]),
-    }));
+    if (files && files[0]) {
+      const file = files[0];
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: file,
+      }));
+  
+      // Preview the image in the form
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [`${name}Preview`]: fileReader.result,
+        }));
+      };
+      fileReader.readAsDataURL(file);
+    }
   };
 
   const handleTagsChange = (name, value) => {
@@ -85,21 +98,19 @@ const EditVideo = () => {
 
   const handleSubmit = async (e) => {
     //e.preventDefault();
-    console.log("Submit button clicked");
-    console.log("Form Data: ", formData);
-
     if (!formData.title || !formData.description || !formData.category || !formData.videoFile || !formData.thumbnail) {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
-
-    const updatedVideo = {
-      ...formData,
-      userId: currentUser._id.toString(),
-    };
-
-    console.log("Updated Video Data: ", updatedVideo);
-
+  
+    const updatedVideo = new FormData();
+    updatedVideo.append('title', formData.title);
+    updatedVideo.append('description', formData.description);
+    updatedVideo.append('category', formData.category);
+    updatedVideo.append('tags', formData.tags);
+    updatedVideo.append('videoFile', formData.videoFile);
+    updatedVideo.append('thumbnail', formData.thumbnail);
+  
     try {
       await editVideo(videoId, updatedVideo, currentUser.token);
       navigate(`/watch/${videoId}`);
@@ -177,9 +188,9 @@ const EditVideo = () => {
               />
               <GenericButton text="Upload Thumbnail" onClick={() => thumbnailInputRef.current.click()} />
             </div>
-            {formData.thumbnail && (
+            {formData.thumbnailPreview && (
               <div className="thumbnail-container">
-                <img src={formData.thumbnail} alt="Thumbnail preview" className="home-video-thumbnail" />
+                <img src={formData.thumbnailPreview} alt="Thumbnail preview" className="home-video-thumbnail" />
               </div>
             )}
           </div>

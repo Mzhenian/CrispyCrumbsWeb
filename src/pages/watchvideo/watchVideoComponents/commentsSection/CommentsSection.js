@@ -46,10 +46,13 @@ const CommentsSection = ({ currentUser, videoId }) => {
       };
       console.log("Submitting new comment:", newCommentObj);
       await addComment(videoId, newCommentObj);
-      setNewComment("");
 
-      const updatedVideo = await getVideoById(videoId);
-      setVideo(updatedVideo);
+      setVideo((prevVideo) => ({
+        ...prevVideo,
+        comments: [...prevVideo.comments, newCommentObj],
+      }));
+
+      setNewComment("");
     }
   };
 

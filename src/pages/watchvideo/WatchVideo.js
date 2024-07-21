@@ -85,56 +85,81 @@ const WatchVideo = () => {
   }
 
   // Handle likes
-  const handleLike = async () => {
-    if (!currentUser) return navigate("/login");
-  
-    try {
-      await likeVideo(videoId, currentUser._id.toString());
-  
-      setLikeSelected((prev) => !prev);
-      if (dislikeSelected) {
-        setDislikeSelected(false);
-        setVideo((prevVideo) => ({
+const handleLike = async () => {
+  if (!currentUser) return navigate("/login");
+
+  try {
+    await likeVideo(videoId, currentUser._id.toString());
+
+    setLikeSelected((prev) => !prev);
+    setVideo((prevVideo) => {
+      if (likeSelected) {
+        // Decrement likes if previously liked
+        return {
+          ...prevVideo,
+          likes: prevVideo.likes - 1,
+        };
+      } else if (dislikeSelected) {
+        // Toggle from dislike to like
+        return {
           ...prevVideo,
           dislikes: prevVideo.dislikes - 1,
           likes: prevVideo.likes + 1,
-        }));
+        };
       } else {
-        setVideo((prevVideo) => ({
+        // Increment likes
+        return {
           ...prevVideo,
           likes: prevVideo.likes + 1,
-        }));
+        };
       }
-    } catch (error) {
-      console.error("Error liking video:", error);
+    });
+    if (dislikeSelected) {
+      setDislikeSelected(false);
     }
-  };
-  
-  // Handle dislikes
-  const handleDislike = async () => {
-    if (!currentUser) return navigate("/login");
-  
-    try {
-      await dislikeVideo(videoId, currentUser._id.toString());
-  
-      setDislikeSelected((prev) => !prev);
-      if (likeSelected) {
-        setLikeSelected(false);
-        setVideo((prevVideo) => ({
+  } catch (error) {
+    console.error("Error liking video:", error);
+  }
+};
+
+// Handle dislikes
+const handleDislike = async () => {
+  if (!currentUser) return navigate("/login");
+
+  try {
+    await dislikeVideo(videoId, currentUser._id.toString());
+
+    setDislikeSelected((prev) => !prev);
+    setVideo((prevVideo) => {
+      if (dislikeSelected) {
+        // Decrement dislikes if previously disliked
+        return {
+          ...prevVideo,
+          dislikes: prevVideo.dislikes - 1,
+        };
+      } else if (likeSelected) {
+        // Toggle from like to dislike
+        return {
           ...prevVideo,
           likes: prevVideo.likes - 1,
           dislikes: prevVideo.dislikes + 1,
-        }));
+        };
       } else {
-        setVideo((prevVideo) => ({
+        // Increment dislikes
+        return {
           ...prevVideo,
           dislikes: prevVideo.dislikes + 1,
-        }));
+        };
       }
-    } catch (error) {
-      console.error("Error disliking video:", error);
+    });
+    if (likeSelected) {
+      setLikeSelected(false);
     }
-  };
+  } catch (error) {
+    console.error("Error disliking video:", error);
+  }
+};
+
     
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);

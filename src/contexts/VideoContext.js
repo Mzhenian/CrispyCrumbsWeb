@@ -201,15 +201,12 @@ const VideoProvider = ({ children }) => {
 
   const editVideo = async (videoId, updatedVideo, token) => {
     try {
-      console.log("Editing video with ID: ", videoId);
-      console.log("Updated Video Data: ", updatedVideo);
       const response = await fetch(`${apiVideosUrl}/${videoId}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updatedVideo),
+        body: updatedVideo, // No need to set Content-Type, fetch will do it automatically with FormData
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -223,6 +220,8 @@ const VideoProvider = ({ children }) => {
       console.error("Error editing video:", error);
     }
   };
+  
+  
 
   const deleteVideo = async (videoId, token) => {
     try {
