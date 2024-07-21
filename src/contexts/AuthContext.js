@@ -98,7 +98,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const followUser = async (userIdToFollow) => {
-   
     try {
       const response = await fetch(`${apiUsersUrl}/follow`, {
         method: "POST",
@@ -112,18 +111,17 @@ export const AuthProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-    } catch (err) {
-      console.error("Follow user failed:", err);
-      // Revert the state update if the API call fails
+
       setCurrentUser((prevUser) => ({
         ...prevUser,
-        following: prevUser.following.filter((id) => id !== userIdToFollow),
+        following: [...(prevUser.following || []), userIdToFollow],
       }));
+    } catch (err) {
+      console.error("Follow user failed:", err);
     }
   };
 
   const unfollowUser = async (userIdToUnfollow) => {
-   
     try {
       const response = await fetch(`${apiUsersUrl}/unfollow`, {
         method: "POST",
@@ -137,13 +135,13 @@ export const AuthProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-    } catch (err) {
-      console.error("Unfollow user failed:", err);
-      // Revert the state update if the API call fails
+
       setCurrentUser((prevUser) => ({
         ...prevUser,
-        following: [...(prevUser.following || []), userIdToUnfollow],
+        following: prevUser.following.filter((id) => id !== userIdToUnfollow),
       }));
+    } catch (err) {
+      console.error("Unfollow user failed:", err);
     }
   };
 
