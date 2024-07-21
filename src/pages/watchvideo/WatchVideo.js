@@ -257,7 +257,7 @@ const WatchVideo = () => {
               ) : (
                 <GenericButton
                   text={isFollowing(author._id.toString()) ? "Unsubscribe" : "Subscribe"}
-                  onClick={handleSubscribe(author._id.toString())}
+                  onClick={handleSubscribe}
                 />
               )}
             </>
