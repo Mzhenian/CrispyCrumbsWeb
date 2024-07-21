@@ -174,6 +174,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const isEmailAvailable = async (email) => {
+    try {
+      const response = await fetch(`${apiUsersUrl}/isEmailAvailable`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.available;
+    } catch (err) {
+      console.error("Check email availability failed:", err);
+      return false;
+    }
+  };
+
   const getUserById = async (userId) => {
     try {
       const response = await fetch(`${apiUsersUrl}/${userId}`, {
@@ -219,6 +239,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const deleteUser = async (userId) => {
+    try {
+      const response = await fetch(`${apiUsersUrl}/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setCurrentUser(null);
+      localStorage.removeItem("token");
+    } catch (err) {
+      console.error("Delete user failed:", err);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -228,10 +268,12 @@ export const AuthProvider = ({ children }) => {
         logout,
         signup,
         isUsernameAvailable,
+        isEmailAvailable,
         followUser,
         unfollowUser,
         isFollowing,
         updateUser,
+        deleteUser,
       }}
     >
       {children}

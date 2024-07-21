@@ -10,28 +10,43 @@ import "../signup/SignUp.css";
 import { months, days, years } from "../signup/SignUpData.js";
 import countries from "../../DB/Countries/CountriesListsData.js";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto.js";
+import Popup from "../../components/popup/Popup.js";
 
 const EditProfile = () => {
   const { theme } = useContext(ThemeContext);
-  const { currentUser, updateUser } = useContext(AuthContext);
+  const { currentUser, updateUser, isUsernameAvailable, isEmailAvailable, deleteUser } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const parseDate = (dateString) => {
+    const date = new Date(dateString);
+    return {
+      year: date.getFullYear(),
+      month: date.toLocaleString("default", { month: "long" }),
+      day: date.getDate().toString().padStart(2, "0"),
+    };
+  };
+
+  const initialBirthday = currentUser?.birthday
+    ? parseDate(currentUser.birthday)
+    : {
+        month: "January",
+        day: "01",
+        year: "1990",
+      };
 
   const [formData, setFormData] = useState({
     fullName: currentUser?.fullName || "",
     email: currentUser?.email || "",
-    birthday: {
-      month: currentUser?.birthday?.split("-")[1] || "January",
-      day: currentUser?.birthday?.split("-")[2] || "1",
-      year: currentUser?.birthday?.split("-")[0] || "1990",
-    },
+    birthday: initialBirthday,
     username: currentUser?.userName || "",
     country: currentUser?.country || "Israel",
-    profilePhoto: "",
+    profilePhoto: currentUser?.profilePhoto || null,
     phoneNumber: currentUser?.phoneNumber || "",
   });
 
   const [profilePhotoURL, setProfilePhotoURL] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // State to store error messages
+  const [errorMessage, setErrorMessage] = useState("");
+  const [warningPopup, setWarningPopup] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -82,6 +97,19 @@ const EditProfile = () => {
       return;
     }
 
+    const usernameAvailable = await isUsernameAvailable(formData.username);
+
+    if (!usernameAvailable && formData.username !== currentUser.userName) {
+      setErrorMessage("Username already exists. Please choose a different one.");
+      return;
+    }
+
+    const emailAvailable = await isEmailAvailable(formData.email);
+    if (!emailAvailable && formData.email !== currentUser.email) {
+      setErrorMessage("Email already exists. Please choose a different one.");
+      return;
+    }
+
     if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 15) {
       setErrorMessage("Phone number must be between 10 and 15 digits.");
       return;
@@ -103,12 +131,30 @@ const EditProfile = () => {
     };
 
     await updateUser(currentUser._id, updatedUser);
+    navigate(`/crumb/${currentUser._id}`);
+  };
+
+  const handleDelete = async (e) => {
+    await deleteUser(currentUser._id);
     navigate("/");
   };
 
+  console.log(warningPopup);
+
   return (
     <div className={`page ${theme}`}>
-      <Container title={"Edit Profile"} containerStyle={"profile-editor-container"}>
+      <Popup title="Warning" isOpen={warningPopup} onClose={() => setWarningPopup(false)}>
+        <p>
+          Are you sure you want to delete your account? This action cannot be undone and will permanently remove all
+          your details and the videos you have uploaded.
+        </p>
+        <div className="buttons-container">
+          <GenericButton text="Yes, delete my account" onClick={(e) => handleDelete(e)} />
+          <LightButton text="Cancel" onClick={() => setWarningPopup(false)} />
+        </div>
+      </Popup>
+
+      <Container title={"Edit Profile"} containerStyle={"signup-container"}>
         <form className="profile-editor-form-container" onSubmit={handleSubmit}>
           {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
           <div className="field-container">
@@ -207,6 +253,7 @@ const EditProfile = () => {
           <div className="buttons-container">
             <GenericButton text="Save Changes" type="submit" onClick={(e) => handleSubmit(e)} />
             <LightButton text="Cancel" link="/" />
+            <LightButton text="Delete User" onClick={(e) => setWarningPopup(true)} />
           </div>
         </form>
       </Container>
