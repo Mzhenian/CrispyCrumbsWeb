@@ -96,6 +96,7 @@ const SignUp = () => {
     }
 
     const usernameAvailable = await isUsernameAvailable(formData.username);
+    console.log(formData.username);
     if (!usernameAvailable) {
       setErrorMessage("Username already exists. Please choose a different one.");
       return;
