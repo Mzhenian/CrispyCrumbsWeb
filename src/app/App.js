@@ -15,6 +15,7 @@ import PrivateRoute from "../routes/PrivateRoute.js";
 import SignedRoute from "../routes/SignedRoute.js";
 import EditVideo from "../pages/editVideo/EditVideo.js";
 import NotFound from "../routes/NotFoundRoute.js";
+import EditProfile from "../pages/editProfile/EditProfile.js";
 
 function App() {
   return (
@@ -33,7 +34,8 @@ function App() {
                   <Route path="/watch/:videoId" element={<WatchVideo />} />
                   <Route path="/crumb/:userId" element={<UserProfile />} />
                   <Route path="/edit/:videoId" element={<EditVideo />} />
-                  <Route path="*" element={<NotFound />} /> {/* Add the 404 route */}
+                  <Route path="/crumb/edit/" element={<EditProfile />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </div>
             </VideoProvider>

@@ -1,14 +1,17 @@
 import React from "react";
 import "./ProfilePhoto.css";
 
-const defaultImage = `${process.env.REACT_APP_API_URL}/api/db/users/0.png`;
+import defaultProfileImage from "../../components/iconsLab/defaultUserProfileImage.png";
+
+let profilePhoto;
 
 const ProfilePhoto = ({ user, profilePhotoStyle, img }) => {
-  const profilePhoto = user && user.profilePhoto ? `${process.env.REACT_APP_API_URL}/api/db${user.profilePhoto}` : img ? img : defaultImage;
-  
+  if (user && user.profilePhoto && user.profilePhoto !== "null") {
+    profilePhoto = `${process.env.REACT_APP_API_URL}/api/db${user.profilePhoto}`;
+  }
   return (
     <img
-      src={profilePhoto}
+      src={user ? profilePhoto : img ? img : defaultProfileImage}
       className="profile-photo"
       alt={user ? user.userName : "profile"}
       id={profilePhotoStyle}

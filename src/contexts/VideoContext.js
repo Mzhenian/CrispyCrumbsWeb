@@ -58,7 +58,7 @@ const VideoProvider = ({ children }) => {
 
   const getVideosByUserId = async (userId) => {
     try {
-      const response = await fetch(`${apiUsersUrl}/${userId}/videos/`, {
+      const response = await fetch(`${apiUsersUrl}/${userId}/videos`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

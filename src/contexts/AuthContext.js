@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 
 export const AuthContext = createContext();
 
@@ -6,7 +6,7 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
-  const validateToken = async () => {
+  const validateToken = useCallback(async () => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         console.error("Token validation failed:", err);
       }
     }
-  };
+  }, [apiUsersUrl]);
 
   useEffect(() => {
     let isMounted = true; // flag to indicate if the component is mounted
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     return () => {
       isMounted = false; // cleanup function to set isMounted to false when the component unmounts
     };
-  }, [apiUsersUrl]);
+  }, [validateToken]);
 
   const login = async (username, password, rememberMe) => {
     try {
@@ -75,12 +75,14 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (userData) => {
     try {
+      const formData = new FormData();
+      Object.keys(userData).forEach((key) => {
+        formData.append(key, userData[key]);
+      });
+
       const response = await fetch(`${apiUsersUrl}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
+        body: formData,
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -172,6 +174,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const isEmailAvailable = async (email) => {
+    try {
+      const response = await fetch(`${apiUsersUrl}/isEmailAvailable`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.available;
+    } catch (err) {
+      console.error("Check email availability failed:", err);
+      return false;
+    }
+  };
+
   const getUserById = async (userId) => {
     try {
       const response = await fetch(`${apiUsersUrl}/${userId}`, {
@@ -191,6 +213,52 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = async (userId, updatedUser) => {
+    try {
+      const formData = new FormData();
+      Object.keys(updatedUser).forEach((key) => {
+        formData.append(key, updatedUser[key]);
+      });
+
+      const response = await fetch(`${apiUsersUrl}/${userId}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setCurrentUser(data);
+    } catch (err) {
+      console.error("Update user failed:", err);
+    }
+  };
+
+  const deleteUser = async (userId) => {
+    try {
+      const response = await fetch(`${apiUsersUrl}/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setCurrentUser(null);
+      localStorage.removeItem("token");
+    } catch (err) {
+      console.error("Delete user failed:", err);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -200,9 +268,12 @@ export const AuthProvider = ({ children }) => {
         logout,
         signup,
         isUsernameAvailable,
+        isEmailAvailable,
         followUser,
         unfollowUser,
         isFollowing,
+        updateUser,
+        deleteUser,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
 import { AuthContext } from "../../contexts/AuthContext.js";
@@ -6,38 +6,54 @@ import DropDownMenu from "../../components/inputs/DropDownMenu.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
 import LightButton from "../../components/buttons/LightButton.js";
-import "./SignUp.css";
-import TermsOfUse from "./components/TermsOfUse.js";
-import OnOffToggle from "../../components/inputs/toggle/OnOffToggle.js";
-import { months, days, years } from "./SignUpData.js";
+import "../signup/SignUp.css";
+import { months, days, years } from "../signup/SignUpData.js";
 import countries from "../../DB/Countries/CountriesListsData.js";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto.js";
+import Popup from "../../components/popup/Popup.js";
 
-const SignUp = () => {
+const EditProfile = () => {
   const { theme } = useContext(ThemeContext);
-  const { signup, isUsernameAvailable, isEmailAvailable } = useContext(AuthContext);
+  const { currentUser, updateUser, isUsernameAvailable, isEmailAvailable, deleteUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const defaultPhoto = process.env.PUBLIC_URL + "/users/default.png";
+  const parseDate = (dateString) => {
+    const date = new Date(dateString);
+    return {
+      year: date.getFullYear(),
+      month: date.toLocaleString("default", { month: "long" }),
+      day: date.getDate().toString().padStart(2, "0"),
+    };
+  };
+
+  const initialBirthday = currentUser?.birthday
+    ? parseDate(currentUser.birthday)
+    : {
+        month: "January",
+        day: "01",
+        year: "1990",
+      };
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    birthday: {
-      month: "January",
-      day: "1",
-      year: "1990",
-    },
-    username: "",
-    password: "",
-    password_auth: "",
-    country: "Israel",
-    profilePhoto: "",
-    phoneNumber: "",
-    acceptTerms: false,
+    fullName: currentUser?.fullName || "",
+    email: currentUser?.email || "",
+    birthday: initialBirthday,
+    username: currentUser?.userName || "",
+    country: currentUser?.country || "Israel",
+    profilePhoto: currentUser?.profilePhoto || null,
+    phoneNumber: currentUser?.phoneNumber || "",
   });
-  const [errorMessage, setErrorMessage] = useState(""); // State to store error messages
-  const [isTermsOpen, setIsTermsOpen] = useState(false); // State to manage terms popup
+
+  const [profilePhotoURL, setProfilePhotoURL] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [warningPopup, setWarningPopup] = useState(false);
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (currentUser?.profilePhoto) {
+      setProfilePhotoURL(`${process.env.REACT_APP_API_URL}${currentUser.profilePhoto}`);
+    }
+  }, [currentUser]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,19 +80,15 @@ const SignUp = () => {
     }
   };
 
-  const handleToggleChange = () => {
-    setFormData((prevState) => ({
-      ...prevState,
-      acceptTerms: !prevState.acceptTerms,
-    }));
-  };
-
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
-    setFormData((prevState) => ({
-      ...prevState,
-      profilePhoto: file,
-    }));
+    if (file) {
+      setFormData((prevState) => ({
+        ...prevState,
+        profilePhoto: file,
+      }));
+      setProfilePhotoURL(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -85,24 +97,15 @@ const SignUp = () => {
       return;
     }
 
-    if (formData.password.length < 8) {
-      setErrorMessage("Password must be at least 8 characters long.");
-      return;
-    }
-
-    if (formData.password !== formData.password_auth) {
-      setErrorMessage("Passwords do not match!");
-      return;
-    }
-
     const usernameAvailable = await isUsernameAvailable(formData.username);
-    if (!usernameAvailable) {
+
+    if (!usernameAvailable && formData.username !== currentUser.userName) {
       setErrorMessage("Username already exists. Please choose a different one.");
       return;
     }
 
     const emailAvailable = await isEmailAvailable(formData.email);
-    if (!emailAvailable) {
+    if (!emailAvailable && formData.email !== currentUser.email) {
       setErrorMessage("Email already exists. Please choose a different one.");
       return;
     }
@@ -112,37 +115,46 @@ const SignUp = () => {
       return;
     }
 
-    if (!formData.acceptTerms) {
-      setErrorMessage("You must accept the terms of use to sign up.");
-      return;
-    }
-
     if (!formData.email || !formData.phoneNumber || !formData.fullName) {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
 
-    const newUser = {
+    const updatedUser = {
       userName: formData.username,
       email: formData.email,
-      password: formData.password,
       fullName: formData.fullName,
       phoneNumber: formData.phoneNumber,
       birthday: `${formData.birthday.year}-${formData.birthday.month}-${formData.birthday.day}`,
       country: formData.country,
-      profilePhoto: formData.profilePhoto ? formData.profilePhoto : defaultPhoto,
+      profilePhoto: formData.profilePhoto,
     };
 
-    await signup(newUser);
+    await updateUser(currentUser._id, updatedUser);
+    navigate(`/crumb/${currentUser._id}`);
+  };
+
+  const handleDelete = async (e) => {
+    await deleteUser(currentUser._id);
     navigate("/");
   };
 
-  const fileInputRef = useRef(null);
 
   return (
     <div className={`page ${theme}`}>
-      <Container title={"Sign up"} containerStyle={"signup-container"}>
-        <form className="signup-form-container" onSubmit={handleSubmit}>
+      <Popup title="Warning" isOpen={warningPopup} onClose={() => setWarningPopup(false)}>
+        <p>
+          Are you sure you want to delete your account? This action cannot be undone and will permanently remove all
+          your details and the videos you have uploaded.
+        </p>
+        <div className="buttons-container">
+          <GenericButton text="Yes, delete my account" onClick={(e) => handleDelete(e)} />
+          <LightButton text="Cancel" onClick={() => setWarningPopup(false)} />
+        </div>
+      </Popup>
+
+      <Container title={"Edit Profile"} containerStyle={"signup-container"}>
+        <form className="profile-editor-form-container" onSubmit={handleSubmit}>
           {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
           <div className="field-container">
             <b>Full Name</b>
@@ -168,26 +180,6 @@ const SignUp = () => {
               className={`input-field ${theme}`}
               name="email"
               value={formData.email}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="field-container">
-            <b>Password</b>
-            <input
-              className={`input-field ${theme}`}
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="field-container">
-            <b>Confirm Password</b>
-            <input
-              className={`input-field ${theme}`}
-              name="password_auth"
-              type="password"
-              value={formData.password_auth}
               onChange={handleInputChange}
             />
           </div>
@@ -232,6 +224,7 @@ const SignUp = () => {
             <input
               className={`input-field ${theme}`}
               name="phoneNumber"
+              type="tel"
               value={formData.phoneNumber}
               onChange={handleInputChange}
             />
@@ -254,30 +247,17 @@ const SignUp = () => {
                 }}
               />
             </div>
-            {formData.profilePhoto && (
-              <ProfilePhoto img={URL.createObjectURL(formData.profilePhoto)} profilePhotoStyle="profilePhotoStyle" />
-            )}
-          </div>
-          <div className="field-container">
-            <div className="linear-layout-2">
-              <b>
-                I agree to the{" "}
-                <span className={`terms-text ${theme}`} onClick={() => setIsTermsOpen(true)}>
-                  Terms of use
-                </span>
-              </b>
-              <OnOffToggle name="acceptTerms" value={formData.acceptTerms} action={handleToggleChange} />
-            </div>
+            {profilePhotoURL && <ProfilePhoto img={profilePhotoURL} profilePhotoStyle="profilePhotoStyle" />}
           </div>
           <div className="buttons-container">
-            <GenericButton text="Sign up" type="submit" onClick={(e) => handleSubmit(e)} />
-            <LightButton text="Login" link="/login" />
+            <GenericButton text="Save Changes" type="submit" onClick={(e) => handleSubmit(e)} />
+            <LightButton text="Cancel" link="/" />
+            <LightButton text="Delete User" onClick={(e) => setWarningPopup(true)} />
           </div>
         </form>
-        <TermsOfUse isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
       </Container>
     </div>
   );
 };
 
-export default SignUp;
+export default EditProfile;
