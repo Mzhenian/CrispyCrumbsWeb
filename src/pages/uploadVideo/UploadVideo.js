@@ -81,29 +81,31 @@ const UploadVideo = () => {
   };
 
   const handleSubmit = async (e) => {
-    if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
-      setErrorMessage("Please fill in all required fields.");
-      return;
-    }
+    if (!isUploading) {
+      if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
+        setErrorMessage("Please fill in all required fields.");
+        return;
+      }
 
-    setIsUploading(true);
-    const videoData = new FormData();
-    videoData.append("videoFile", formData.videoFile);
-    if (formData.thumbnail) {
-      videoData.append("thumbnail", formData.thumbnail);
-    }
-    videoData.append("title", formData.title);
-    videoData.append("description", formData.description);
-    videoData.append("category", formData.category);
-    videoData.append("tags", formData.tags.join(","));
-    videoData.append("userId", currentUser._id);
+      setIsUploading(true);
+      const videoData = new FormData();
+      videoData.append("videoFile", formData.videoFile);
+      if (formData.thumbnail) {
+        videoData.append("thumbnail", formData.thumbnail);
+      }
+      videoData.append("title", formData.title);
+      videoData.append("description", formData.description);
+      videoData.append("category", formData.category);
+      videoData.append("tags", formData.tags.join(","));
+      videoData.append("userId", currentUser._id);
 
-    try {
-      await uploadVideo(currentUser.token, videoData, currentUser._id);
-      navigate("/");
-    } catch (error) {
-      setErrorMessage(error.message);
-      setIsUploading(false);
+      try {
+        await uploadVideo(currentUser.token, videoData, currentUser._id);
+        navigate(`/crumb/${currentUser._id}`);
+      } catch (error) {
+        setErrorMessage(error.message);
+        setIsUploading(false);
+      }
     }
   };
 
