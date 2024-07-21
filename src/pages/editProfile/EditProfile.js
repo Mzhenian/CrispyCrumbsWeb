@@ -149,7 +149,6 @@ const EditProfile = () => {
     navigate("/");
   };
 
-  console.log(warningPopup);
 
   return (
     <div className={`page ${theme}`}>
