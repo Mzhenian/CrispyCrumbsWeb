@@ -221,8 +221,6 @@ const VideoProvider = ({ children }) => {
     }
   };
   
-  
-
   const deleteVideo = async (videoId, token) => {
     try {
       const response = await fetch(`${apiVideosUrl}/${videoId}`, {

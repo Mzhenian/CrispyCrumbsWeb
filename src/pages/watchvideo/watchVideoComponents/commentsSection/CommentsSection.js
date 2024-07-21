@@ -46,15 +46,21 @@ const CommentsSection = ({ currentUser, videoId }) => {
       };
       console.log("Submitting new comment:", newCommentObj);
       await addComment(videoId, newCommentObj);
-
+  
       setVideo((prevVideo) => ({
         ...prevVideo,
         comments: [...prevVideo.comments, newCommentObj],
       }));
-
+  
+      setCommentAuthors((prevAuthors) => ({
+        ...prevAuthors,
+        [newCommentObj.commentId]: currentUser,
+      }));
+  
       setNewComment("");
     }
   };
+  
 
   const handleCancel = () => {
     setNewComment("");
@@ -72,13 +78,25 @@ const CommentsSection = ({ currentUser, videoId }) => {
       comment: editingText,
       date: new Date().toISOString(),
     };
+  
     await editComment(videoId, updatedComment);
+  
+    setVideo((prevVideo) => {
+      const updatedComments = prevVideo.comments.map((comment) =>
+        comment.commentId === commentId ? updatedComment : comment
+      );
+      return { ...prevVideo, comments: updatedComments };
+    });
+  
+    setCommentAuthors((prevAuthors) => ({
+      ...prevAuthors,
+      [commentId]: currentUser,
+    }));
+  
     setEditingCommentId(null);
     setEditingText("");
-
-    const updatedVideo = await getVideoById(videoId);
-    setVideo(updatedVideo);
   };
+  
 
   const handleCancelEdit = () => {
     setEditingCommentId(null);

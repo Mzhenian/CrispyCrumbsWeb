@@ -15,7 +15,7 @@ import NotFoundRoute from "../../routes/NotFoundRoute";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
-  const { currentUser, getUserById } = useContext(AuthContext);
+  const { currentUser, getUserById, followUser, unfollowUser, isFollowing } = useContext(AuthContext);
   const { getVideoById, likeVideo, dislikeVideo, incrementViews, fetchVideos } = useContext(VideoContext);
 
   const { videoId } = useParams();
@@ -84,83 +84,97 @@ const WatchVideo = () => {
     return <NotFoundRoute />;
   }
 
+  const handleSubscribe = async (userIdToFollow) => {
+    if (!currentUser) return navigate("/login");
+  
+    try {
+      await followUser(userIdToFollow);
+      // Directly update the author state to reflect the new follower
+      setAuthor((prevAuthor) => ({
+        ...prevAuthor,
+        followers: [...(prevAuthor.followers || []), currentUser._id.toString()],
+      }));
+    } catch (error) {
+      console.error("Error subscribing to user:", error);
+    }
+  };
+  
   // Handle likes
-const handleLike = async () => {
-  if (!currentUser) return navigate("/login");
+  const handleLike = async () => {
+    if (!currentUser) return navigate("/login");
 
-  try {
-    await likeVideo(videoId, currentUser._id.toString());
+    try {
+      await likeVideo(videoId, currentUser._id.toString());
 
-    setLikeSelected((prev) => !prev);
-    setVideo((prevVideo) => {
-      if (likeSelected) {
-        // Decrement likes if previously liked
-        return {
-          ...prevVideo,
-          likes: prevVideo.likes - 1,
-        };
-      } else if (dislikeSelected) {
-        // Toggle from dislike to like
-        return {
-          ...prevVideo,
-          dislikes: prevVideo.dislikes - 1,
-          likes: prevVideo.likes + 1,
-        };
-      } else {
-        // Increment likes
-        return {
-          ...prevVideo,
-          likes: prevVideo.likes + 1,
-        };
-      }
-    });
-    if (dislikeSelected) {
-      setDislikeSelected(false);
-    }
-  } catch (error) {
-    console.error("Error liking video:", error);
-  }
-};
-
-// Handle dislikes
-const handleDislike = async () => {
-  if (!currentUser) return navigate("/login");
-
-  try {
-    await dislikeVideo(videoId, currentUser._id.toString());
-
-    setDislikeSelected((prev) => !prev);
-    setVideo((prevVideo) => {
+      setLikeSelected((prev) => !prev);
+      setVideo((prevVideo) => {
+        if (likeSelected) {
+          // Decrement likes if previously liked
+          return {
+            ...prevVideo,
+            likes: prevVideo.likes - 1,
+          };
+        } else if (dislikeSelected) {
+          // Toggle from dislike to like
+          return {
+            ...prevVideo,
+            dislikes: prevVideo.dislikes - 1,
+            likes: prevVideo.likes + 1,
+          };
+        } else {
+          // Increment likes
+          return {
+            ...prevVideo,
+            likes: prevVideo.likes + 1,
+          };
+        }
+      });
       if (dislikeSelected) {
-        // Decrement dislikes if previously disliked
-        return {
-          ...prevVideo,
-          dislikes: prevVideo.dislikes - 1,
-        };
-      } else if (likeSelected) {
-        // Toggle from like to dislike
-        return {
-          ...prevVideo,
-          likes: prevVideo.likes - 1,
-          dislikes: prevVideo.dislikes + 1,
-        };
-      } else {
-        // Increment dislikes
-        return {
-          ...prevVideo,
-          dislikes: prevVideo.dislikes + 1,
-        };
+        setDislikeSelected(false);
       }
-    });
-    if (likeSelected) {
-      setLikeSelected(false);
+    } catch (error) {
+      console.error("Error liking video:", error);
     }
-  } catch (error) {
-    console.error("Error disliking video:", error);
-  }
-};
+  };
 
-    
+  // Handle dislikes
+  const handleDislike = async () => {
+    if (!currentUser) return navigate("/login");
+
+    try {
+      await dislikeVideo(videoId, currentUser._id.toString());
+
+      setDislikeSelected((prev) => !prev);
+      setVideo((prevVideo) => {
+        if (dislikeSelected) {
+          // Decrement dislikes if previously disliked
+          return {
+            ...prevVideo,
+            dislikes: prevVideo.dislikes - 1,
+          };
+        } else if (likeSelected) {
+          // Toggle from like to dislike
+          return {
+            ...prevVideo,
+            likes: prevVideo.likes - 1,
+            dislikes: prevVideo.dislikes + 1,
+          };
+        } else {
+          // Increment dislikes
+          return {
+            ...prevVideo,
+            dislikes: prevVideo.dislikes + 1,
+          };
+        }
+      });
+      if (likeSelected) {
+        setLikeSelected(false);
+      }
+    } catch (error) {
+      console.error("Error disliking video:", error);
+    }
+  };
+
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
@@ -241,7 +255,10 @@ const handleDislike = async () => {
                   link={`/edit/${videoId}`}
                 />
               ) : (
-                <SubscribeButton userToSubscribe={author._id.toString()} />
+                <GenericButton
+                  text={isFollowing(author._id.toString()) ? "Unsubscribe" : "Subscribe"}
+                  onClick={handleSubscribe(author._id.toString())}
+                />
               )}
             </>
           )}
