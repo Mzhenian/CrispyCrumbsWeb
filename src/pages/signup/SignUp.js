@@ -15,7 +15,7 @@ import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto.js";
 
 const SignUp = () => {
   const { theme } = useContext(ThemeContext);
-  const { signup, isUsernameAvailable } = useContext(AuthContext);
+  const { signup, isUsernameAvailable, isEmailAvailable } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const defaultPhoto = process.env.PUBLIC_URL + "/users/default.png";
@@ -96,8 +96,16 @@ const SignUp = () => {
     }
 
     const usernameAvailable = await isUsernameAvailable(formData.username);
+    console.log(formData.username);
     if (!usernameAvailable) {
       setErrorMessage("Username already exists. Please choose a different one.");
+      return;
+    }
+
+    const emailAvailable = await isEmailAvailable(formData.email);
+    console.log(formData.username);
+    if (!emailAvailable) {
+      setErrorMessage("Email already exists. Please choose a different one.");
       return;
     }
 
