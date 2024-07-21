@@ -149,6 +149,8 @@ const EditProfile = () => {
     navigate("/");
   };
 
+  console.log(warningPopup);
+
   return (
     <div className={`page ${theme}`}>
       <Popup title="Warning" isOpen={warningPopup} onClose={() => setWarningPopup(false)}>

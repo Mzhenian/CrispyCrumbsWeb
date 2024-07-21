@@ -101,7 +101,7 @@ const UploadVideo = () => {
 
       try {
         await uploadVideo(currentUser.token, videoData, currentUser._id);
-        navigate("/");
+        navigate(`/crumb/${currentUser._id}`);
       } catch (error) {
         setErrorMessage(error.message);
         setIsUploading(false);
