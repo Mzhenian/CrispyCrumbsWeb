@@ -15,7 +15,7 @@ import NotFoundRoute from "../../routes/NotFoundRoute";
 
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
-  const { currentUser, getUserById, followUser, unfollowUser, isFollowing } = useContext(AuthContext);
+  const { currentUser, getUserById, isFollowing } = useContext(AuthContext);
   const { getVideoById, likeVideo, dislikeVideo, incrementViews, fetchVideos } = useContext(VideoContext);
 
   const { videoId } = useParams();
@@ -28,7 +28,6 @@ const WatchVideo = () => {
   const hasIncrementedView = useRef(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
-  const [isFollowingAuthor, setIsFollowingAuthor] = useState(false);
 
   useEffect(() => {
     fetchVideos();
@@ -56,17 +55,13 @@ const WatchVideo = () => {
             await incrementViews(videoId);
             setVideo((prevVideo) => ({ ...prevVideo, views: prevVideo.views + 1 }));
           }
-
-          if (currentUser) {
-            setIsFollowingAuthor(isFollowing(videoAuthor._id.toString()));
-          }
         }
       } catch (error) {
         console.error("Error fetching video or author:", error);
       }
     };
     fetchVideoAndAuthor();
-  }, [videoId, currentUser, getVideoById, getUserById, incrementViews, isFollowing]);
+  }, [videoId, currentUser, getVideoById, getUserById, incrementViews]);
 
   useEffect(() => {
     hasIncrementedView.current = false;
@@ -88,30 +83,6 @@ const WatchVideo = () => {
   if (showNotFound) {
     return <NotFoundRoute />;
   }
-
-  const handleSubscribe = async (userId) => {
-    if (!currentUser) return navigate("/login");
-
-    try {
-      if (isFollowingAuthor) {
-        await unfollowUser(userId);
-        setAuthor((prevAuthor) => ({
-          ...prevAuthor,
-          followers: prevAuthor.followers.filter((id) => id !== currentUser._id.toString()),
-        }));
-        setIsFollowingAuthor(false);
-      } else {
-        await followUser(userId);
-        setAuthor((prevAuthor) => ({
-          ...prevAuthor,
-          followers: [...(prevAuthor.followers || []), currentUser._id.toString()],
-        }));
-        setIsFollowingAuthor(true);
-      }
-    } catch (error) {
-      console.error("Error following/unfollowing user:", error);
-    }
-  };
 
   // Handle likes
   const handleLike = async () => {
@@ -269,10 +240,7 @@ const WatchVideo = () => {
                   link={`/edit/${videoId}`}
                 />
               ) : (
-                <GenericButton
-                  text={isFollowingAuthor ? "Unsubscribe" : "Subscribe"}
-                  onClick={() => handleSubscribe(author._id.toString())}
-                />
+                <SubscribeButton userToSubscribe={author._id.toString()} displayNum={true} />
               )}
             </>
           )}

@@ -98,6 +98,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const followUser = async (userIdToFollow) => {
+    console.log(`Attempting to follow user: ${userIdToFollow}`);
     try {
       const response = await fetch(`${apiUsersUrl}/follow`, {
         method: "POST",
@@ -109,6 +110,8 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
+        //const error = await response.text();
+        //console.error(`Error following user: ${error}`);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -116,12 +119,14 @@ export const AuthProvider = ({ children }) => {
         ...prevUser,
         following: [...(prevUser.following || []), userIdToFollow],
       }));
+      console.log(`Successfully followed user: ${userIdToFollow}`);
     } catch (err) {
       console.error("Follow user failed:", err);
     }
   };
 
   const unfollowUser = async (userIdToUnfollow) => {
+    console.log(`Attempting to unfollow user: ${userIdToUnfollow}`);
     try {
       const response = await fetch(`${apiUsersUrl}/unfollow`, {
         method: "POST",
@@ -133,6 +138,8 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
+        //const error = await response.text();
+        //console.error(`Error unfollowing user: ${error}`);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -140,6 +147,7 @@ export const AuthProvider = ({ children }) => {
         ...prevUser,
         following: prevUser.following.filter((id) => id !== userIdToUnfollow),
       }));
+      console.log(`Successfully unfollowed user: ${userIdToUnfollow}`);
     } catch (err) {
       console.error("Unfollow user failed:", err);
     }

@@ -11,32 +11,39 @@ const SubscribeButton = ({ userToSubscribe, displayNum = false }) => {
   const [followerCount, setFollowerCount] = useState(0);
 
   useEffect(() => {
-    if (userToSubscribe && isFollowing) {
-      setSubscribed(isFollowing(userToSubscribe));
-    }
-    if (userToSubscribe && getUserById) {
-      const user = getUserById(userToSubscribe);
-      if (user && user.followers) {
-        setFollowerCount(user.followers.length);
-      } else {
-        setFollowerCount(0);
+    const updateSubscriptionStatus = async () => {
+      if (userToSubscribe && isFollowing) {
+        setSubscribed(isFollowing(userToSubscribe));
       }
-    }
+      if (userToSubscribe && getUserById) {
+        const user = await getUserById(userToSubscribe);
+        if (user && user.followers) {
+          setFollowerCount(user.followers.length);
+        } else {
+          setFollowerCount(0);
+        }
+      }
+    };
+    updateSubscriptionStatus();
   }, [userToSubscribe, isFollowing, getUserById, currentUser]);
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
     if (!userToSubscribe || !followUser || !unfollowUser) {
       return;
     }
-    if (subscribed) {
-      unfollowUser(userToSubscribe);
-      setFollowerCount((prevCount) => prevCount - 1);
-    } else {
-      followUser(userToSubscribe);
-      setFollowerCount((prevCount) => prevCount + 1);
+    try {
+      if (subscribed) {
+        await unfollowUser(userToSubscribe);
+        setFollowerCount((prevCount) => prevCount - 1);
+      } else {
+        await followUser(userToSubscribe);
+        setFollowerCount((prevCount) => prevCount + 1);
+      }
+      setSubscribed(!subscribed);
+    } catch (error) {
+      console.error("Error following/unfollowing user:", error);
     }
-    setSubscribed(!subscribed);
   };
 
   if (!currentUser) {
