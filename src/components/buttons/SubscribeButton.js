@@ -4,7 +4,7 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import "./Buttons.css";
 
-const SubscribeButton = ({ userToSubscribe, displayNum = false }) => {
+const SubscribeButton = ({ userToSubscribe }) => {
   const { theme } = useContext(ThemeContext);
   const { followUser, unfollowUser, isFollowing, getUserById, currentUser } = useContext(AuthContext);
   const [subscribed, setSubscribed] = useState(false);
@@ -12,10 +12,10 @@ const SubscribeButton = ({ userToSubscribe, displayNum = false }) => {
 
   useEffect(() => {
     const updateSubscriptionStatus = async () => {
-      if (userToSubscribe && isFollowing) {
-        setSubscribed(isFollowing(userToSubscribe));
-      }
-      if (userToSubscribe && getUserById) {
+      if (userToSubscribe && currentUser) {
+        const isSubscribed = await isFollowing(userToSubscribe);
+        setSubscribed(isSubscribed);
+
         const user = await getUserById(userToSubscribe);
         if (user && user.followers) {
           setFollowerCount(user.followers.length);
@@ -25,7 +25,7 @@ const SubscribeButton = ({ userToSubscribe, displayNum = false }) => {
       }
     };
     updateSubscriptionStatus();
-  }, [userToSubscribe, isFollowing, getUserById, currentUser]);
+  }, [userToSubscribe, currentUser, isFollowing, getUserById]);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -64,7 +64,7 @@ const SubscribeButton = ({ userToSubscribe, displayNum = false }) => {
       id="subscribe-button"
       onClick={handleClick}
     >
-      {subscribed ? "Unsubscribe" : "Subscribe"} {displayNum && followerCount}
+      {subscribed ? "Unsubscribe" : "Subscribe"}
     </div>
   );
 };

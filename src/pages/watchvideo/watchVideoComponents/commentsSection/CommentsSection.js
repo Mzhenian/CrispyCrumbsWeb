@@ -45,21 +45,22 @@ const CommentsSection = ({ currentUser, videoId }) => {
         date: new Date().toISOString(),
       };
       console.log("Submitting new comment:", newCommentObj);
-      await addComment(videoId, newCommentObj);
+      const addedComment = await addComment(videoId, newCommentObj);
   
       setVideo((prevVideo) => ({
         ...prevVideo,
-        comments: [...prevVideo.comments, newCommentObj],
+        comments: [...prevVideo.comments, addedComment],
       }));
   
       setCommentAuthors((prevAuthors) => ({
         ...prevAuthors,
-        [newCommentObj.commentId]: currentUser,
+        [addedComment.commentId]: currentUser,
       }));
   
       setNewComment("");
     }
   };
+  
   
 
   const handleCancel = () => {

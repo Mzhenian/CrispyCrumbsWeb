@@ -143,10 +143,13 @@ const VideoProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+      const newComment = await response.json(); // Get the new comment with commentId
+      return newComment;
     } catch (error) {
       console.error("Error adding comment:", error);
     }
   };
+  
 
   const editComment = async (videoId, comment) => {
     try {
