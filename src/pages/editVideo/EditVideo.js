@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
 import DropDownMenu from "../../components/inputs/DropDownMenu.js";
@@ -9,6 +9,7 @@ import LightButton from "../../components/buttons/LightButton.js";
 import { VideoContext } from "../../contexts/VideoContext.js";
 import { AuthContext } from "../../contexts/AuthContext.js";
 import { categories } from "../uploadVideo/UploadVideoData.js";
+import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail.js";
 import "../uploadVideo/UploadVideo.css";
 
 import cancelIcon from "../../components/iconsLab/closeOrange.svg";
@@ -30,6 +31,7 @@ const EditVideo = () => {
     tags: [],
     videoFile: null,
     thumbnail: null,
+    thumbnailPreview: null,
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -51,7 +53,8 @@ const EditVideo = () => {
             category: fetchedVideo.category,
             tags: fetchedVideo.tags,
             videoFile: fetchedVideo.videoFile,
-            thumbnail: fetchedVideo.thumbnail,
+            thumbnail: `${process.env.REACT_APP_API_URL}/api/db${fetchedVideo.thumbnail}`,
+            thumbnailPreview: `${process.env.REACT_APP_API_URL}/api/db${fetchedVideo.thumbnail}`,
           });
         } else {
           setIsAuthorized(false);
@@ -90,8 +93,6 @@ const EditVideo = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
     if (!formData.title || !formData.description || !formData.category) {
       setErrorMessage("Please fill in all required fields.");
       return;
@@ -198,11 +199,7 @@ const EditVideo = () => {
                 />
                 <GenericButton text="Upload Thumbnail" onClick={() => thumbnailInputRef.current.click()} />
               </div>
-              {formData.thumbnailPreview && (
-                <div className="thumbnail-container">
-                  <img src={formData.thumbnailPreview} alt="Thumbnail preview" className="home-video-thumbnail" />
-                </div>
-              )}
+              {formData.thumbnailPreview && <VideoThumbnail img={formData.thumbnailPreview} />}
             </div>
             <div className="buttons-container">
               <GenericButton text="Update" type="submit" onClick={handleSubmit} icon={editIcon} />
