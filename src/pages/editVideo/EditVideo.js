@@ -13,6 +13,7 @@ import "../uploadVideo/UploadVideo.css";
 
 import cancelIcon from "../../components/iconsLab/closeOrange.svg";
 import editIcon from "../../components/iconsLab/edit.svg";
+import Popup from "../../components/popup/Popup.js";
 
 const EditVideo = () => {
   const { theme } = useContext(ThemeContext);
@@ -32,8 +33,10 @@ const EditVideo = () => {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [warningPopup, setWarningPopup] = useState(false);
 
   const thumbnailInputRef = useRef(null);
+  const videoInputRef = useRef(null);
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -75,17 +78,8 @@ const EditVideo = () => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: file,
+        [`${name}Preview`]: URL.createObjectURL(file),
       }));
-
-      // Preview the image in the form
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          [`${name}Preview`]: fileReader.result,
-        }));
-      };
-      fileReader.readAsDataURL(file);
     }
   };
 
@@ -97,8 +91,9 @@ const EditVideo = () => {
   };
 
   const handleSubmit = async (e) => {
-    //e.preventDefault();
-    if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
+    e.preventDefault();
+
+    if (!formData.title || !formData.description || !formData.category) {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
@@ -107,9 +102,13 @@ const EditVideo = () => {
     updatedVideo.append("title", formData.title);
     updatedVideo.append("description", formData.description);
     updatedVideo.append("category", formData.category);
-    updatedVideo.append("tags", formData.tags);
-    updatedVideo.append("videoFile", formData.videoFile);
-    updatedVideo.append("thumbnail", formData.thumbnail);
+    updatedVideo.append("tags", formData.tags.join(","));
+    if (formData.videoFile instanceof File) {
+      updatedVideo.append("videoFile", formData.videoFile);
+    }
+    if (formData.thumbnail instanceof File) {
+      updatedVideo.append("thumbnail", formData.thumbnail);
+    }
 
     try {
       await editVideo(currentUser._id, videoId, updatedVideo, currentUser.token);
@@ -138,6 +137,17 @@ const EditVideo = () => {
 
   return (
     <div className={`page ${theme}`}>
+      <Popup title="Warning" isOpen={warningPopup} onClose={() => setWarningPopup(false)}>
+        <p>
+          Are you sure you want to delete this video? This action cannot be undone and will permanently remove the video
+          and all associated data.
+        </p>
+        <div className="buttons-container">
+          <GenericButton text="Yes, delete the video" onClick={handleDelete} />
+          <LightButton text="Cancel" onClick={() => setWarningPopup(false)} />
+        </div>
+      </Popup>
+
       <Container title={"Edit Video"} containerStyle={"upload-video-container"}>
         <form className="upload-form-container" onSubmit={handleSubmit}>
           {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
@@ -197,7 +207,7 @@ const EditVideo = () => {
           <div className="buttons-container">
             <GenericButton text="Update" type="submit" onClick={handleSubmit} icon={editIcon} />
             <LightButton text="Cancel" onClick={() => navigate(`/watch/${videoId}`)} icon={cancelIcon} />
-            <LightButton text="Delete" onClick={handleDelete} />
+            <LightButton text="Delete" onClick={() => setWarningPopup(true)} />
           </div>
         </form>
       </Container>
