@@ -80,8 +80,8 @@ const SignUp = () => {
   };
 
   const handleSubmit = async (e) => {
-    if (formData.username.length < 8) {
-      setErrorMessage("Username must be at least 8 characters long.");
+    if (formData.username.length < 3) {
+      setErrorMessage("Username must be at least 3 characters long.");
       return;
     }
 

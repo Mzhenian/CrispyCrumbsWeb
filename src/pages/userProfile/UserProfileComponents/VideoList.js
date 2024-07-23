@@ -20,9 +20,12 @@ const VideoList = ({ userId }) => {
         const videos = await getVideosByUserId(userId);
         if (videos) {
           setUserVideos(videos);
+        } else {
+          setUserVideos([]);
         }
       } catch (error) {
         console.error("Failed to fetch videos:", error);
+        setUserVideos([]);
       }
     };
 
@@ -34,13 +37,16 @@ const VideoList = ({ userId }) => {
   };
 
   const sortedVideos = () => {
+    if (userVideos.length === 0) {
+      return [];
+    }
     let sorted = [...userVideos];
     switch (sortOption) {
       case "most-watched":
         sorted.sort((a, b) => b.views - a.views);
         break;
       case "newest":
-        sorted.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+        sorted.sort((a, b) => new Date(b.uploadDate || 0) - new Date(a.uploadDate || 0));
         break;
       default:
         break;
@@ -59,7 +65,11 @@ const VideoList = ({ userId }) => {
                 <div className="user-profile-video-info">
                   <p className="user-profile-video-title">{video.title}</p>
                   <p className="note">{video.views} views</p>
-                  <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
+                  {video.uploadDate ? (
+                    <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
+                  ) : (
+                    <p className="note">No upload date</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -71,6 +81,7 @@ const VideoList = ({ userId }) => {
           </div>
         </div>
       ))}
+      {userVideos.length === 0 && <p className="note">No videos available.</p>}
     </div>
   );
 
