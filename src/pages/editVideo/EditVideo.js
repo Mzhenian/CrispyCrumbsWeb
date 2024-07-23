@@ -76,7 +76,7 @@ const EditVideo = () => {
         ...prevFormData,
         [name]: file,
       }));
-  
+
       // Preview the image in the form
       const fileReader = new FileReader();
       fileReader.onload = () => {
@@ -98,21 +98,21 @@ const EditVideo = () => {
 
   const handleSubmit = async (e) => {
     //e.preventDefault();
-    if (!formData.title || !formData.description || !formData.category || !formData.videoFile || !formData.thumbnail) {
+    if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
-  
+
     const updatedVideo = new FormData();
-    updatedVideo.append('title', formData.title);
-    updatedVideo.append('description', formData.description);
-    updatedVideo.append('category', formData.category);
-    updatedVideo.append('tags', formData.tags);
-    updatedVideo.append('videoFile', formData.videoFile);
-    updatedVideo.append('thumbnail', formData.thumbnail);
-  
+    updatedVideo.append("title", formData.title);
+    updatedVideo.append("description", formData.description);
+    updatedVideo.append("category", formData.category);
+    updatedVideo.append("tags", formData.tags);
+    updatedVideo.append("videoFile", formData.videoFile);
+    updatedVideo.append("thumbnail", formData.thumbnail);
+
     try {
-      await editVideo(videoId, updatedVideo, currentUser.token);
+      await editVideo(currentUser._id, videoId, updatedVideo, currentUser.token);
       navigate(`/watch/${videoId}`);
     } catch (error) {
       setErrorMessage("Error updating video.");

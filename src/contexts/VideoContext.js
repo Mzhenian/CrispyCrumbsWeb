@@ -202,9 +202,9 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-  const editVideo = async (videoId, updatedVideo, token) => {
+  const editVideo = async (userId, videoId, updatedVideo, token) => {
     try {
-      const response = await fetch(`${apiVideosUrl}/${videoId}`, {
+      const response = await fetch(`${apiUsersUrl}/${userId}/videos/${videoId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
