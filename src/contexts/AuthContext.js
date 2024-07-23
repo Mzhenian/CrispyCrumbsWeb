@@ -124,8 +124,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const isFollowing = (userIdToCheck) => {
-    return currentUser?.following?.includes(userIdToCheck);
+  const isFollowing = async (userIdToCheck) => {
+    try {
+      const response = await fetch(`${apiUsersUrl}/isFollowing`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+        body: JSON.stringify({ userId: currentUser._id, userIdToCheck }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.isFollowing;
+    } catch (err) {
+      console.error(`Check if following failed:`, err);
+      return false;
+    }
   };
 
   const isUsernameAvailable = async (username) => {
