@@ -34,19 +34,14 @@ const EditProfile = () => {
         year: "1990",
       };
 
-  const [formData, setFormData] = useState(() => {
-    const savedFormData = JSON.parse(localStorage.getItem("editProfileFormData"));
-    return (
-      savedFormData || {
-        fullName: currentUser?.fullName || "",
-        email: currentUser?.email || "",
-        birthday: initialBirthday,
-        username: currentUser?.userName || "",
-        country: currentUser?.country || "Israel",
-        profilePhoto: currentUser?.profilePhoto || null,
-        phoneNumber: currentUser?.phoneNumber || "",
-      }
-    );
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    birthday: initialBirthday,
+    username: "",
+    country: "Israel",
+    profilePhoto: null,
+    phoneNumber: "",
   });
 
   const [profilePhotoURL, setProfilePhotoURL] = useState("");
@@ -55,14 +50,23 @@ const EditProfile = () => {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (currentUser?.profilePhoto) {
-      setProfilePhotoURL(`${process.env.REACT_APP_API_URL}/api/db${currentUser.profilePhoto}`);
-    }
-  }, [currentUser]);
+    if (currentUser) {
+      setFormData({
+        fullName: currentUser.fullName || "",
+        email: currentUser.email || "",
+        birthday: parseDate(currentUser.birthday) || initialBirthday,
+        username: currentUser.userName || "",
+        country: currentUser.country || "Israel",
+        profilePhoto: currentUser.profilePhoto || null,
+        phoneNumber: currentUser.phoneNumber || "",
+      });
 
-  useEffect(() => {
-    localStorage.setItem("editProfileFormData", JSON.stringify(formData));
-  }, [formData]);
+      if (currentUser.profilePhoto) {
+        setProfilePhotoURL(`${process.env.REACT_APP_API_URL}/api/db${currentUser.profilePhoto}`);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -101,6 +105,7 @@ const EditProfile = () => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     if (formData.username.length < 8) {
       setErrorMessage("Username must be at least 8 characters long.");
       return;
@@ -140,7 +145,6 @@ const EditProfile = () => {
     };
 
     await updateUser(currentUser._id, updatedUser);
-    localStorage.removeItem("editProfileFormData");
     navigate(`/crumb/${currentUser._id}`);
   };
 
@@ -148,7 +152,6 @@ const EditProfile = () => {
     await deleteUser(currentUser._id);
     navigate("/");
   };
-
 
   return (
     <div className={`page ${theme}`}>
