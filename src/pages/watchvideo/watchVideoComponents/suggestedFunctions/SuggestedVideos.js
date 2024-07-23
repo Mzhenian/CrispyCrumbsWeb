@@ -44,10 +44,7 @@ const SuggestedVideos = () => {
             </div>
             <div className="suggested-video-details">
               <p className="suggested-video-title">{video.title}</p>
-              <p
-                className="note author-link"
-                onClick={(e) => handleAuthorClick(e, author._id.toString())}
-              >
+              <p className="note author-link" onClick={(e) => handleAuthorClick(e, author._id.toString())}>
                 {author.userName}
               </p>
               <p className="note">{video.views} views</p>

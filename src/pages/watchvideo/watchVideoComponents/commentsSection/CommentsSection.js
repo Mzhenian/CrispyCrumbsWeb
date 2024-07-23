@@ -46,22 +46,20 @@ const CommentsSection = ({ currentUser, videoId }) => {
       };
       console.log("Submitting new comment:", newCommentObj);
       const addedComment = await addComment(videoId, newCommentObj);
-  
+
       setVideo((prevVideo) => ({
         ...prevVideo,
         comments: [...prevVideo.comments, addedComment],
       }));
-  
+
       setCommentAuthors((prevAuthors) => ({
         ...prevAuthors,
         [addedComment.commentId]: currentUser,
       }));
-  
+
       setNewComment("");
     }
   };
-  
-  
 
   const handleCancel = () => {
     setNewComment("");
@@ -79,25 +77,24 @@ const CommentsSection = ({ currentUser, videoId }) => {
       comment: editingText,
       date: new Date().toISOString(),
     };
-  
+
     await editComment(videoId, updatedComment);
-  
+
     setVideo((prevVideo) => {
       const updatedComments = prevVideo.comments.map((comment) =>
         comment.commentId === commentId ? updatedComment : comment
       );
       return { ...prevVideo, comments: updatedComments };
     });
-  
+
     setCommentAuthors((prevAuthors) => ({
       ...prevAuthors,
       [commentId]: currentUser,
     }));
-  
+
     setEditingCommentId(null);
     setEditingText("");
   };
-  
 
   const handleCancelEdit = () => {
     setEditingCommentId(null);
@@ -136,7 +133,7 @@ const CommentsSection = ({ currentUser, videoId }) => {
     const commentAuthor = commentAuthors[comment.commentId];
 
     if (!commentAuthor) {
-      return <div key={comment.commentId}>Loading...</div>;
+      return <div key={comment.commentId}></div>;
     }
 
     return (
@@ -158,15 +155,13 @@ const CommentsSection = ({ currentUser, videoId }) => {
           </div>
         ) : (
           <div id="comment">
-            <ProfilePhoto user={commentAuthor} />
+            <ProfilePhoto user={commentAuthor} clickable={true} />
             <div className="comment-data">
               <div className="comment-title">
                 <b>@{commentAuthor.userName}</b>
+                <span className="note">{new Date(comment.date).toLocaleDateString()}</span>
               </div>
-              <p>{comment.comment}</p>
-              <div className="comment-date">
-                {new Date(comment.date).toLocaleDateString()}
-              </div>
+              <p style={{ whiteSpace: "pre-wrap" }}>{comment.comment}</p>
             </div>
           </div>
         )}

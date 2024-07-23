@@ -79,9 +79,7 @@ const Home = () => {
             </Link>
             <div className="home-video-b">
               <div className="home-video-details">
-                <div className="author-link" onClick={(e) => handleAuthorClick(e, author._id)}>
-                  <ProfilePhoto user={author} />
-                </div>
+                <ProfilePhoto user={author} clickable={true} />
                 <div className="home-video-info">
                   <Link to={`/watch/${video._id.toString()}`} className="title-link">
                     <p className="home-video-title">{video.title}</p>
