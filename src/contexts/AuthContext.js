@@ -33,12 +33,12 @@ export const AuthProvider = ({ children }) => {
   }, [apiUsersUrl]);
 
   useEffect(() => {
-    let isMounted = true; // flag to indicate if the component is mounted
+    let isMounted = true;
     if (isMounted) {
       validateToken();
     }
     return () => {
-      isMounted = false; // cleanup function to set isMounted to false when the component unmounts
+      isMounted = false;
     };
   }, [validateToken]);
 
@@ -97,59 +97,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const followUser = async (userIdToFollow) => {
-    console.log(`Attempting to follow user: ${userIdToFollow}`);
+  const followUnfollowUser = async (userId, isCurrentlyFollowing) => {
+    const endpoint = isCurrentlyFollowing ? "unfollow" : "follow";
     try {
-      const response = await fetch(`${apiUsersUrl}/follow`, {
+      const response = await fetch(`${apiUsersUrl}/${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${currentUser.token}`,
         },
-        body: JSON.stringify({ userIdToFollow }),
+        body: JSON.stringify({ userId }),
       });
 
       if (!response.ok) {
-        //const error = await response.text();
-        //console.error(`Error following user: ${error}`);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       setCurrentUser((prevUser) => ({
         ...prevUser,
-        following: [...(prevUser.following || []), userIdToFollow],
+        following: isCurrentlyFollowing
+          ? prevUser.following.filter((id) => id !== userId)
+          : [...prevUser.following, userId],
       }));
-      console.log(`Successfully followed user: ${userIdToFollow}`);
     } catch (err) {
-      console.error("Follow user failed:", err);
-    }
-  };
-
-  const unfollowUser = async (userIdToUnfollow) => {
-    console.log(`Attempting to unfollow user: ${userIdToUnfollow}`);
-    try {
-      const response = await fetch(`${apiUsersUrl}/unfollow`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-        body: JSON.stringify({ userIdToUnfollow }),
-      });
-
-      if (!response.ok) {
-        //const error = await response.text();
-        //console.error(`Error unfollowing user: ${error}`);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      setCurrentUser((prevUser) => ({
-        ...prevUser,
-        following: prevUser.following.filter((id) => id !== userIdToUnfollow),
-      }));
-      console.log(`Successfully unfollowed user: ${userIdToUnfollow}`);
-    } catch (err) {
-      console.error("Unfollow user failed:", err);
+      console.error(`Failed to ${endpoint} user:`, err);
     }
   };
 
@@ -272,8 +243,7 @@ export const AuthProvider = ({ children }) => {
         signup,
         isUsernameAvailable,
         isEmailAvailable,
-        followUser,
-        unfollowUser,
+        followUnfollowUser,
         isFollowing,
         updateUser,
         deleteUser,

@@ -6,7 +6,7 @@ import "./Buttons.css";
 
 const SubscribeButton = ({ userToSubscribe }) => {
   const { theme } = useContext(ThemeContext);
-  const { followUser, unfollowUser, isFollowing, getUserById, currentUser } = useContext(AuthContext);
+  const { followUnfollowUser, isFollowing, getUserById, currentUser } = useContext(AuthContext);
   const [subscribed, setSubscribed] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
 
@@ -29,17 +29,12 @@ const SubscribeButton = ({ userToSubscribe }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    if (!userToSubscribe || !followUser || !unfollowUser) {
+    if (!userToSubscribe || !followUnfollowUser) {
       return;
     }
     try {
-      if (subscribed) {
-        await unfollowUser(userToSubscribe);
-        setFollowerCount((prevCount) => prevCount - 1);
-      } else {
-        await followUser(userToSubscribe);
-        setFollowerCount((prevCount) => prevCount + 1);
-      }
+      await followUnfollowUser(userToSubscribe, subscribed);
+      setFollowerCount((prevCount) => prevCount + (subscribed ? -1 : 1));
       setSubscribed(!subscribed);
     } catch (error) {
       console.error("Error following/unfollowing user:", error);
@@ -59,12 +54,14 @@ const SubscribeButton = ({ userToSubscribe }) => {
   }
 
   return (
-    <div
-      className={subscribed ? `light-button ${theme}` : `generic-button ${theme}`}
-      id="subscribe-button"
-      onClick={handleClick}
-    >
-      {subscribed ? "Unsubscribe" : "Subscribe"}
+    <div>
+      <div
+        className={subscribed ? `light-button ${theme}` : `generic-button ${theme}`}
+        id="subscribe-button"
+        onClick={handleClick}
+      >
+        {subscribed ? "Unsubscribe" : "Subscribe"}
+      </div>
     </div>
   );
 };
