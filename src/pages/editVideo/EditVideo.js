@@ -36,7 +36,6 @@ const EditVideo = () => {
   const [warningPopup, setWarningPopup] = useState(false);
 
   const thumbnailInputRef = useRef(null);
-  const videoInputRef = useRef(null);
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -136,82 +135,84 @@ const EditVideo = () => {
   }
 
   return (
-    <div className={`page ${theme}`}>
-      <Popup title="Warning" isOpen={warningPopup} onClose={() => setWarningPopup(false)}>
-        <p>
-          Are you sure you want to delete this video? This action cannot be undone and will permanently remove the video
-          and all associated data.
-        </p>
-        <div className="buttons-container">
-          <GenericButton text="Yes, delete the video" onClick={handleDelete} />
-          <LightButton text="Cancel" onClick={() => setWarningPopup(false)} />
-        </div>
-      </Popup>
+    video && (
+      <div className={`page ${theme}`}>
+        <Popup title="Warning" isOpen={warningPopup} onClose={() => setWarningPopup(false)}>
+          <p>
+            Are you sure you want to delete this video? This action cannot be undone and will permanently remove the
+            video and all associated data.
+          </p>
+          <div className="buttons-container">
+            <GenericButton text="Yes, delete the video" onClick={handleDelete} />
+            <LightButton text="Cancel" onClick={() => setWarningPopup(false)} />
+          </div>
+        </Popup>
 
-      <Container title={"Edit Video"} containerStyle={"upload-video-container"}>
-        <form className="upload-form-container" onSubmit={handleSubmit}>
-          {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
-          <div className="field-container">
-            <b>Title</b>
-            <input
-              className={`input-field ${theme}`}
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="field-container">
-            <b>Description</b>
-            <textarea
-              className={`input-field ${theme}`}
-              name="description"
-              id="description-field"
-              value={formData.description}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="field-container">
-            <b>Category</b>
-            <DropDownMenu
-              name="category"
-              arr={categories}
-              value={formData.category}
-              showFlag={false}
-              action={(name, value) => handleInputChange({ target: { name, value } })}
-            />
-          </div>
-          <div className="field-container">
-            <b>Tags</b>
-            <ListInput name="tags" list={formData.tags} action={handleTagsChange} editMode={true} />
-          </div>
-          <div className="field-container">
-            <div className="linear-layout-2">
-              <b>Thumbnail</b>
+        <Container title={"Edit Video"} containerStyle={"upload-video-container"}>
+          <form className="upload-form-container" onSubmit={handleSubmit}>
+            {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
+            <div className="field-container">
+              <b>Title</b>
               <input
                 className={`input-field ${theme}`}
-                name="thumbnail"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                ref={thumbnailInputRef}
-                style={{ display: "none" }}
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
               />
-              <GenericButton text="Upload Thumbnail" onClick={() => thumbnailInputRef.current.click()} />
             </div>
-            {formData.thumbnailPreview && (
-              <div className="thumbnail-container">
-                <img src={formData.thumbnailPreview} alt="Thumbnail preview" className="home-video-thumbnail" />
+            <div className="field-container">
+              <b>Description</b>
+              <textarea
+                className={`input-field ${theme}`}
+                name="description"
+                id="description-field"
+                value={formData.description}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="field-container">
+              <b>Category</b>
+              <DropDownMenu
+                name="category"
+                arr={categories}
+                value={formData.category}
+                showFlag={false}
+                action={(name, value) => handleInputChange({ target: { name, value } })}
+              />
+            </div>
+            <div className="field-container">
+              <b>Tags</b>
+              <ListInput name="tags" list={formData.tags} action={handleTagsChange} editMode={true} />
+            </div>
+            <div className="field-container">
+              <div className="linear-layout-2">
+                <b>Thumbnail</b>
+                <input
+                  className={`input-field ${theme}`}
+                  name="thumbnail"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  ref={thumbnailInputRef}
+                  style={{ display: "none" }}
+                />
+                <GenericButton text="Upload Thumbnail" onClick={() => thumbnailInputRef.current.click()} />
               </div>
-            )}
-          </div>
-          <div className="buttons-container">
-            <GenericButton text="Update" type="submit" onClick={handleSubmit} icon={editIcon} />
-            <LightButton text="Cancel" onClick={() => navigate(`/watch/${videoId}`)} icon={cancelIcon} />
-            <LightButton text="Delete" onClick={() => setWarningPopup(true)} />
-          </div>
-        </form>
-      </Container>
-    </div>
+              {formData.thumbnailPreview && (
+                <div className="thumbnail-container">
+                  <img src={formData.thumbnailPreview} alt="Thumbnail preview" className="home-video-thumbnail" />
+                </div>
+              )}
+            </div>
+            <div className="buttons-container">
+              <GenericButton text="Update" type="submit" onClick={handleSubmit} icon={editIcon} />
+              <LightButton text="Cancel" onClick={() => navigate(`/watch/${videoId}`)} icon={cancelIcon} />
+              <LightButton text="Delete" onClick={() => setWarningPopup(true)} />
+            </div>
+          </form>
+        </Container>
+      </div>
+    )
   );
 };
 

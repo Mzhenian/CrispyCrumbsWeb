@@ -8,20 +8,12 @@ const SubscribeButton = ({ userToSubscribe }) => {
   const { theme } = useContext(ThemeContext);
   const { followUnfollowUser, isFollowing, getUserById, currentUser } = useContext(AuthContext);
   const [subscribed, setSubscribed] = useState(false);
-  const [followerCount, setFollowerCount] = useState(0);
 
   useEffect(() => {
     const updateSubscriptionStatus = async () => {
       if (userToSubscribe && currentUser) {
         const isSubscribed = await isFollowing(userToSubscribe);
         setSubscribed(isSubscribed);
-
-        const user = await getUserById(userToSubscribe);
-        if (user && user.followers) {
-          setFollowerCount(user.followers.length);
-        } else {
-          setFollowerCount(0);
-        }
       }
     };
     updateSubscriptionStatus();
@@ -34,7 +26,6 @@ const SubscribeButton = ({ userToSubscribe }) => {
     }
     try {
       await followUnfollowUser(userToSubscribe, subscribed);
-      setFollowerCount((prevCount) => prevCount + (subscribed ? -1 : 1));
       setSubscribed(!subscribed);
     } catch (error) {
       console.error("Error following/unfollowing user:", error);
