@@ -40,24 +40,24 @@ const CommentsSection = ({ currentUser, videoId }) => {
   const handleCommentSubmit = async () => {
     if (newComment.trim()) {
       const newCommentObj = {
-        userId: currentUser._id.toString(),
         comment: newComment,
-        date: new Date().toISOString(),
       };
       console.log("Submitting new comment:", newCommentObj);
       const addedComment = await addComment(videoId, newCommentObj);
 
-      setVideo((prevVideo) => ({
-        ...prevVideo,
-        comments: [...prevVideo.comments, addedComment],
-      }));
+      if (addedComment) {
+        setVideo((prevVideo) => ({
+          ...prevVideo,
+          comments: [...prevVideo.comments, addedComment],
+        }));
 
-      setCommentAuthors((prevAuthors) => ({
-        ...prevAuthors,
-        [addedComment.commentId]: currentUser,
-      }));
+        setCommentAuthors((prevAuthors) => ({
+          ...prevAuthors,
+          [addedComment.commentId]: currentUser,
+        }));
 
-      setNewComment("");
+        setNewComment("");
+      }
     }
   };
 
@@ -155,7 +155,7 @@ const CommentsSection = ({ currentUser, videoId }) => {
           </div>
         ) : (
           <div id="comment">
-            <ProfilePhoto user={commentAuthor} clickable={true} />
+            <ProfilePhoto user={commentAuthor} clickable />
             <div className="comment-data">
               <div className="comment-title">
                 <b>@{commentAuthor.userName}</b>

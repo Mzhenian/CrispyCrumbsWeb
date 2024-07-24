@@ -1,8 +1,10 @@
-import React, { createContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useState, useEffect, useCallback, useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 const VideoContext = createContext();
 
 const VideoProvider = ({ children }) => {
+  const { currentUser } = useContext(AuthContext);
   const [videos, setVideos] = useState([]);
   const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
   const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
@@ -131,25 +133,30 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-  const addComment = async (videoId, comment) => {
-    try {
-      const response = await fetch(`${apiVideosUrl}/comment`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ videoId, userId: comment.userId, commentText: comment.comment, date: new Date().toISOString() }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const newComment = await response.json(); // Get the new comment with commentId
-      return newComment;
-    } catch (error) {
-      console.error("Error adding comment:", error);
+const addComment = async (videoId, comment) => {
+  try {
+    const response = await fetch(`${apiVideosUrl}/comment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
+      },
+      body: JSON.stringify({
+        videoId,
+        userId: currentUser._id, 
+        commentText: comment.comment,
+        date: new Date().toISOString(),
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-  };
-  
+    const newComment = await response.json();
+    return newComment;
+  } catch (error) {
+    console.error("Error adding comment:", error);
+  }
+};
 
   const editComment = async (videoId, comment) => {
     try {
@@ -215,15 +222,13 @@ const VideoProvider = ({ children }) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setVideos((prevVideos) =>
-        prevVideos.map((video) => (video._id === videoId ? data : video))
-      );
+      setVideos((prevVideos) => prevVideos.map((video) => (video._id === videoId ? data : video)));
       return data;
     } catch (error) {
       console.error("Error editing video:", error);
     }
   };
-  
+
   const deleteVideo = async (videoId, token) => {
     try {
       const response = await fetch(`${apiVideosUrl}/${videoId}`, {
