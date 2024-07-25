@@ -17,19 +17,50 @@ const VideoProvider = ({ children }) => {
   const fetchVideos = useCallback(async () => {
     try {
       const response = await fetch(apiVideosUrl, {
-        headers: {
-          Authorization: currentUser ? `Bearer ${currentUser.token}` : "",
-        },
+        headers: {},
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setVideos(data);
+      setVideos((prevVideos) => ({
+        ...prevVideos,
+        mostViewedVideos: data.mostViewedVideos || [],
+        mostRecentVideos: data.mostRecentVideos || [],
+        randomVideos: data.randomVideos || [],
+      }));
     } catch (err) {
       console.error("Fetch videos failed:", err);
     }
+  }, [apiVideosUrl]);
+
+  const fetchFollowersVideos = useCallback(async () => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/followers`, {
+        headers: {
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setVideos((prevVideos) => ({
+        ...prevVideos,
+        followingVideos: data || [],
+      }));
+    } catch (err) {
+      console.error("Fetch followers videos failed:", err);
+    }
   }, [apiVideosUrl, currentUser]);
+
+  useEffect(() => {
+    fetchVideos();
+    if (currentUser) {
+      fetchFollowersVideos();
+    }
+  }, [fetchVideos, fetchFollowersVideos, currentUser]);
 
   useEffect(() => {
     fetchVideos();
@@ -51,19 +82,6 @@ const VideoProvider = ({ children }) => {
     } catch (err) {
       console.error("Get video by ID failed:", err);
       return null;
-    }
-  };
-
-  const fetchAllVideos = async () => {
-    try {
-      const response = await fetch(apiVideosUrl);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setVideos(data);
-    } catch (error) {
-      console.error("Error fetching all videos:", error);
     }
   };
 
@@ -262,9 +280,9 @@ const VideoProvider = ({ children }) => {
         apiUrl: apiVideosUrl,
         videos,
         fetchVideos,
+        fetchFollowersVideos,
         getVideoById,
         getVideosByUserId,
-        fetchAllVideos,
         editVideo,
         uploadVideo,
         likeVideo,

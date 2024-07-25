@@ -10,17 +10,16 @@ import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
-  const { videos, fetchVideos } = useContext(VideoContext);
+  const { videos, fetchVideos, fetchFollowersVideos } = useContext(VideoContext);
   const { currentUser, getUserById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
   const [videoAuthors, setVideoAuthors] = useState({});
   const navigate = useNavigate();
 
-  console.log(videos.followingVideos);
-
   useEffect(() => {
     fetchVideos();
-  }, [fetchVideos]);
+    fetchFollowersVideos();
+  }, [fetchVideos, fetchFollowersVideos]);
 
   useEffect(() => {
     const fetchAuthors = async () => {
