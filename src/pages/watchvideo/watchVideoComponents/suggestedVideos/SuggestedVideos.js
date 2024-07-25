@@ -14,7 +14,7 @@ const SuggestedVideos = () => {
 
   useEffect(() => {
     const fetchAuthors = async () => {
-      const authorPromises = videos.map(async (video) => {
+      const authorPromises = videos.randomVideos.map(async (video) => {
         const author = await getUserById(video.userId);
         return { [video._id.toString()]: author };
       });
@@ -23,7 +23,7 @@ const SuggestedVideos = () => {
       setVideoAuthors(authorsMap);
     };
 
-    if (videos.length > 0) {
+    if (videos.randomVideos.length > 0) {
       fetchAuthors();
     }
   }, [videos, getUserById]);
@@ -35,7 +35,7 @@ const SuggestedVideos = () => {
 
   return (
     <div className={`watch-suggested-video-section ${theme}`}>
-      {videos.slice(0, 10).map((video) => {
+      {videos.randomVideos.slice(0, 10).map((video) => {
         const author = videoAuthors[video._id];
         return author ? (
           <Link to={`/watch/${video._id}`} key={video._id} className={`suggested-video-card ${theme}`}>

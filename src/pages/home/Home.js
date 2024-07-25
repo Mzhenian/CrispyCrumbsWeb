@@ -16,22 +16,32 @@ const Home = () => {
   const [videoAuthors, setVideoAuthors] = useState({});
   const navigate = useNavigate();
 
+  console.log(videos.followingVideos);
+
   useEffect(() => {
     fetchVideos();
   }, [fetchVideos]);
 
   useEffect(() => {
     const fetchAuthors = async () => {
-      const authorPromises = videos.map(async (video) => {
+      const videoList = [
+        ...videos.mostViewedVideos,
+        ...videos.mostRecentVideos,
+        ...videos.followingVideos,
+        ...videos.randomVideos,
+      ];
+
+      const authorPromises = videoList.map(async (video) => {
         const author = await getUserById(video.userId.toString());
         return { [video._id.toString()]: author };
       });
+
       const authors = await Promise.all(authorPromises);
       const authorsMap = authors.reduce((acc, author) => ({ ...acc, ...author }), {});
       setVideoAuthors(authorsMap);
     };
 
-    if (videos.length > 0) {
+    if (videos.mostViewedVideos.length > 0) {
       fetchAuthors();
     }
   }, [videos, getUserById]);
@@ -47,25 +57,16 @@ const Home = () => {
   };
 
   const sortedVideos = () => {
-    let sorted = [...videos];
     switch (sortOption) {
       case "most-watched":
-        sorted.sort((a, b) => b.views - a.views);
-        break;
+        return videos.mostViewedVideos;
+      case "most-recent":
+        return videos.mostRecentVideos;
       case "subscribed":
-        if (currentUser) {
-          sorted = sorted.filter((video) => currentUser.following.includes(video.userId));
-        } else {
-          sorted = [];
-        }
-        break;
-      case "date":
-        sorted.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
-        break;
+        return currentUser ? videos.followingVideos : [];
       default:
-        break;
+        return videos.randomVideos;
     }
-    return sorted;
   };
 
   const videosList = (
@@ -102,7 +103,8 @@ const Home = () => {
       <div className="sorting-filtering-options">
         {currentUser && <GenericButton text="Subscribed" onClick={() => handleSortChange("subscribed")} />}
         <GenericButton text="Most Watched" onClick={() => handleSortChange("most-watched")} />
-        <GenericButton text="Newest" onClick={() => handleSortChange("date")} />
+        <GenericButton text="Most Recent" onClick={() => handleSortChange("most-recent")} />
+        <GenericButton text="Suggested for you" onClick={() => handleSortChange("random")} />
       </div>
       {videosList}
     </div>

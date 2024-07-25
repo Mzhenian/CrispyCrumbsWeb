@@ -5,13 +5,22 @@ const VideoContext = createContext();
 
 const VideoProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState({
+    mostViewedVideos: [],
+    mostRecentVideos: [],
+    followingVideos: [],
+    randomVideos: [],
+  });
   const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
   const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
   const fetchVideos = useCallback(async () => {
     try {
-      const response = await fetch(apiVideosUrl);
+      const response = await fetch(apiVideosUrl, {
+        headers: {
+          Authorization: currentUser ? `Bearer ${currentUser.token}` : "",
+        },
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -20,7 +29,7 @@ const VideoProvider = ({ children }) => {
     } catch (err) {
       console.error("Fetch videos failed:", err);
     }
-  }, [apiVideosUrl]);
+  }, [apiVideosUrl, currentUser]);
 
   useEffect(() => {
     fetchVideos();
@@ -133,30 +142,30 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-const addComment = async (videoId, comment) => {
-  try {
-    const response = await fetch(`${apiVideosUrl}/comment`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${currentUser.token}`,
-      },
-      body: JSON.stringify({
-        videoId,
-        userId: currentUser._id, 
-        commentText: comment.comment,
-        date: new Date().toISOString(),
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+  const addComment = async (videoId, comment) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/comment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+        body: JSON.stringify({
+          videoId,
+          userId: currentUser._id,
+          commentText: comment.comment,
+          date: new Date().toISOString(),
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const newComment = await response.json();
+      return newComment;
+    } catch (error) {
+      console.error("Error adding comment:", error);
     }
-    const newComment = await response.json();
-    return newComment;
-  } catch (error) {
-    console.error("Error adding comment:", error);
-  }
-};
+  };
 
   const editComment = async (videoId, comment) => {
     try {
