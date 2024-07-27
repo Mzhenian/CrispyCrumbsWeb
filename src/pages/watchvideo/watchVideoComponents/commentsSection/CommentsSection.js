@@ -11,7 +11,7 @@ import editIcon from "../../../../components/iconsLab/edit.svg";
 const CommentsSection = ({ currentUser, videoId }) => {
   const { theme } = useContext(ThemeContext);
   const { getVideoById, addComment, editComment, deleteComment } = useContext(VideoContext);
-  const { getUserById } = useContext(AuthContext);
+  const { getUserBasicById } = useContext(AuthContext);
   const [video, setVideo] = useState(null);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
@@ -25,7 +25,7 @@ const CommentsSection = ({ currentUser, videoId }) => {
 
       const authors = await Promise.all(
         fetchedVideo.comments.map(async (comment) => {
-          const user = await getUserById(comment.userId);
+          const user = await getUserBasicById(comment.userId);
           return { [comment.commentId]: user };
         })
       );
@@ -35,7 +35,7 @@ const CommentsSection = ({ currentUser, videoId }) => {
     };
 
     fetchVideo();
-  }, [videoId, getVideoById, getUserById]);
+  }, [videoId, getVideoById, getUserBasicById]);
 
   const handleCommentSubmit = async () => {
     if (newComment.trim()) {

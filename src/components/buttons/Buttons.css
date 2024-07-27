@@ -114,3 +114,7 @@
 .button-icon:hover {
     scale: 160%;
 }
+
+#subscribe-button.light {
+    color: var(--white-color);
+}

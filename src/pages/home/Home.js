@@ -11,7 +11,7 @@ import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail";
 const Home = () => {
   const { theme } = useContext(ThemeContext);
   const { videos, fetchVideos, fetchFollowersVideos } = useContext(VideoContext);
-  const { currentUser, getUserById } = useContext(AuthContext);
+  const { currentUser, getUserBasicById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
   const [videoAuthors, setVideoAuthors] = useState({});
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const Home = () => {
       ];
 
       const authorPromises = videoList.map(async (video) => {
-        const author = await getUserById(video.userId.toString());
+        const author = await getUserBasicById(video.userId.toString());
         return { [video._id.toString()]: author };
       });
 
@@ -43,7 +43,7 @@ const Home = () => {
     if (videos.mostViewedVideos.length > 0) {
       fetchAuthors();
     }
-  }, [videos, getUserById]);
+  }, [videos, getUserBasicById]);
 
   const handleSortChange = (value) => {
     setSortOption(value);

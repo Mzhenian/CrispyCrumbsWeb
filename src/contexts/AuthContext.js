@@ -204,6 +204,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+    const getUserBasicById = async (userId) => {
+      try {
+        const response = await fetch(`${apiUsersUrl}/basic/${userId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+      } catch (err) {
+        console.error(`Get user by ID failed: ${userId}`, err);
+        return null;
+      }
+    };
+
   const updateUser = async (userId, updatedUser) => {
     try {
       const formData = new FormData();
@@ -255,6 +274,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         currentUser,
         getUserById,
+        getUserBasicById,
         login,
         logout,
         signup,

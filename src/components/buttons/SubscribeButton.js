@@ -48,7 +48,7 @@ const SubscribeButton = ({ userToSubscribe }) => {
     <div>
       <div
         className={subscribed ? `light-button ${theme}` : `generic-button ${theme}`}
-        id="subscribe-button"
+        id={`subscribe-button ${theme}`}
         onClick={handleClick}
       >
         {subscribed ? "Unsubscribe" : "Subscribe"}

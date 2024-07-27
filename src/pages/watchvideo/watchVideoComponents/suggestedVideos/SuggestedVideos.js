@@ -7,15 +7,15 @@ import VideoThumbnail from "../../../../components/videoThumbnail/VideoThumbnail
 
 const SuggestedVideos = () => {
   const { theme } = useContext(ThemeContext);
-  const { videos } = useContext(VideoContext);
-  const { getUserById } = useContext(AuthContext);
+  const { videos, fetchVideos } = useContext(VideoContext);
+  const { getUserBasicById } = useContext(AuthContext);
   const [videoAuthors, setVideoAuthors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAuthors = async () => {
       const authorPromises = videos.randomVideos.map(async (video) => {
-        const author = await getUserById(video.userId);
+        const author = await getUserBasicById(video.userId);
         return { [video._id.toString()]: author };
       });
       const authors = await Promise.all(authorPromises);
@@ -26,12 +26,16 @@ const SuggestedVideos = () => {
     if (videos.randomVideos.length > 0) {
       fetchAuthors();
     }
-  }, [videos, getUserById]);
+  }, [videos, getUserBasicById]);
 
   const handleAuthorClick = (e, profileId) => {
     e.stopPropagation();
     navigate(`/crumb/${profileId}`);
   };
+
+  useEffect(() => {
+    fetchVideos();
+  }, [fetchVideos]);
 
   return (
     <div className={`watch-suggested-video-section ${theme}`}>
