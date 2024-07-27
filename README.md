@@ -67,15 +67,14 @@ The photos are not enough, you should go and explore the website by yourself :>
 
 
 7. **Profile Page**
-   
-   This page is for user sign-up or profile editing. It includes fields for entering full name, username, email, password, country, birthday, and phone number. There is also an option to upload a profile photo. The form includes "Sign up" and "Log in" buttons at the top.
 
-7. **Profile Page**
+   This page is designed to edit user details. It includes options to change the user's basic details as well as to update the user's profile picture.
+
+7. **Profile Edit Page**
    
    דף זה נועד לערוך את פרטי המשתמש הוא כולל אופציות לשנות את הפרטים הרגילים של המשתמש וכמו כן גם לשנות את התמונת הפרופיל של המשתמש
 
 ## Work process -  
-הפרויקט עבד בשיתוף פעולה בין שלושתינו ראשית עבדנו על בניית השרת ולאחר מכן החלנו לבנות את הפונקציות ולהחליף את הפעולות שהיו מוגדרות קודם ב- React לפעולות שהגדרנו בשרת שמדברות באופן ישיר עם ה- MONGODB. רוב הפונקציונאליות והשינויים המהותיים היו ב- Authcontext ו- VideoContext מאחר ששם הסתתרה הפונקציונאליות עוד מחלק 1. והיו עוד שינויים בדפים מסויימים ובמקומות שבהם יש פונקציונאליות גבוהה אבל האתר נשאר דיי דומה למה שהיה.
-בדומה לחלק הראשון הגדרנו פרויקט
+   The project was a collaborative effort among the three of us. Initially, we focused on building the server. Afterward, we started developing the functions and replacing the previously defined actions in React with server-defined actions that directly interact with MongoDB. Most of the functionality and significant changes were in the AuthContext and VideoContext since the core functionality from part 1 was located there. There were also changes in certain pages and in areas with high functionality, but the website remained quite similar to its previous state.
 
 ![alt text](<readme photos/Screenshot 2024-07-27 233247.png>)
