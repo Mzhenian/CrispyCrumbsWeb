@@ -243,13 +243,21 @@ const VideoProvider = ({ children }) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: updatedVideo, // No need to set Content-Type, fetch will do it automatically with FormData
+        body: updatedVideo,
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setVideos((prevVideos) => prevVideos.map((video) => (video._id === videoId ? data : video)));
+      setVideos((prevVideos) => {
+        const allVideos = [
+          ...prevVideos.mostViewedVideos,
+          ...prevVideos.mostRecentVideos,
+          ...prevVideos.followingVideos,
+          ...prevVideos.randomVideos,
+        ];
+        return allVideos.map((video) => (video._id === videoId ? data : video));
+      });
       return data;
     } catch (error) {
       console.error("Error editing video:", error);
