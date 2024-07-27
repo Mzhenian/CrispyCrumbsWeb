@@ -105,7 +105,6 @@ const EditProfile = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     if (formData.username.length < 8) {
       setErrorMessage("Username must be at least 8 characters long.");
       return;
