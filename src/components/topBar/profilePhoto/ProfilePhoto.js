@@ -16,6 +16,8 @@ const ProfilePhoto = () => {
   useEffect(() => {
     if (currentUser && currentUser.profilePhoto && currentUser.profilePhoto !== "null") {
       setProfilePhoto(`${process.env.REACT_APP_API_URL}/api/db${currentUser.profilePhoto}`);
+    } else {
+      setProfilePhoto(defaultProfileImage);
     }
   }, [currentUser]);
 
@@ -39,14 +41,7 @@ const ProfilePhoto = () => {
 
   return (
     <>
-      {profilePhoto && (
-        <img
-          src={process.env.PUBLIC_URL + profilePhoto}
-          className={`profile-photo ${theme}`}
-          onClick={handleMenu}
-          alt={currentUser.userName}
-        />
-      )}
+      <img src={profilePhoto} className={`profile-photo ${theme}`} onClick={handleMenu} alt={currentUser.userName} />
       {isMenuVisible && popup}
     </>
   );

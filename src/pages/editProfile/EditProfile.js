@@ -42,6 +42,8 @@ const EditProfile = () => {
     country: "Israel",
     profilePhoto: null,
     phoneNumber: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [profilePhotoURL, setProfilePhotoURL] = useState("");
@@ -59,6 +61,8 @@ const EditProfile = () => {
         country: currentUser.country || "Israel",
         profilePhoto: currentUser.profilePhoto || null,
         phoneNumber: currentUser.phoneNumber || "",
+        password: "",
+        confirmPassword: "",
       });
 
       if (currentUser.profilePhoto) {
@@ -105,8 +109,8 @@ const EditProfile = () => {
   };
 
   const handleSubmit = async (e) => {
-    if (formData.username.length < 8) {
-      setErrorMessage("Username must be at least 8 characters long.");
+    if (formData.username.length < 4) {
+      setErrorMessage("Username must be at least 4 characters long.");
       return;
     }
 
@@ -133,6 +137,11 @@ const EditProfile = () => {
       return;
     }
 
+    if (formData.password && formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match.");
+      return;
+    }
+
     const updatedUser = {
       userName: formData.username,
       email: formData.email,
@@ -142,6 +151,10 @@ const EditProfile = () => {
       country: formData.country,
       profilePhoto: formData.profilePhoto,
     };
+
+    if (formData.password) {
+      updatedUser.password = formData.password;
+    }
 
     await updateUser(currentUser._id, updatedUser);
     navigate(`/crumb/${currentUser._id}`);
@@ -195,6 +208,30 @@ const EditProfile = () => {
               onChange={handleInputChange}
             />
           </div>
+
+          <div className="field-container">
+            <b>Password</b>
+            <input
+              className={`input-field ${theme}`}
+              name="password"
+              type="password"
+              placeholder="Leave this field blank if you do not wish to change your password"
+              value={formData.password}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="field-container">
+            <b>Confirm Password</b>
+            <input
+              className={`input-field ${theme}`}
+              name="confirmPassword"
+              type="password"
+              placeholder="Leave this field blank if you do not wish to change your password"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+            />
+          </div>
+
           <div className="field-container">
             <b>Country</b>
             <DropDownMenu
