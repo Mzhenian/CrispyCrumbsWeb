@@ -70,11 +70,12 @@ The photos are not enough, you should go and explore the website by yourself :>
 
    This page is designed to edit user details. It includes options to change the user's basic details as well as to update the user's profile picture.
 
-7. **Profile Edit Page**
+8. **Profile Edit Page**
+   This page is designed to edit user details. It includes options to change the user's basic details as well as to update the user's profile picture.
    
-   דף זה נועד לערוך את פרטי המשתמש הוא כולל אופציות לשנות את הפרטים הרגילים של המשתמש וכמו כן גם לשנות את התמונת הפרופיל של המשתמש
-
 ## Work process -  
    The project was a collaborative effort among the three of us. Initially, we focused on building the server. Afterward, we started developing the functions and replacing the previously defined actions in React with server-defined actions that directly interact with MongoDB. Most of the functionality and significant changes were in the AuthContext and VideoContext since the core functionality from part 1 was located there. There were also changes in certain pages and in areas with high functionality, but the website remained quite similar to its previous state.
 
-![alt text](<readme photos/Screenshot 2024-07-27 233247.png>)
+   Similar to part 1, we divided the work among ourselves using Jira.
+
+   ![alt text](<readme photos/Screenshot 2024-07-27 233247.png>)
