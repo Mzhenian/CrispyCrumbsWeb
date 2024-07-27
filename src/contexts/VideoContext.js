@@ -11,6 +11,7 @@ const VideoProvider = ({ children }) => {
     followingVideos: [],
     randomVideos: [],
   });
+
   const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
   const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
@@ -250,13 +251,24 @@ const VideoProvider = ({ children }) => {
       }
       const data = await response.json();
       setVideos((prevVideos) => {
-        const allVideos = [
-          ...prevVideos.mostViewedVideos,
-          ...prevVideos.mostRecentVideos,
-          ...prevVideos.followingVideos,
-          ...prevVideos.randomVideos,
-        ];
-        return allVideos.map((video) => (video._id === videoId ? data : video));
+        const updatedMostViewedVideos = prevVideos.mostViewedVideos.map((video) =>
+          video._id === videoId ? data : video
+        );
+        const updatedMostRecentVideos = prevVideos.mostRecentVideos.map((video) =>
+          video._id === videoId ? data : video
+        );
+        const updatedFollowingVideos = prevVideos.followingVideos.map((video) =>
+          video._id === videoId ? data : video
+        );
+        const updatedRandomVideos = prevVideos.randomVideos.map((video) => (video._id === videoId ? data : video));
+
+        return {
+          ...prevVideos,
+          mostViewedVideos: updatedMostViewedVideos,
+          mostRecentVideos: updatedMostRecentVideos,
+          followingVideos: updatedFollowingVideos,
+          randomVideos: updatedRandomVideos,
+        };
       });
       return data;
     } catch (error) {
@@ -276,7 +288,20 @@ const VideoProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      setVideos((prevVideos) => prevVideos.filter((video) => video._id !== videoId));
+      setVideos((prevVideos) => {
+        const updatedMostViewedVideos = prevVideos.mostViewedVideos.filter((video) => video._id !== videoId);
+        const updatedMostRecentVideos = prevVideos.mostRecentVideos.filter((video) => video._id !== videoId);
+        const updatedFollowingVideos = prevVideos.followingVideos.filter((video) => video._id !== videoId);
+        const updatedRandomVideos = prevVideos.randomVideos.filter((video) => video._id !== videoId);
+
+        return {
+          ...prevVideos,
+          mostViewedVideos: updatedMostViewedVideos,
+          mostRecentVideos: updatedMostRecentVideos,
+          followingVideos: updatedFollowingVideos,
+          randomVideos: updatedRandomVideos,
+        };
+      });
     } catch (error) {
       console.error("Error deleting video:", error);
     }
