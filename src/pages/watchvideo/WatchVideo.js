@@ -67,23 +67,6 @@ const WatchVideo = () => {
     hasIncrementedView.current = false;
   }, [videoId]);
 
-  useEffect(() => {
-    if (!video) {
-      const timer = setTimeout(() => {
-        setShowNotFound(true);
-      }, 3000); // Delay of 3000 milliseconds (3 seconds)
-
-      // Cleanup the timer if the component unmounts or if video changes
-      return () => clearTimeout(timer);
-    } else {
-      setShowNotFound(false);
-    }
-  }, [video]);
-
-  if (showNotFound) {
-    return <NotFoundRoute />;
-  }
-
   // Handle likes
   const handleLike = async () => {
     if (!currentUser) return navigate("/login");
@@ -239,6 +222,23 @@ const WatchVideo = () => {
       </div>
     </div>
   );
+
+  useEffect(() => {
+    if (!video) {
+      const timer = setTimeout(() => {
+        setShowNotFound(true);
+      }, 3000); // Delay of 3000 milliseconds (3 seconds)
+
+      // Cleanup the timer if the component unmounts or if video changes
+      return () => clearTimeout(timer);
+    } else {
+      setShowNotFound(false);
+    }
+  }, [video]);
+
+  if (showNotFound) {
+    return <NotFoundRoute />;
+  }
 
   return (
     video && (
