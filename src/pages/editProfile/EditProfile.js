@@ -11,6 +11,7 @@ import { months, days, years } from "../signup/SignUpData.js";
 import countries from "../../DB/Countries/CountriesListsData.js";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto.js";
 import Popup from "../../components/popup/Popup.js";
+import NotFoundRoute from "../../routes/NotFoundRoute.js";
 
 const EditProfile = () => {
   const { theme } = useContext(ThemeContext);
@@ -164,6 +165,14 @@ const EditProfile = () => {
     await deleteUser(currentUser._id);
     navigate("/");
   };
+
+  if (!currentUser) {
+    return (
+      <div className={`page ${theme}`}>
+        <NotFoundRoute />
+      </div>
+    );
+  }
 
   return (
     <div className={`page ${theme}`}>
