@@ -50,6 +50,7 @@ const EditProfile = () => {
   const [profilePhotoURL, setProfilePhotoURL] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [warningPopup, setWarningPopup] = useState(false);
+  const [fileError, setFileError] = useState("");
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -101,11 +102,18 @@ const EditProfile = () => {
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/svg+xml"];
+      if (!validImageTypes.includes(file.type)) {
+        setFileError("Invalid file type. Please upload an image.");
+        return;
+      }
+
       setFormData((prevState) => ({
         ...prevState,
         profilePhoto: file,
       }));
       setProfilePhotoURL(URL.createObjectURL(file));
+      setFileError("");
     }
   };
 
@@ -184,6 +192,13 @@ const EditProfile = () => {
         <div className="buttons-container">
           <GenericButton text="Yes, delete my account" onClick={(e) => handleDelete(e)} />
           <LightButton text="Cancel" onClick={() => setWarningPopup(false)} />
+        </div>
+      </Popup>
+
+      <Popup title="File Error" isOpen={!!fileError} onClose={() => setFileError("")}>
+        <p>{fileError}</p>
+        <div className="buttons-container">
+          <GenericButton text="OK" onClick={() => setFileError("")} />
         </div>
       </Popup>
 
@@ -296,6 +311,7 @@ const EditProfile = () => {
                 type="file"
                 onChange={handlePhotoChange}
                 ref={fileInputRef}
+                accept="image/*"
                 style={{ display: "none" }}
               />
               <GenericButton
@@ -312,7 +328,6 @@ const EditProfile = () => {
             <LightButton text="Cancel" link="/" />
             <LightButton text="Delete User" onClick={(e) => setWarningPopup(true)} />
           </div>
-          {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
         </form>
       </Container>
     </div>

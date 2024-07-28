@@ -34,6 +34,7 @@ const EditVideo = () => {
     thumbnailPreview: null,
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [fileError, setFileError] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [warningPopup, setWarningPopup] = useState(false);
 
@@ -77,11 +78,17 @@ const EditVideo = () => {
     const { name, files } = e.target;
     if (files && files[0]) {
       const file = files[0];
+      const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/svg+xml"];
+      if (!validImageTypes.includes(file.type)) {
+        setFileError("Invalid file type. Please upload an image.");
+        return;
+      }
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: file,
         [`${name}Preview`]: URL.createObjectURL(file),
       }));
+      setFileError("");
     }
   };
 
@@ -209,6 +216,12 @@ const EditVideo = () => {
             {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
           </form>
         </Container>
+        <Popup title="Error" isOpen={fileError} onClose={() => setFileError("")}>
+          <p>{fileError}</p>
+          <div className="buttons-container">
+            <GenericButton text="Close" onClick={() => setFileError("")} />
+          </div>
+        </Popup>
       </div>
     )
   );
