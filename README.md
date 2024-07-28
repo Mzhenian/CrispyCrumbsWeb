@@ -85,4 +85,3 @@ Similar to part 1, we divided the work among ourselves using Jira.
 
 ![Jira Board](<readme photos/Screenshot 2024-07-27 233247.png>)
 
-   ![alt text](<readme photos/Screenshot 2024-07-27 233247.png>)
