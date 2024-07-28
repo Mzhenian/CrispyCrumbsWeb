@@ -312,6 +312,7 @@ const EditProfile = () => {
             <LightButton text="Cancel" link="/" />
             <LightButton text="Delete User" onClick={(e) => setWarningPopup(true)} />
           </div>
+          {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
         </form>
       </Container>
     </div>

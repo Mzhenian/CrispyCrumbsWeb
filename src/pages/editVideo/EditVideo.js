@@ -206,6 +206,7 @@ const EditVideo = () => {
               <LightButton text="Cancel" onClick={() => navigate(`/watch/${videoId}`)} icon={cancelIcon} />
               <LightButton text="Delete" onClick={() => setWarningPopup(true)} />
             </div>
+            {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
           </form>
         </Container>
       </div>
