@@ -42,7 +42,6 @@ const CommentsSection = ({ currentUser, videoId }) => {
       const newCommentObj = {
         comment: newComment,
       };
-      console.log("Submitting new comment:", newCommentObj);
       const addedComment = await addComment(videoId, newCommentObj);
 
       if (addedComment) {

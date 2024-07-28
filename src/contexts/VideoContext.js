@@ -192,6 +192,7 @@ const VideoProvider = ({ children }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
         },
         body: JSON.stringify({ videoId, ...comment }),
       });
@@ -209,6 +210,7 @@ const VideoProvider = ({ children }) => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
         },
         body: JSON.stringify({ videoId, commentId, userId }),
       });
