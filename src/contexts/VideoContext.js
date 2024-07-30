@@ -133,6 +133,7 @@ const VideoProvider = ({ children }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
         },
         body: JSON.stringify({ videoId, userId }),
       });
@@ -150,6 +151,7 @@ const VideoProvider = ({ children }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
         },
         body: JSON.stringify({ videoId, userId }),
       });
