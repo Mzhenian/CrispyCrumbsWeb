@@ -33,7 +33,7 @@ for the server:
 
 ### Initialization option one: Easy & fast script
 
-After downloading the CrispyCrumbsWeb and CrispyCrumbsServer projects folders into the the same parent folder.
+After downloading the CrispyCrumbsWeb and CrispyCrumbsServer projects-folders into the the same parent folder.
 
 1) open a powershell in `CrispyCrumbsWeb` project-folder.
 2) run: `.\init_website.ps1`
@@ -44,7 +44,7 @@ After downloading the CrispyCrumbsWeb and CrispyCrumbsServer projects folders in
 
 - if the server wasn't active when running the script than this method will open the **server** at the background of the current terminal. Which will keep running as long as that terminal is kept open.
 - After this initial setup, you can run the website again in the same way
-- or run the the site manually as shown below.
+- or run the site manually as shown below.
 
 ### Initialization option two: manually
 
@@ -54,7 +54,7 @@ After downloading the CrispyCrumbsWeb and CrispyCrumbsServer projects folders in
 4) Run `npm start`
 5) wait for the website to open itself.
 
-After the initial initialization, you can run the server by only running the server and running `npm start`
+After the initial initialization, you can run the server by just running the server and running `npm start`
 
 This command will launch the website in address [http://localhost:3000](http://localhost:3000) in your browser.
 
@@ -65,9 +65,7 @@ To experience everything CrispyCrumbs has to offer quickly you can log in using 
 - **Username:** Tuna
 - **Password:** password6
 
-## Website Pages
-
-The photos are not enough; you should go and explore the website yourself :>
+## Website Pages review
 
 ### 1. Homepage
 
