@@ -1,47 +1,71 @@
-# Crispy Crumbs - React Website
+# Crispy Crumbs: React Website
 
 Welcome to the **Crispy Crumbs** website, a dedicated video sharing platform showcasing only the finest Crispy Crumbs content. This website is built with React to ensure a smooth, interactive, and tasty user experience.
 
-### Crispy Crumbs - Founders
+## Crispy Crumbs - Founders
+
 - Ofek Avan Danan (211824727)
 - Zohar Mzhen (314621806)
 - Dolev Menajem (207272220)
 
 ## Running the Crispy Crumbs Website
 
-Follow these steps to get the Crispy Crumbs website up and running on your local machine:
+### Prerequisites
 
-### 0. Server Setup
+- The website is build and tested to run from a windows machine.
+- Node.js
+- [CrispyCrumbsServer](https://github.com/Mzhenian/CrispyCrumbsServer) (will be explained below)
 
-First, set up the server from [CrispyCrumbsServer](https://github.com/Mzhenian/CrispyCrumbsServer).
+for the server:
 
-### 1. Initial Setup
+- MongoDB
+  - By default CrispyCrumbs will use "CrispyCrumbs" database in "mongodb://localhost:27017/CrispyCrumbs" connection.
 
-On the first time opening this project, run the following command in your terminal to install all necessary node modules:
+### Download
 
-```bash
-npm install
-```
+- First download [CrispyCrumbsWeb](https://github.com/Mzhenian/CrispyCrumbsWeb) as [zip](https://github.com/Mzhenian/CrispyCrumbsWeb/archive/refs/heads/EX2-main.zip) and unzip it
+- **or** [clone](https://github.com/Mzhenian/CrispyCrumbsWeb.git) the repository and checkout the EX2-complete branch.
+- Second download [CrispyCrumbsServer](https://github.com/Mzhenian/CrispyCrumbsServer) as [zip](https://github.com/Mzhenian/CrispyCrumbsServer/archive/refs/heads/main.zip) and unzip it
+- **or** [clone](https://github.com/Mzhenian/CrispyCrumbsServer.git) the repository and checkout the EX2-complete branch.
 
-### 2. Starting the Web - FrontEnd
+- Recommended: to use initialization script - put both projects in the same folder, named `CrispyCrumbsWeb` and `CrispyCrumbsServer` accordingly, like this:
+![[./readme photos/same-folder.png]]
 
-To start running the project in development mode, navigate to the project directory and execute:
+### Initialization option one: Easy & fast script
 
-```bash
-npm start
-```
+After downloading the CrispyCrumbsWeb and CrispyCrumbsServer projects-folders into the the same parent folder.
 
-This command will launch the app and open [http://localhost:3000](http://localhost:3000) in your browser. The page will automatically reload if you make changes to the source code. Additionally, you may see any lint errors in the console.
+1) open a powershell in `CrispyCrumbsWeb` project-folder.
+2) run: `.\init_website.ps1`
+3) Enter the new CrispyCrumbs server JWT secret if prompted.
+4) wait for the website to open itself.
 
-### 3. User Login
+**Notes:**
 
-You can sign up or log in using an existing user. For example:
+- if the server wasn't active when running the script than this method will open the **server** at the background of the current terminal. Which will keep running as long as that terminal is kept open.
+- After this initial setup, you can run the website again in the same way
+- or run the site manually as shown below.
+
+### Initialization option two: manually
+
+1) Manually set up and run the server from [CrispyCrumbsServer](https://github.com/Mzhenian/CrispyCrumbsServer) as described in its README.md.
+2) Open a terminal in the CrispyCrumbsWeb  project-folder
+3) Run `npm install`
+4) Run `npm start`
+5) wait for the website to open itself.
+
+After the initial initialization, you can run the server by just running the server and running `npm start`
+
+This command will launch the website in address [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Logged in user experience
+
+To experience everything CrispyCrumbs has to offer quickly you can log in using predefined user,  For example:
+
 - **Username:** Tuna
 - **Password:** password6
 
-## Website Pages
-
-The photos are not enough; you should go and explore the website yourself :>
+## Website Pages review
 
 ### 1. Homepage
 
@@ -84,4 +108,3 @@ The project was a collaborative effort among the three of us. Initially, we focu
 Similar to part 1, we divided the work among ourselves using Jira.
 
 ![Jira Board](<readme photos/Screenshot 2024-07-27 233247.png>)
-
