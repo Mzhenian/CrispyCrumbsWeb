@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
         }
         const data = await response.json();
         if (data.valid) {
-          setCurrentUser({ ...data.user, token });
+          setCurrentUser({ ...data.user, token, following: data.user.following || [] });
         } else {
           localStorage.removeItem("token");
         }
@@ -33,18 +33,18 @@ export const AuthProvider = ({ children }) => {
   }, [apiUsersUrl]);
 
   useEffect(() => {
-    let isMounted = true; // flag to indicate if the component is mounted
+    let isMounted = true;
     if (isMounted) {
       validateToken();
     }
     return () => {
-      isMounted = false; // cleanup function to set isMounted to false when the component unmounts
+      isMounted = false;
     };
   }, [validateToken]);
 
   const login = async (username, password, rememberMe) => {
     try {
-      const response = await fetch(`${apiUsersUrl}/login`, {
+      const response = await fetch(`${apiUsersUrl}/tokens`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (data.token) {
         localStorage.setItem("token", data.token);
-        setCurrentUser({ ...data.user, token: data.token });
+        setCurrentUser({ ...data.user, token: data.token, following: data.user.following || [] });
         return true;
       }
       return false;
@@ -90,68 +90,59 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (data.token) {
         localStorage.setItem("token", data.token);
-        setCurrentUser({ ...data.user, token: data.token });
+        setCurrentUser({ ...data.user, token: data.token, following: data.user.following || [] });
       }
     } catch (err) {
       console.error("Signup failed:", err);
     }
   };
 
-  const followUser = async (userIdToFollow) => {
+  const followUnfollowUser = async (userId, isCurrentlyFollowing) => {
+    const endpoint = isCurrentlyFollowing ? "unfollow" : "follow";
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${apiUsersUrl}/follow`, {
+      const response = await fetch(`${apiUsersUrl}/${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${currentUser.token}`,
         },
-        body: JSON.stringify({ userIdToFollow }),
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setCurrentUser((prevUser) => ({
+        ...prevUser,
+        following: isCurrentlyFollowing
+          ? prevUser.following.filter((id) => id !== userId)
+          : [...prevUser.following, userId],
+      }));
+    } catch (err) {
+      console.error(`Failed to ${endpoint} user:`, err);
+    }
+  };
+
+  const isFollowing = async (userIdToCheck) => {
+    try {
+      const response = await fetch(`${apiUsersUrl}/isFollowing`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+        body: JSON.stringify({ userId: currentUser._id, userIdToCheck }),
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      if (data.success) {
-        setCurrentUser((prevUser) => ({
-          ...prevUser,
-          following: [...prevUser.following, userIdToFollow],
-        }));
-      }
+      return data.isFollowing;
     } catch (err) {
-      console.error("Follow user failed:", err);
+      console.error(`Check if following failed:`, err);
+      return false;
     }
-  };
-
-  const unfollowUser = async (userIdToUnfollow) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${apiUsersUrl}/unfollow`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ userIdToUnfollow }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      if (data.success) {
-        setCurrentUser((prevUser) => ({
-          ...prevUser,
-          following: prevUser.following.filter((id) => id !== userIdToUnfollow),
-        }));
-      }
-    } catch (err) {
-      console.error("Unfollow user failed:", err);
-    }
-  };
-
-  const isFollowing = (userIdToCheck) => {
-    if (!currentUser || !Array.isArray(currentUser.following)) return false;
-    return currentUser.following.includes(userIdToCheck);
   };
 
   const isUsernameAvailable = async (username) => {
@@ -213,6 +204,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+    const getUserBasicById = async (userId) => {
+      try {
+        const response = await fetch(`${apiUsersUrl}/basic/${userId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+      } catch (err) {
+        console.error(`Get user by ID failed: ${userId}`, err);
+        return null;
+      }
+    };
+
   const updateUser = async (userId, updatedUser) => {
     try {
       const formData = new FormData();
@@ -233,7 +243,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const data = await response.json();
-      setCurrentUser(data);
+      setCurrentUser({ ...data, following: data.following || [] });
     } catch (err) {
       console.error("Update user failed:", err);
     }
@@ -264,13 +274,13 @@ export const AuthProvider = ({ children }) => {
       value={{
         currentUser,
         getUserById,
+        getUserBasicById,
         login,
         logout,
         signup,
         isUsernameAvailable,
         isEmailAvailable,
-        followUser,
-        unfollowUser,
+        followUnfollowUser,
         isFollowing,
         updateUser,
         deleteUser,

@@ -4,39 +4,32 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import "./Buttons.css";
 
-const SubscribeButton = ({ userToSubscribe, displayNum = false }) => {
+const SubscribeButton = ({ userToSubscribe }) => {
   const { theme } = useContext(ThemeContext);
-  const { followUser, unfollowUser, isFollowing, getUserById, currentUser } = useContext(AuthContext);
+  const { followUnfollowUser, isFollowing, getUserById, currentUser } = useContext(AuthContext);
   const [subscribed, setSubscribed] = useState(false);
-  const [followerCount, setFollowerCount] = useState(0);
 
   useEffect(() => {
-    if (userToSubscribe && isFollowing) {
-      setSubscribed(isFollowing(userToSubscribe));
-    }
-    if (userToSubscribe && getUserById) {
-      const user = getUserById(userToSubscribe);
-      if (user && user.followers) {
-        setFollowerCount(user.followers.length);
-      } else {
-        setFollowerCount(0);
+    const updateSubscriptionStatus = async () => {
+      if (userToSubscribe && currentUser) {
+        const isSubscribed = await isFollowing(userToSubscribe);
+        setSubscribed(isSubscribed);
       }
-    }
-  }, [userToSubscribe, isFollowing, getUserById, currentUser]);
+    };
+    updateSubscriptionStatus();
+  }, [userToSubscribe, currentUser, isFollowing, getUserById]);
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    if (!userToSubscribe || !followUser || !unfollowUser) {
+    if (!userToSubscribe || !followUnfollowUser) {
       return;
     }
-    if (subscribed) {
-      unfollowUser(userToSubscribe);
-      setFollowerCount((prevCount) => prevCount - 1);
-    } else {
-      followUser(userToSubscribe);
-      setFollowerCount((prevCount) => prevCount + 1);
+    try {
+      await followUnfollowUser(userToSubscribe, subscribed);
+      setSubscribed(!subscribed);
+    } catch (error) {
+      console.error("Error following/unfollowing user:", error);
     }
-    setSubscribed(!subscribed);
   };
 
   if (!currentUser) {
@@ -52,12 +45,14 @@ const SubscribeButton = ({ userToSubscribe, displayNum = false }) => {
   }
 
   return (
-    <div
-      className={subscribed ? `light-button ${theme}` : `generic-button ${theme}`}
-      id="subscribe-button"
-      onClick={handleClick}
-    >
-      {subscribed ? "Unsubscribe" : "Subscribe"} {displayNum && followerCount}
+    <div>
+      <div
+        className={subscribed ? `light-button ${theme}` : `generic-button ${theme}`}
+        id={`subscribe-button ${theme}`}
+        onClick={handleClick}
+      >
+        {subscribed ? "Unsubscribe" : "Subscribe"}
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { VideoContext } from "../../contexts/VideoContext";
 import "./WatchVideo.css";
 import LikeButton from "./watchVideoComponents/likeButton/LikeButton";
-import SuggestedVideos from "./watchVideoComponents/suggestedFunctions/SuggestedVideos";
+import SuggestedVideos from "./watchVideoComponents/suggestedVideos/SuggestedVideos";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import CommentsSection from "./watchVideoComponents/commentsSection/CommentsSection";
@@ -51,8 +51,9 @@ const WatchVideo = () => {
           }
 
           if (!hasIncrementedView.current) {
-            await incrementViews(videoId);
             hasIncrementedView.current = true;
+            await incrementViews(videoId);
+            setVideo((prevVideo) => ({ ...prevVideo, views: prevVideo.views + 1 }));
           }
         }
       } catch (error) {
@@ -66,35 +67,80 @@ const WatchVideo = () => {
     hasIncrementedView.current = false;
   }, [videoId]);
 
-  useEffect(() => {
-    if (!video) {
-      const timer = setTimeout(() => {
-        setShowNotFound(true);
-      }, 3000); // Delay of 3000 milliseconds (3 seconds)
-
-      // Cleanup the timer if the component unmounts or if video changes
-      return () => clearTimeout(timer);
-    } else {
-      setShowNotFound(false);
-    }
-  }, [video]);
-
-  if (showNotFound) {
-    return <NotFoundRoute />;
-  }
-
-  const handleLike = () => {
+  // Handle likes
+  const handleLike = async () => {
     if (!currentUser) return navigate("/login");
-    likeVideo(videoId, currentUser._id.toString());
-    setLikeSelected(!likeSelected);
-    if (dislikeSelected) setDislikeSelected(false);
+
+    try {
+      await likeVideo(videoId, currentUser._id.toString());
+
+      setLikeSelected((prev) => !prev);
+      setVideo((prevVideo) => {
+        if (likeSelected) {
+          // Decrement likes if previously liked
+          return {
+            ...prevVideo,
+            likes: prevVideo.likes - 1,
+          };
+        } else if (dislikeSelected) {
+          // Toggle from dislike to like
+          return {
+            ...prevVideo,
+            dislikes: prevVideo.dislikes - 1,
+            likes: prevVideo.likes + 1,
+          };
+        } else {
+          // Increment likes
+          return {
+            ...prevVideo,
+            likes: prevVideo.likes + 1,
+          };
+        }
+      });
+      if (dislikeSelected) {
+        setDislikeSelected(false);
+      }
+    } catch (error) {
+      console.error("Error liking video:", error);
+    }
   };
 
-  const handleDislike = () => {
+  // Handle dislikes
+  const handleDislike = async () => {
     if (!currentUser) return navigate("/login");
-    dislikeVideo(videoId, currentUser._id.toString());
-    setDislikeSelected(!dislikeSelected);
-    if (likeSelected) setLikeSelected(false);
+
+    try {
+      await dislikeVideo(videoId, currentUser._id.toString());
+
+      setDislikeSelected((prev) => !prev);
+      setVideo((prevVideo) => {
+        if (dislikeSelected) {
+          // Decrement dislikes if previously disliked
+          return {
+            ...prevVideo,
+            dislikes: prevVideo.dislikes - 1,
+          };
+        } else if (likeSelected) {
+          // Toggle from like to dislike
+          return {
+            ...prevVideo,
+            likes: prevVideo.likes - 1,
+            dislikes: prevVideo.dislikes + 1,
+          };
+        } else {
+          // Increment dislikes
+          return {
+            ...prevVideo,
+            dislikes: prevVideo.dislikes + 1,
+          };
+        }
+      });
+      if (likeSelected) {
+        setLikeSelected(false);
+      }
+    } catch (error) {
+      console.error("Error disliking video:", error);
+    }
   };
 
   const toggleDescription = () => {
@@ -118,16 +164,8 @@ const WatchVideo = () => {
 
   const videoSection = video && (
     <div className={`container ${theme}`}>
-      <video
-        key={video._id.toString()}
-        controls
-        className="container-video"
-        autoPlay
-      >
-        <source
-          src={`${process.env.REACT_APP_API_URL}/api/db${video.videoFile}`}
-          type="video/mp4"
-        />
+      <video key={video._id.toString()} controls className="container-video" autoPlay>
+        <source src={`${process.env.REACT_APP_API_URL}/api/db${video.videoFile}`} type="video/mp4" />
         Not supported
       </video>
       <div className={`container-body ${theme}`}>
@@ -135,10 +173,7 @@ const WatchVideo = () => {
           <h1 className="single-line-text">{video.title}</h1>
           <div className="buttons">
             <div>
-              <GenericButton
-                text="Share"
-                onClick={() => setIsShareOpen(true)}
-              />
+              <GenericButton text="Share" onClick={() => setIsShareOpen(true)} />
             </div>
             <LikeButton
               dislikeCounter={video.dislikes}
@@ -154,39 +189,26 @@ const WatchVideo = () => {
         <div className="author-section">
           {author && (
             <>
-              <Link
-                to={`/crumb/${author._id.toString()}`}
-                className="no-link-style"
-              >
+              <Link to={`/crumb/${author._id.toString()}`} className="no-link-style">
                 <ProfilePhoto user={author} />
               </Link>
-              <Link
-                to={`/crumb/${author._id.toString()}`}
-                className="no-link-style"
-              >
+              <Link to={`/crumb/${author._id.toString()}`} className="no-link-style">
                 <div className="author-details">
                   <b className="author-name">{author.userName}</b>
                   <p>{author.followers?.length || 0} followers</p>
                 </div>
               </Link>
-              {currentUser &&
-              author &&
-              currentUser._id.toString() === author._id.toString() ? (
-                <GenericButton
-                  text="Edit this video"
-                  link={`/edit/${videoId}`}
-                />
+              {currentUser && author && currentUser._id.toString() === author._id.toString() ? (
+                <GenericButton text="Edit this video" link={`/edit/${videoId}`} />
               ) : (
-                <SubscribeButton userToSubscribe={author._id.toString()} />
+                <SubscribeButton userToSubscribe={author._id.toString()} displayNum={true} />
               )}
             </>
           )}
         </div>
         <div className="details-section">
           <p className="note">{`${video.views} views`}</p>
-          <p className="note">
-            {new Date(video.uploadDate).toLocaleDateString()}
-          </p>
+          <p className="note">{new Date(video.uploadDate).toLocaleDateString()}</p>
           {videoTags()}
         </div>
         <p className="video-description">
@@ -201,15 +223,34 @@ const WatchVideo = () => {
     </div>
   );
 
+  useEffect(() => {
+    if (!video) {
+      const timer = setTimeout(() => {
+        setShowNotFound(true);
+      }, 3000); // Delay of 3000 milliseconds (3 seconds)
+
+      // Cleanup the timer if the component unmounts or if video changes
+      return () => clearTimeout(timer);
+    } else {
+      setShowNotFound(false);
+    }
+  }, [video]);
+
+  if (showNotFound) {
+    return <NotFoundRoute />;
+  }
+
   return (
-    <div className="watch-video-container">
-      <div className="main-video-section">
-        <SharePopup isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} />
-        {videoSection}
-        <div className="video-details">{<CommentsSection videoId={videoId} currentUser={currentUser} />}</div>
+    video && (
+      <div className="watch-video-container">
+        <div className="main-video-section">
+          <SharePopup isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} />
+          {videoSection}
+          <div className="video-details">{<CommentsSection videoId={videoId} currentUser={currentUser} />}</div>
+        </div>
+        <SuggestedVideos />
       </div>
-      <SuggestedVideos />
-    </div>
+    )
   );
 };
 

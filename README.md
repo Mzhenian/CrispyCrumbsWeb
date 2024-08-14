@@ -1,98 +1,110 @@
-# Crispy Crumbs - React Website
+# Crispy Crumbs: React Website
 
 Welcome to the **Crispy Crumbs** website, a dedicated video sharing platform showcasing only the finest Crispy Crumbs content. This website is built with React to ensure a smooth, interactive, and tasty user experience.
 
+## Crispy Crumbs - Founders
 
-### Crispy Crumbs - founders
-Ofek Avan Danan 211824727
-Zohar Mzhen 314621806
-Dolev Menajem 207272220
+- Ofek Avan Danan (211824727)
+- Zohar Mzhen (314621806)
+- Dolev Menajem (207272220)
 
-## Running the Crispy Crumbs website
+## Running the Crispy Crumbs Website
 
-Follow these steps to get the Crispy Crumbs website up and running on your local machine:
+### Prerequisites
 
-0. **server**
+- The website is build and tested to run from a windows machine.
+- Node.js
+- [CrispyCrumbsServer](https://github.com/Mzhenian/CrispyCrumbsServer) (will be explained below)
 
-   First setup the server from [CrispyCrumbsServer](https://github.com/Mzhenian/CrispyCrumbsServer).
+for the server:
 
-   
-1. **Initial Setup**
-   
-   On the first time opening this project, run the following command in your terminal to install all necessary node modules:
-   
-  ### `npm install`
+- MongoDB
+  - By default CrispyCrumbs will use "CrispyCrumbs" database in "mongodb://localhost:27017/CrispyCrumbs" connection.
 
+### Download
 
-2. **Starting the Development Server**
+- First download [CrispyCrumbsWeb](https://github.com/Mzhenian/CrispyCrumbsWeb) as [zip](https://github.com/Mzhenian/CrispyCrumbsWeb/archive/refs/heads/EX2-main.zip) and unzip it
+- **or** [clone](https://github.com/Mzhenian/CrispyCrumbsWeb.git) the repository and checkout the EX2-complete branch.
+- Second download [CrispyCrumbsServer](https://github.com/Mzhenian/CrispyCrumbsServer) as [zip](https://github.com/Mzhenian/CrispyCrumbsServer/archive/refs/heads/main.zip) and unzip it
+- **or** [clone](https://github.com/Mzhenian/CrispyCrumbsServer.git) the repository and checkout the EX2-complete branch.
 
-   To start running the project in development mode, navigate to the project directory and execute:
-   
-   ### `npm start`
-   
-   This command will launch the app and open [http://localhost:3000](http://localhost:3000) in your browser. The page will automatically reload if you make changes to the source code. Additionally, you may see any lint errors in the console.
+- Recommended: to use initialization script - put both projects in the same folder, named `CrispyCrumbsWeb` and `CrispyCrumbsServer` accordingly, like this:
+![[./readme photos/same-folder.png]]
 
-3. You can sign up or login using an existing user - for example:
-   **Username:** Tuna
-   **Password:** password6
+### Initialization option one: Easy & fast script
 
-## Website Pages
-The photos are not enough, you should go and explore the website by yourself :>
+After downloading the CrispyCrumbsWeb and CrispyCrumbsServer projects-folders into the the same parent folder.
 
-1. **Homepage**
-   
-   The homepage of the Crispy Crumbs website features a search bar at the top, along with buttons for sorting videos by "Newest" and "Most Watched." A video thumbnail with details such as views, upload date, and title is displayed.
-   
-   - The top-bar displays login and sign-up options if the user isn't registered. If the user is registered, the top-bar will display an upload video button and a profile photo of the registered user. Clicking on the profile photo opens a popup menu with additional options. The top-bar also includes the logo, a search bar (to be functional in the next exercise), and a light/dark mode toggle (the night mode looks awesome :>).
+1) open a powershell in `CrispyCrumbsWeb` project-folder.
+2) run: `.\init_website.ps1`
+3) Enter the new CrispyCrumbs server JWT secret if prompted.
+4) wait for the website to open itself.
 
-![alt text](<readme photos/Home.png>)
-![alt text](<readme photos/Dark mode home page.png>)
+**Notes:**
 
-2. **Sign Up**
-   
-   This page is for user sign-up or profile editing. It includes fields for entering full name, username, email, password, country, birthday, and phone number. There is also an option to upload a profile photo. The form includes "Sign up" and "Log in" buttons at the top.
+- if the server wasn't active when running the script than this method will open the **server** at the background of the current terminal. Which will keep running as long as that terminal is kept open.
+- After this initial setup, you can run the website again in the same way
+- or run the site manually as shown below.
 
-![alt text](<readme photos/Sign Up.png>)
+### Initialization option two: manually
 
-3. **Login**
-   
-   This page is for user login. It includes fields for entering the username and password, along with options to remember the user and a link to recover a forgotten password. There are "Log in" and "Sign up" buttons at the bottom.
+1) Manually set up and run the server from [CrispyCrumbsServer](https://github.com/Mzhenian/CrispyCrumbsServer) as described in its README.md.
+2) Open a terminal in the CrispyCrumbsWeb  project-folder
+3) Run `npm install`
+4) Run `npm start`
+5) wait for the website to open itself.
 
-![alt text](<readme photos/Login.png>)
+After the initial initialization, you can run the server by just running the server and running `npm start`
 
-4. **Video Upload**
-   
-   This page is for uploading videos. First, it opens a popup so the user can drag a video to the website. After the user picks a video, the page includes fields for entering the video title, description, category, and tags. There is also an option to upload a thumbnail image for the video. At the bottom, there are "Upload" and "Cancel" buttons.
+This command will launch the website in address [http://localhost:3000](http://localhost:3000) in your browser.
 
-![alt text](<readme photos/Upload 1.png>)
-![alt text](<readme photos/Upload 2.png>)
+### Logged in user experience
 
-5. **Video Page**
-   
-   This page shows a video player at the top left, playing the selected video. Below the video, there are details about the video, including the uploader's name, upload date, views, and tags. Users can see and add comments below the video. On the right side, there is a list of suggested or related videos with thumbnails and view counts. if the comment is yours you can edit or delete that comment.
+To experience everything CrispyCrumbs has to offer quickly you can log in using predefined user,  For example:
 
-![alt text](<readme photos/Video example.png>)
+- **Username:** Tuna
+- **Password:** password6
 
-6. **Edit Video**
-   
-   This page is very similar to the Video Upload page but is used for updating an existing video. It includes the same fields: video title, description, category, and tags, along with the option to upload a thumbnail image. Additional options for editing existing content may be present. you can also delete videos in this page.
+## Website Pages review
 
+### 1. Homepage
 
-7. **Profile Page**
-   
-   This page is for user sign-up or profile editing. It includes fields for entering full name, username, email, password, country, birthday, and phone number. There is also an option to upload a profile photo. The form includes "Sign up" and "Log in" buttons at the top.
+The homepage of the Crispy Crumbs website features a search bar at the top, along with buttons for sorting videos by "Newest," "Suggested," and "Most Watched." If you are logged in, you get subscribed, which gives you the videos from the users you follow. A video thumbnail with details such as views, upload date, and title is displayed.
 
-![alt text](<readme photos/Profile.png>)
+- The top bar displays login and sign-up options if the user isn't registered. If the user is registered, the top bar will display an upload video button and a profile photo of the registered user. Clicking on the profile photo opens a popup menu with additional options. The top bar also includes the logo, a search bar (to be functional in the next exercise), and a light/dark mode toggle (the night mode looks awesome :>).
 
-## Work process -  
-Our project was built collaboratively as a team. 
-Initially, we planned the work together using Jira and divided the tasks among us. 
+### 2. Sign Up
 
-We created mockups for the website and application pages using Figma, and then we started working on the code for both the application and the website. The process was educational, and we thoroughly enjoyed the journey.
+This page is for user sign-up or profile editing. It includes fields for entering full name, username, email, password, country, birthday, and phone number. There is also an option to upload a profile photo. The form includes "Sign up" and "Log in" buttons at the top.
 
-the Jira at the beginning-
-![alt text](<readme photos/Jira start.png>)
-![alt text](<readme photos/Jira end.png>)
+### 3. Login
 
-the figma document-
-![alt text](<readme photos/Figma.png>)
+This page is for user login. It includes fields for entering the username and password, along with options to remember the user and a link to recover a forgotten password. There are "Log in" and "Sign up" buttons at the bottom.
+
+### 4. Video Upload
+
+This page is for uploading videos. First, it opens a popup so the user can drag a video to the website. After the user picks a video, the page includes fields for entering the video title, description, category, and tags. There is also an option to upload a thumbnail image for the video. At the bottom, there are "Upload" and "Cancel" buttons.
+
+### 5. Video Page
+
+This page shows a video player at the top left, playing the selected video. Below the video, there are details about the video, including the uploader's name, upload date, views, and tags. Users can see and add comments below the video. On the right side, there is a list of suggested or related videos with thumbnails and view counts. If the comment is yours, you can edit or delete that comment.
+
+### 6. Edit Video
+
+This page is very similar to the Video Upload page but is used for updating an existing video. It includes the same fields: video title, description, category, and tags, along with the option to upload a thumbnail image. Additional options for editing existing content may be present. You can also delete videos on this page.
+
+### 7. Profile Page
+
+This page is designed to edit user details. It includes options to change the user's basic details as well as to update the user's profile picture.
+
+### 8. Profile Edit Page
+
+This page is designed to edit user details. It includes options to change the user's basic details as well as to update the user's profile picture.
+
+## Work Process
+
+The project was a collaborative effort among the three of us. Initially, we focused on building the server. Afterward, we started developing the functions and replacing the previously defined actions in React with server-defined actions that directly interact with MongoDB. Most of the functionality and significant changes were in the AuthContext and VideoContext since the core functionality from part 1 was located there. There were also changes in certain pages and in areas with high functionality, but the website remained quite similar to its previous state.
+
+Similar to part 1, we divided the work among ourselves using Jira.
+
+![Jira Board](<readme photos/Screenshot 2024-07-27 233247.png>)

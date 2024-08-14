@@ -16,5 +16,7 @@
 #social-container {
   height: 10px;
   padding-top: 170px;
+  background-color: var(--primary-color-light);
+  cursor: pointer;
 
 }

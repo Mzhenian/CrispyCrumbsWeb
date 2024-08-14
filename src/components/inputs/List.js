@@ -9,7 +9,7 @@ export default function List(props) {
   const theme = useContext(ThemeContext).theme;
 
   const removeItem = (index) => {
-    const updatedList = props.list;
+    const updatedList = [...props.list];
     updatedList.splice(index, 1);
     props.action(props.listName, updatedList);
   };
@@ -25,7 +25,13 @@ export default function List(props) {
           <div className={`input-field ${theme}`} id="input-item" key={index}>
             {item}
             {props.editMode && (
-              <img src={removeIcon} className="button-icon" id="action-icon" alt="icon" onClick={() => removeItem()} />
+              <img
+                src={removeIcon}
+                className="button-icon"
+                id="action-icon"
+                alt="icon"
+                onClick={() => removeItem(index)}
+              />
             )}
           </div>
         ))}

@@ -58,7 +58,7 @@ export default function ListInput(props) {
       )}
       <List
         action={props.action}
-        list={props.list || []} // Ensure list is always an array
+        list={props.list || []}
         listName={props.name}
         editMode={props.editMode}
       />

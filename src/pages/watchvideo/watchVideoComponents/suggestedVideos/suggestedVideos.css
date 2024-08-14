@@ -50,7 +50,6 @@
 .suggested-video-thumbnail {
   width: 200px;
   height: 112.5px;
-  /* 16:9 aspect ratio */
   object-fit: cover;
 
   border-top-left-radius: 20px 30px;

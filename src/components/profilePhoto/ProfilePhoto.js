@@ -1,21 +1,36 @@
 import React from "react";
-import "./ProfilePhoto.css";
+import { useNavigate } from "react-router-dom";
 
+import "./ProfilePhoto.css";
 import defaultProfileImage from "../../components/iconsLab/defaultUserProfileImage.png";
 
-let profilePhoto;
+const ProfilePhoto = ({ user, profilePhotoStyle, img, clickable = false }) => {
+  const navigate = useNavigate();
 
-const ProfilePhoto = ({ user, profilePhotoStyle, img }) => {
-  if (user && user.profilePhoto && user.profilePhoto !== "null") {
-    profilePhoto = `${process.env.REACT_APP_API_URL}/api/db${user.profilePhoto}`;
-  }
+  const profilePhoto =
+    user && user.profilePhoto && user.profilePhoto !== "null"
+      ? `${process.env.REACT_APP_API_URL}/api/db${user.profilePhoto}`
+      : img
+      ? img
+      : defaultProfileImage;
+
+  const handleAuthorClick = (e, profileId) => {
+    e.stopPropagation();
+    e.preventDefault();
+    navigate(`/crumb/${profileId}`);
+  };
+
   return (
-    <img
-      src={user ? profilePhoto : img ? img : defaultProfileImage}
-      className="profile-photo"
-      alt={user ? user.userName : "profile"}
-      id={profilePhotoStyle}
-    />
+    (user || img) && (
+      <div onClick={(e) => clickable && handleAuthorClick(e, user._id)} id={clickable ? "clickable" : undefined}>
+        <img
+          src={profilePhoto}
+          className="profile-photo"
+          alt={user ? user.userName : "profile"}
+          id={profilePhotoStyle ? profilePhotoStyle : undefined}
+        />
+      </div>
+    )
   );
 };
 

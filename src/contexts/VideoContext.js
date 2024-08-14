@@ -1,24 +1,67 @@
-import React, { createContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useState, useEffect, useCallback, useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 const VideoContext = createContext();
 
 const VideoProvider = ({ children }) => {
-  const [videos, setVideos] = useState([]);
+  const { currentUser } = useContext(AuthContext);
+  const [videos, setVideos] = useState({
+    mostViewedVideos: [],
+    mostRecentVideos: [],
+    followingVideos: [],
+    randomVideos: [],
+  });
+
   const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
   const apiUsersUrl = `${process.env.REACT_APP_API_URL}/api/users`;
 
   const fetchVideos = useCallback(async () => {
     try {
-      const response = await fetch(apiVideosUrl);
+      const response = await fetch(apiVideosUrl, {
+        headers: {},
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setVideos(data);
+      setVideos((prevVideos) => ({
+        ...prevVideos,
+        mostViewedVideos: data.mostViewedVideos || [],
+        mostRecentVideos: data.mostRecentVideos || [],
+        randomVideos: data.randomVideos || [],
+      }));
     } catch (err) {
       console.error("Fetch videos failed:", err);
     }
   }, [apiVideosUrl]);
+
+  const fetchFollowersVideos = useCallback(async () => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/followers`, {
+        headers: {
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setVideos((prevVideos) => ({
+        ...prevVideos,
+        followingVideos: data || [],
+      }));
+    } catch (err) {
+      console.error("Fetch followers videos failed:", err);
+    }
+  }, [apiVideosUrl, currentUser]);
+
+  useEffect(() => {
+    fetchVideos();
+    if (currentUser) {
+      fetchFollowersVideos();
+    }
+  }, [fetchVideos, fetchFollowersVideos, currentUser]);
 
   useEffect(() => {
     fetchVideos();
@@ -62,11 +105,9 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-  const editVideo = async (videoId, updatedVideo) => {};
-
   const uploadVideo = async (token, videoData, userId) => {
     try {
-      const response = await fetch(`${apiUsersUrl}/${parseInt(userId)}/videos`, {
+      const response = await fetch(`${apiUsersUrl}/${userId}/videos`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -86,19 +127,189 @@ const VideoProvider = ({ children }) => {
     }
   };
 
-  const likeVideo = async (videoId) => {};
+  const likeVideo = async (videoId, userId) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/like`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+        body: JSON.stringify({ videoId, userId }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error liking video:", error);
+    }
+  };
 
-  const dislikeVideo = async (videoId) => {};
+  const dislikeVideo = async (videoId, userId) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/dislike`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+        body: JSON.stringify({ videoId, userId }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error disliking video:", error);
+    }
+  };
 
-  const addComment = async (videoId, comment) => {};
+  const addComment = async (videoId, comment) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/comment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+        body: JSON.stringify({
+          videoId,
+          userId: currentUser._id,
+          commentText: comment.comment,
+          date: new Date().toISOString(),
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const newComment = await response.json();
+      return newComment;
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
 
-  const editComment = async (videoId, updatedComment) => {};
+  const editComment = async (videoId, comment) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/comment`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+        body: JSON.stringify({ videoId, ...comment }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error editing comment:", error);
+    }
+  };
 
-  const deleteComment = async (videoId, commentId) => {};
+  const deleteComment = async (videoId, commentId, userId) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/comment`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+        body: JSON.stringify({ videoId, commentId, userId }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
 
-  const deleteVideo = async (videoId) => {};
+  const incrementViews = async (videoId) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/incrementViews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoId }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error incrementing views:", error);
+    }
+  };
 
-  const incrementViews = async (videoId) => {};
+  const editVideo = async (userId, videoId, updatedVideo, token) => {
+    try {
+      const response = await fetch(`${apiUsersUrl}/${userId}/videos/${videoId}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: updatedVideo,
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setVideos((prevVideos) => {
+        const updatedMostViewedVideos = prevVideos.mostViewedVideos.map((video) =>
+          video._id === videoId ? data : video
+        );
+        const updatedMostRecentVideos = prevVideos.mostRecentVideos.map((video) =>
+          video._id === videoId ? data : video
+        );
+        const updatedFollowingVideos = prevVideos.followingVideos.map((video) =>
+          video._id === videoId ? data : video
+        );
+        const updatedRandomVideos = prevVideos.randomVideos.map((video) => (video._id === videoId ? data : video));
+
+        return {
+          ...prevVideos,
+          mostViewedVideos: updatedMostViewedVideos,
+          mostRecentVideos: updatedMostRecentVideos,
+          followingVideos: updatedFollowingVideos,
+          randomVideos: updatedRandomVideos,
+        };
+      });
+      return data;
+    } catch (error) {
+      console.error("Error editing video:", error);
+    }
+  };
+
+  const deleteVideo = async (videoId, token) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/${videoId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setVideos((prevVideos) => {
+        const updatedMostViewedVideos = prevVideos.mostViewedVideos.filter((video) => video._id !== videoId);
+        const updatedMostRecentVideos = prevVideos.mostRecentVideos.filter((video) => video._id !== videoId);
+        const updatedFollowingVideos = prevVideos.followingVideos.filter((video) => video._id !== videoId);
+        const updatedRandomVideos = prevVideos.randomVideos.filter((video) => video._id !== videoId);
+
+        return {
+          ...prevVideos,
+          mostViewedVideos: updatedMostViewedVideos,
+          mostRecentVideos: updatedMostRecentVideos,
+          followingVideos: updatedFollowingVideos,
+          randomVideos: updatedRandomVideos,
+        };
+      });
+    } catch (error) {
+      console.error("Error deleting video:", error);
+    }
+  };
 
   return (
     <VideoContext.Provider
@@ -106,6 +317,7 @@ const VideoProvider = ({ children }) => {
         apiUrl: apiVideosUrl,
         videos,
         fetchVideos,
+        fetchFollowersVideos,
         getVideoById,
         getVideosByUserId,
         editVideo,

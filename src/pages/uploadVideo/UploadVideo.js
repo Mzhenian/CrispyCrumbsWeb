@@ -41,6 +41,7 @@ const UploadVideo = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
+  const [fileError, setFileError] = useState("");
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -49,27 +50,32 @@ const UploadVideo = () => {
     });
   };
 
-  const handleVideoFileChange = (name, files) => {
+  const handleVideoFileChange = (files) => {
     const file = files[0];
-    if (file) {
+    const validVideoTypes = ["video/mp4", "video/webm", "video/ogg"];
+    if (file && validVideoTypes.includes(file.type)) {
       setFormData({
         ...formData,
-        [name]: file,
+        videoFile: file,
       });
       setIsPopupOpen(false);
+      setFileError("");
     } else {
-      setErrorMessage("Please upload a valid video file.");
+      setFileError("Invalid file type. Please upload a valid video file.");
     }
   };
 
   const handleFileChange = (name, files) => {
     const file = files[0];
-    if (file) {
+    const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/svg+xml"];
+    if (file && validImageTypes.includes(file.type)) {
       setFormData({
         ...formData,
         [name]: file,
       });
-      setIsPopupOpen(false);
+      setFileError("");
+    } else {
+      setFileError("Invalid file type. Please upload a valid image file.");
     }
   };
 
@@ -80,7 +86,7 @@ const UploadVideo = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
     if (!isUploading) {
       if (!formData.title || !formData.description || !formData.category || !formData.videoFile) {
         setErrorMessage("Please fill in all required fields.");
@@ -118,7 +124,7 @@ const UploadVideo = () => {
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         title="Upload Video"
-        onFileDrop={(files) => handleVideoFileChange("videoFile", files)}
+        onFileDrop={handleVideoFileChange}
         canClose={false}
       >
         <div className="popup-body-content">
@@ -129,22 +135,30 @@ const UploadVideo = () => {
             alt="upload"
           />
           <p className="upload-click-here" onClick={() => videoInputRef.current.click()}>
-            Click to here upload a file or drag and drop a file here.
+            Click here to upload a file or drag and drop a file here.
           </p>
           <input
             className="field"
             name="videoFile"
             type="file"
             accept="video/*"
-            onChange={(e) => handleFileChange(e.target.name, e.target.files)}
+            onChange={(e) => handleVideoFileChange(e.target.files)}
             ref={videoInputRef}
             style={{ display: "none" }}
           />
         </div>
       </Popup>
       <Container title={"Upload Video"} containerStyle={"upload-video-container"}>
-        <form className="upload-form-container" onSubmit={handleSubmit}>
+        <form className="upload-form-container" onSubmit={(e) => e.preventDefault()}>
           {errorMessage && <b className={`error ${theme}`}>{errorMessage}</b>}
+          {fileError && (
+            <Popup title="Error" isOpen={fileError} onClose={() => setFileError("")}>
+              <p>{fileError}</p>
+              <div className="buttons-container">
+                <GenericButton text="Close" onClick={() => setFileError("")} />
+              </div>
+            </Popup>
+          )}
           <div className="field-container">
             <b>Title</b>
             <input
@@ -201,7 +215,7 @@ const UploadVideo = () => {
           <div className="buttons-container">
             <GenericButton
               text="Upload"
-              type="submit"
+              type="button"
               onClick={handleSubmit}
               icon={uploadIcon}
               disabled={isUploading}

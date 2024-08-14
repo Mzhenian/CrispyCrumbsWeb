@@ -12,6 +12,7 @@ import OnOffToggle from "../../components/inputs/toggle/OnOffToggle.js";
 import { months, days, years } from "./SignUpData.js";
 import countries from "../../DB/Countries/CountriesListsData.js";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto.js";
+import Popup from "../../components/popup/Popup.js";
 
 const SignUp = () => {
   const { theme } = useContext(ThemeContext);
@@ -36,8 +37,9 @@ const SignUp = () => {
     phoneNumber: "",
     acceptTerms: false,
   });
-  const [errorMessage, setErrorMessage] = useState(""); // State to store error messages
-  const [isTermsOpen, setIsTermsOpen] = useState(false); // State to manage terms popup
+  const [errorMessage, setErrorMessage] = useState("");
+  const [fileError, setFileError] = useState("");
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -73,15 +75,23 @@ const SignUp = () => {
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
-    setFormData((prevState) => ({
-      ...prevState,
-      profilePhoto: file,
-    }));
+    if (file) {
+      const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/svg+xml"];
+      if (!validImageTypes.includes(file.type)) {
+        setFileError("Invalid file type. Please upload an image.");
+        return;
+      }
+      setFormData((prevState) => ({
+        ...prevState,
+        profilePhoto: file,
+      }));
+      setFileError("");
+    }
   };
 
   const handleSubmit = async (e) => {
-    if (formData.username.length < 8) {
-      setErrorMessage("Username must be at least 8 characters long.");
+    if (formData.username.length < 3) {
+      setErrorMessage("Username must be at least 3 characters long.");
       return;
     }
 
@@ -245,6 +255,7 @@ const SignUp = () => {
                 type="file"
                 onChange={handlePhotoChange}
                 ref={fileInputRef}
+                accept="image/*"
                 style={{ display: "none" }}
               />
               <GenericButton
@@ -276,6 +287,12 @@ const SignUp = () => {
         </form>
         <TermsOfUse isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
       </Container>
+      <Popup title="Error" isOpen={fileError} onClose={() => setFileError("")}>
+        <p>{fileError}</p>
+        <div className="buttons-container">
+          <GenericButton text="Close" onClick={() => setFileError("")} />
+        </div>
+      </Popup>
     </div>
   );
 };

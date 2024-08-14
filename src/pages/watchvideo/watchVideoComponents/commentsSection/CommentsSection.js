@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { VideoContext } from "../../../../contexts/VideoContext";
+import { AuthContext } from "../../../../contexts/AuthContext";
 import "./commentsSection.css";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 import ProfilePhoto from "../../../../components/profilePhoto/ProfilePhoto";
@@ -9,22 +10,53 @@ import editIcon from "../../../../components/iconsLab/edit.svg";
 
 const CommentsSection = ({ currentUser, videoId }) => {
   const { theme } = useContext(ThemeContext);
-  const { getUserById, getVideoById, addComment, editComment, deleteComment } = useContext(VideoContext);
-  const video = getVideoById(videoId);
+  const { getVideoById, addComment, editComment, deleteComment } = useContext(VideoContext);
+  const { getUserBasicById } = useContext(AuthContext);
+  const [video, setVideo] = useState(null);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingText, setEditingText] = useState("");
+  const [commentAuthors, setCommentAuthors] = useState({});
 
-  const handleCommentSubmit = () => {
+  useEffect(() => {
+    const fetchVideo = async () => {
+      const fetchedVideo = await getVideoById(videoId);
+      setVideo(fetchedVideo);
+
+      const authors = await Promise.all(
+        fetchedVideo.comments.map(async (comment) => {
+          const user = await getUserBasicById(comment.userId);
+          return { [comment.commentId]: user };
+        })
+      );
+
+      const authorsMap = Object.assign({}, ...authors);
+      setCommentAuthors(authorsMap);
+    };
+
+    fetchVideo();
+  }, [videoId, getVideoById, getUserBasicById]);
+
+  const handleCommentSubmit = async () => {
     if (newComment.trim()) {
       const newCommentObj = {
-        commentId: Date.now().toString(),
-        userId: currentUser._id.toString(),
         comment: newComment,
-        date: new Date().toLocaleDateString(),
       };
-      addComment(videoId, newCommentObj);
-      setNewComment("");
+      const addedComment = await addComment(videoId, newCommentObj);
+
+      if (addedComment) {
+        setVideo((prevVideo) => ({
+          ...prevVideo,
+          comments: [...prevVideo.comments, addedComment],
+        }));
+
+        setCommentAuthors((prevAuthors) => ({
+          ...prevAuthors,
+          [addedComment.commentId]: currentUser,
+        }));
+
+        setNewComment("");
+      }
     }
   };
 
@@ -37,12 +69,28 @@ const CommentsSection = ({ currentUser, videoId }) => {
     setEditingText(commentText);
   };
 
-  const handleSaveEdit = (commentId) => {
+  const handleSaveEdit = async (commentId) => {
     const updatedComment = {
-      ...video.comments.find((comment) => comment.commentId === commentId),
+      commentId,
+      userId: currentUser._id.toString(),
       comment: editingText,
+      date: new Date().toISOString(),
     };
-    editComment(videoId, updatedComment);
+
+    await editComment(videoId, updatedComment);
+
+    setVideo((prevVideo) => {
+      const updatedComments = prevVideo.comments.map((comment) =>
+        comment.commentId === commentId ? updatedComment : comment
+      );
+      return { ...prevVideo, comments: updatedComments };
+    });
+
+    setCommentAuthors((prevAuthors) => ({
+      ...prevAuthors,
+      [commentId]: currentUser,
+    }));
+
     setEditingCommentId(null);
     setEditingText("");
   };
@@ -52,9 +100,16 @@ const CommentsSection = ({ currentUser, videoId }) => {
     setEditingText("");
   };
 
-  const handleDeleteClick = (commentId) => {
-    deleteComment(videoId, commentId);
+  const handleDeleteClick = async (commentId) => {
+    await deleteComment(videoId, commentId, currentUser._id.toString());
+
+    const updatedVideo = await getVideoById(videoId);
+    setVideo(updatedVideo);
   };
+
+  if (!video) {
+    return <div>Loading...</div>;
+  }
 
   const writeComment = currentUser && (
     <div className={`comment-box ${theme}`} id="write-comment">
@@ -64,7 +119,7 @@ const CommentsSection = ({ currentUser, videoId }) => {
         onChange={(e) => setNewComment(e.target.value)}
         placeholder="Add a comment..."
         rows="4"
-        style={{ resize: "none" }} // Disable resize
+        style={{ resize: "none" }}
       />
       <div className="comment-buttons">
         <GenericButton text="Comment" onClick={handleCommentSubmit} />
@@ -73,46 +128,50 @@ const CommentsSection = ({ currentUser, videoId }) => {
     </div>
   );
 
-  const commentsList =
-    video.comments &&
-    video.comments.map((comment) => {
-      const commentAuthor = getUserById(comment.userId);
-      return (
-        <div key={comment.commentId} className={`comment-box ${theme}`} id="comment">
-          {editingCommentId === comment.commentId ? (
-            <div className="edit-comment">
-              <textarea
-                className={`input-empty ${theme}`}
-                value={editingText}
-                onChange={(e) => setEditingText(e.target.value)}
-                rows="4"
-              />
+  const commentsList = video.comments.map((comment) => {
+    const commentAuthor = commentAuthors[comment.commentId];
 
-              <div className="comment-buttons">
-                <GenericButton text="Save" onClick={() => handleSaveEdit(comment.commentId)} />
-                <LightButton text="Cancel" onClick={handleCancelEdit} />
-                <LightButton text="Delete" onClick={() => handleDeleteClick(comment.commentId, comment.comment)} />
+    if (!commentAuthor) {
+      return <div key={comment.commentId}></div>;
+    }
+
+    return (
+      <div key={comment.commentId} className={`comment-box ${theme}`} id="comment">
+        {editingCommentId === comment.commentId ? (
+          <div className="edit-comment">
+            <textarea
+              className={`input-empty ${theme}`}
+              value={editingText}
+              onChange={(e) => setEditingText(e.target.value)}
+              rows="4"
+            />
+
+            <div className="comment-buttons">
+              <GenericButton text="Save" onClick={() => handleSaveEdit(comment.commentId)} />
+              <LightButton text="Cancel" onClick={handleCancelEdit} />
+              <LightButton text="Delete" onClick={() => handleDeleteClick(comment.commentId)} />
+            </div>
+          </div>
+        ) : (
+          <div id="comment">
+            <ProfilePhoto user={commentAuthor} clickable />
+            <div className="comment-data">
+              <div className="comment-title">
+                <b>@{commentAuthor.userName}</b>
+                <span className="note">{new Date(comment.date).toLocaleDateString()}</span>
               </div>
+              <p style={{ whiteSpace: "pre-wrap" }}>{comment.comment}</p>
             </div>
-          ) : (
-            <div id="comment">
-              <ProfilePhoto user={commentAuthor} />
-              <div className="comment-data">
-                <div className="comment-title">
-                  <b>@{commentAuthor.userName}</b> {comment.date}
-                </div>
-                <p>{comment.comment}</p>
-              </div>
-            </div>
-          )}
-          {currentUser && currentUser._id.toString() === comment.userId && editingCommentId !== comment.commentId && (
-            <div className="edit-button-container">
-              <GenericButton icon={editIcon} onClick={() => handleEditClick(comment.commentId, comment.comment)} />
-            </div>
-          )}
-        </div>
-      );
-    });
+          </div>
+        )}
+        {currentUser && currentUser._id.toString() === comment.userId && editingCommentId !== comment.commentId && (
+          <div className="edit-button-container">
+            <GenericButton icon={editIcon} onClick={() => handleEditClick(comment.commentId, comment.comment)} />
+          </div>
+        )}
+      </div>
+    );
+  });
 
   return (
     <div className="comments-section">

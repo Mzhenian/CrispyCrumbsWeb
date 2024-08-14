@@ -7,8 +7,15 @@
   border-top-right-radius: 30px 20px;
   border-bottom-right-radius: 20px 30px;
   border-bottom-left-radius: 30px 20px;
-  background-color: var(--tertiary-color-dark);
   transition: 0.3s ease-in-out;
+}
+
+.thumbnail-container.light {
+  background-color: var(--dark-white-color);
+}
+
+.thumbnail-container.dark {
+  background-color: var(--light-black-color);
 }
 
 .thumbnail-container:hover {

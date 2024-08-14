@@ -11,6 +11,7 @@ import { months, days, years } from "../signup/SignUpData.js";
 import countries from "../../DB/Countries/CountriesListsData.js";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto.js";
 import Popup from "../../components/popup/Popup.js";
+import NotFoundRoute from "../../routes/NotFoundRoute.js";
 
 const EditProfile = () => {
   const { theme } = useContext(ThemeContext);
@@ -35,24 +36,42 @@ const EditProfile = () => {
       };
 
   const [formData, setFormData] = useState({
-    fullName: currentUser?.fullName || "",
-    email: currentUser?.email || "",
+    fullName: "",
+    email: "",
     birthday: initialBirthday,
-    username: currentUser?.userName || "",
-    country: currentUser?.country || "Israel",
-    profilePhoto: currentUser?.profilePhoto || null,
-    phoneNumber: currentUser?.phoneNumber || "",
+    username: "",
+    country: "Israel",
+    profilePhoto: null,
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [profilePhotoURL, setProfilePhotoURL] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [warningPopup, setWarningPopup] = useState(false);
+  const [fileError, setFileError] = useState("");
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (currentUser?.profilePhoto) {
-      setProfilePhotoURL(`${process.env.REACT_APP_API_URL}${currentUser.profilePhoto}`);
+    if (currentUser) {
+      setFormData({
+        fullName: currentUser.fullName || "",
+        email: currentUser.email || "",
+        birthday: parseDate(currentUser.birthday) || initialBirthday,
+        username: currentUser.userName || "",
+        country: currentUser.country || "Israel",
+        profilePhoto: currentUser.profilePhoto || null,
+        phoneNumber: currentUser.phoneNumber || "",
+        password: "",
+        confirmPassword: "",
+      });
+
+      if (currentUser.profilePhoto) {
+        setProfilePhotoURL(`${process.env.REACT_APP_API_URL}/api/db${currentUser.profilePhoto}`);
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   const handleInputChange = (e) => {
@@ -83,17 +102,24 @@ const EditProfile = () => {
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/svg+xml"];
+      if (!validImageTypes.includes(file.type)) {
+        setFileError("Invalid file type. Please upload an image.");
+        return;
+      }
+
       setFormData((prevState) => ({
         ...prevState,
         profilePhoto: file,
       }));
       setProfilePhotoURL(URL.createObjectURL(file));
+      setFileError("");
     }
   };
 
   const handleSubmit = async (e) => {
-    if (formData.username.length < 8) {
-      setErrorMessage("Username must be at least 8 characters long.");
+    if (formData.username.length < 4) {
+      setErrorMessage("Username must be at least 4 characters long.");
       return;
     }
 
@@ -120,6 +146,11 @@ const EditProfile = () => {
       return;
     }
 
+    if (formData.password && formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match.");
+      return;
+    }
+
     const updatedUser = {
       userName: formData.username,
       email: formData.email,
@@ -130,6 +161,10 @@ const EditProfile = () => {
       profilePhoto: formData.profilePhoto,
     };
 
+    if (formData.password) {
+      updatedUser.password = formData.password;
+    }
+
     await updateUser(currentUser._id, updatedUser);
     navigate(`/crumb/${currentUser._id}`);
   };
@@ -139,6 +174,13 @@ const EditProfile = () => {
     navigate("/");
   };
 
+  if (!currentUser) {
+    return (
+      <div className={`page ${theme}`}>
+        <NotFoundRoute />
+      </div>
+    );
+  }
 
   return (
     <div className={`page ${theme}`}>
@@ -150,6 +192,13 @@ const EditProfile = () => {
         <div className="buttons-container">
           <GenericButton text="Yes, delete my account" onClick={(e) => handleDelete(e)} />
           <LightButton text="Cancel" onClick={() => setWarningPopup(false)} />
+        </div>
+      </Popup>
+
+      <Popup title="File Error" isOpen={!!fileError} onClose={() => setFileError("")}>
+        <p>{fileError}</p>
+        <div className="buttons-container">
+          <GenericButton text="OK" onClick={() => setFileError("")} />
         </div>
       </Popup>
 
@@ -183,6 +232,30 @@ const EditProfile = () => {
               onChange={handleInputChange}
             />
           </div>
+
+          <div className="field-container">
+            <b>Password</b>
+            <input
+              className={`input-field ${theme}`}
+              name="password"
+              type="password"
+              placeholder="Leave this field blank if you do not wish to change your password"
+              value={formData.password}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="field-container">
+            <b>Confirm Password</b>
+            <input
+              className={`input-field ${theme}`}
+              name="confirmPassword"
+              type="password"
+              placeholder="Leave this field blank if you do not wish to change your password"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+            />
+          </div>
+
           <div className="field-container">
             <b>Country</b>
             <DropDownMenu
@@ -238,6 +311,7 @@ const EditProfile = () => {
                 type="file"
                 onChange={handlePhotoChange}
                 ref={fileInputRef}
+                accept="image/*"
                 style={{ display: "none" }}
               />
               <GenericButton
