@@ -32,7 +32,10 @@ const TopBar = () => {
 
   const searchBar = (
     <div className={`search-bar ${theme}`}>
-      <input className={`transparent-input ${theme}`} />
+      <input
+        className={`transparent-input ${theme}`}
+        placeholder="Search videos"
+      />
       <GenericButton icon={searchIcon} />
     </div>
   );

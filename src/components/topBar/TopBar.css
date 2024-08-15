@@ -77,6 +77,12 @@
     }
 }
 
+.transparent-input::placeholder {
+  font-family: 'Lexend', sans-serif;
+  font-size: 14px;
+  color: #a8a8a8;
+}
+
 .transparent-input.light {
     color: var(--black-color)
 }

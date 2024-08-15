@@ -73,9 +73,6 @@ const Login = () => {
                 action={() => setFormData({ ...formData, rememberMe: !formData.rememberMe })}
               />
             </div>
-            <Link className={theme} to="./forgotpassword">
-              <b>I forgot my password</b>
-            </Link>
           </div>
           <div className="buttons-container">
             <GenericButton text="Log in" type="submit" onClick={handleSubmit} />
