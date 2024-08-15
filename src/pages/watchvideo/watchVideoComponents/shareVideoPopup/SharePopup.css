@@ -13,7 +13,17 @@
   object-fit: cover;
 }
 
-#social-container {
+.social-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  overflow: hidden;
+  border-top-left-radius: 20px 30px;
+  border-top-right-radius: 30px 20px;
+  border-bottom-right-radius: 20px 30px;
+  border-bottom-left-radius: 30px 20px;
+  transition: 0.3s ease-in-out;
+  
   height: 10px;
   padding-top: 170px;
   background-color: var(--primary-color-light);
