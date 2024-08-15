@@ -161,6 +161,7 @@ const SignUp = () => {
               name="fullName"
               value={formData.fullName}
               onChange={handleInputChange}
+              tabIndex="1"
             />
           </div>
           <div className="field-container">
@@ -170,6 +171,7 @@ const SignUp = () => {
               name="username"
               value={formData.username}
               onChange={handleInputChange}
+              tabIndex="2"
             />
           </div>
           <div className="field-container">
@@ -179,6 +181,7 @@ const SignUp = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
+              tabIndex="3"
             />
           </div>
           <div className="field-container">
@@ -189,6 +192,7 @@ const SignUp = () => {
               type="password"
               value={formData.password}
               onChange={handleInputChange}
+              tabIndex="4"
             />
           </div>
           <div className="field-container">
@@ -199,6 +203,7 @@ const SignUp = () => {
               type="password"
               value={formData.password_auth}
               onChange={handleInputChange}
+              tabIndex="5"
             />
           </div>
           <div className="field-container">
@@ -209,6 +214,7 @@ const SignUp = () => {
               value={formData.country}
               showFlag={true}
               action={handleDropDownChange}
+              tabIndex="6"
             />
           </div>
           <div className="field-container">
@@ -244,6 +250,7 @@ const SignUp = () => {
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleInputChange}
+              tabIndex="10"
             />
           </div>
           <div className="field-container">
@@ -266,26 +273,43 @@ const SignUp = () => {
               />
             </div>
             {formData.profilePhoto && (
-              <ProfilePhoto img={URL.createObjectURL(formData.profilePhoto)} profilePhotoStyle="profilePhotoStyle" />
+              <ProfilePhoto
+                img={URL.createObjectURL(formData.profilePhoto)}
+                profilePhotoStyle="profilePhotoStyle"
+              />
             )}
           </div>
           <div className="field-container">
             <div className="linear-layout-2">
               <b>
                 I agree to the{" "}
-                <span className={`terms-text ${theme}`} onClick={() => setIsTermsOpen(true)}>
+                <span
+                  className={`terms-text ${theme}`}
+                  onClick={() => setIsTermsOpen(true)}
+                >
                   Terms of use
                 </span>
               </b>
-              <OnOffToggle name="acceptTerms" value={formData.acceptTerms} action={handleToggleChange} />
+              <OnOffToggle
+                name="acceptTerms"
+                value={formData.acceptTerms}
+                action={handleToggleChange}
+              />
             </div>
           </div>
           <div className="buttons-container">
-            <GenericButton text="Sign up" type="submit" onClick={(e) => handleSubmit(e)} />
+            <GenericButton
+              text="Sign up"
+              type="submit"
+              onClick={(e) => handleSubmit(e)}
+            />
             <LightButton text="Login" link="/login" />
           </div>
         </form>
-        <TermsOfUse isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
+        <TermsOfUse
+          isOpen={isTermsOpen}
+          onClose={() => setIsTermsOpen(false)}
+        />
       </Container>
       <Popup title="Error" isOpen={fileError} onClose={() => setFileError("")}>
         <p>{fileError}</p>
