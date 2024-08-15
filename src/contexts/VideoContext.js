@@ -10,6 +10,7 @@ const VideoProvider = ({ children }) => {
     mostRecentVideos: [],
     followingVideos: [],
     randomVideos: [],
+    // searchResultVideos: [],
   });
 
   const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
@@ -104,6 +105,27 @@ const VideoProvider = ({ children }) => {
       return null;
     }
   };
+
+  const getVideoBySearch = async (query) => {
+    try {
+      const response = await fetch(`${apiVideosUrl}/search/${query}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 404) {
+        throw new Error(`No video found. status: ${response.status}`);
+      } else if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      console.error("search videos failed:", err);
+      return [];
+    }
+  }
 
   const uploadVideo = async (token, videoData, userId) => {
     try {
@@ -320,6 +342,7 @@ const VideoProvider = ({ children }) => {
         fetchFollowersVideos,
         getVideoById,
         getVideosByUserId,
+        getVideoBySearch,
         editVideo,
         uploadVideo,
         likeVideo,

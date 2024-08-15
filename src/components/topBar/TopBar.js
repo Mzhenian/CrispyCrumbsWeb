@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./TopBar.css";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ThemeContext } from "../../contexts/ThemeContext";
@@ -11,6 +12,8 @@ import searchIcon from "../iconsLab/searchWhite.svg";
 const TopBar = () => {
   const { theme } = useContext(ThemeContext);
   const { currentUser } = useContext(AuthContext);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   const UploadLoginTitle = "Log in";
   const UploadSignUpTitle = "Sign up";
@@ -30,13 +33,29 @@ const TopBar = () => {
     </div>
   );
 
+  const handleSearchClick = () => {
+    if (searchQuery !== "") {
+      navigate(`/?search=${searchQuery}`);
+    }
+  };
+
+  const handleSearchBarKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearchClick();
+    }
+  };
+
   const searchBar = (
     <div className={`search-bar ${theme}`}>
       <input
         className={`transparent-input ${theme}`}
+        name="searchQuery"
         placeholder="Search videos"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        onKeyDown={handleSearchBarKeyDown}
       />
-      <GenericButton icon={searchIcon} />
+      <GenericButton icon={searchIcon} onClick={handleSearchClick} />
     </div>
   );
 
