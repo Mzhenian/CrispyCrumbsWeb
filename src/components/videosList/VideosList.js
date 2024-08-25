@@ -7,6 +7,8 @@ import "./VideoList.css";
 import GenericButton from "../buttons/GenericButton";
 import editIcon from "../../components/iconsLab/edit.svg";
 import { ViewContext } from "../../contexts/ViewContext";
+import gridIcon from "../iconsLab/grid.svg";
+import listIcon from "../iconsLab/list.svg";
 
 const VideoList = ({
   videos,
@@ -14,6 +16,7 @@ const VideoList = ({
   handleAuthorClick,
   theme,
   sortOptions,
+  displayProfileImage = true,
   showView = false,
   isProfile = false,
   editVideo = false,
@@ -23,7 +26,7 @@ const VideoList = ({
   const ViewOptions = () =>
     !showView && (
       <div className="sorting-filtering-options">
-        <GenericButton text={view === "grid" ? "List" : "Grid"} onClick={toggleView} />
+        <GenericButton icon={view === "grid" ? gridIcon : listIcon} onClick={toggleView} />
       </div>
     );
 
@@ -44,11 +47,11 @@ const VideoList = ({
                   </div>
                 )}
               </div>
-              <div className="home-video-details">
-                {!isProfile && author && <ProfilePhoto user={author} clickable={true} />}
-                <div className="home-video-info">
+              <div className="video-details">
+                {!isProfile && displayProfileImage && author && <ProfilePhoto user={author} clickable={true} />}
+                <div className="video-info">
                   <Link to={`/watch/${video._id.toString()}`} className="title-link">
-                    <p className="home-video-title">{video.title}</p>
+                    <p className="video-title">{video.title}</p>
                   </Link>
                   {!isProfile && author && (
                     <div className="author-link" onClick={(e) => handleAuthorClick(e, author._id)}>
@@ -71,10 +74,13 @@ const VideoList = ({
 
   return (
     <div>
-      <div className="sorting-filtering-options">
-        {sortOptions}
-        <ViewOptions />
-      </div>
+      {!showView && (
+        <div className="sorting-filtering-options">
+          {sortOptions}
+          <ViewOptions />
+        </div>
+      )}
+
       {videosList}
     </div>
   );

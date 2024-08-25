@@ -12,7 +12,6 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
-  width: 1150pt;
 }
 
 /* Card for each video in grid and list view */
@@ -23,10 +22,10 @@
   border-radius: 8px;
   width: 100%;
   max-width: 350px;
-  min-height: 250px;
+  min-height: 225px;
   text-align: center;
   transition: 0.4s ease-in-out;
-  background-color: var(--white-color);
+
 }
 
 .video-card.list {
@@ -39,8 +38,6 @@
   height: 150px;
   text-align: left;
   transition: 0.4s ease-in-out;
-  background-color: var(--white-color);
-
 }
 
 /* Light and dark theme styles for video cards */
@@ -69,7 +66,7 @@
 }
 
 /* Layout for video details in both grid and list view */
-.home-video-details {
+.video-details {
   padding: 10px;
   display: flex;
   align-items: start;
@@ -79,11 +76,11 @@
 }
 
 /* Layout for the information inside the video card */
-.home-video-info {
+.video-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 5px;
+  gap: 0px;
 }
 
 /* Sorting and filtering options layout */

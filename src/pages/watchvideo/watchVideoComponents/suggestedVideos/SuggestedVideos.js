@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 import { VideoContext } from "../../../../contexts/VideoContext";
 import { AuthContext } from "../../../../contexts/AuthContext";
-import VideoThumbnail from "../../../../components/videoThumbnail/VideoThumbnail";
+import VideoList from "../../../../components/videosList/VideosList";
+
 
 const SuggestedVideos = () => {
   const { theme } = useContext(ThemeContext);
@@ -38,25 +39,14 @@ const SuggestedVideos = () => {
   }, [fetchVideos]);
 
   return (
-    <div className={`watch-suggested-video-section ${theme}`}>
-      {videos.randomVideos.slice(0, 10).map((video) => {
-        const author = videoAuthors[video._id];
-        return author ? (
-          <Link to={`/watch/${video._id}`} key={video._id} className={`suggested-video-card ${theme}`}>
-            <div>
-              <VideoThumbnail video={video} />
-            </div>
-            <div className="suggested-video-details">
-              <p className="suggested-video-title">{video.title}</p>
-              <p className="note author-link" onClick={(e) => handleAuthorClick(e, author._id.toString())}>
-                {author.userName}
-              </p>
-              <p className="note">{video.views} views</p>
-            </div>
-          </Link>
-        ) : null;
-      })}
-    </div>
+    <VideoList
+      videos={videos.randomVideos.slice(0, 10)}
+      videoAuthors={videoAuthors}
+      handleAuthorClick={handleAuthorClick}
+      theme={theme}
+      showView="list"
+      displayProfileImage={false}
+    />
   );
 };
 
