@@ -39,13 +39,13 @@ const VideoList = ({
             <div key={video._id.toString()} className={`video-card ${theme} ${listView}`}>
               <div>
                 <Link to={`/watch/${video._id.toString()}`} className={`thumbnail-link  ${listView}`}>
+                  {editVideo && (
+                    <div className="video-list-edit-icon">
+                      <GenericButton icon={editIcon} link={`/edit/${video._id}`} />
+                    </div>
+                  )}
                   <VideoThumbnail video={video} />
                 </Link>
-                {editVideo && (
-                  <div className="video-list-edit-icon">
-                    <GenericButton icon={editIcon} link={`/edit/${video._id}`} />
-                  </div>
-                )}
               </div>
               <div className="video-details">
                 {!isProfile && displayProfileImage && author && <ProfilePhoto user={author} clickable={true} />}

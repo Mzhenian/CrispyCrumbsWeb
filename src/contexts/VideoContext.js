@@ -10,7 +10,6 @@ const VideoProvider = ({ children }) => {
     mostRecentVideos: [],
     followingVideos: [],
     randomVideos: [],
-    // searchResultVideos: [],
   });
 
   const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
@@ -142,7 +141,7 @@ const VideoProvider = ({ children }) => {
       }
 
       const data = await response.json();
-      fetchVideos(); // Fetch videos after uploading a new video
+      fetchVideos();
       return data;
     } catch (error) {
       throw new Error(error.message || "An error occurred while uploading the video.");

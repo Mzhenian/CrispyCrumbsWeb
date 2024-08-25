@@ -133,6 +133,7 @@
 
 .video-list-edit-icon {
   position: absolute;
+  z-index: 9999999999;
 }
 
 /* Not found section */
