@@ -1,11 +1,11 @@
-/* Container for the video section */
+/* Container for the video section using CSS Grid */
 .watch-home-video-section,
 .watch-user-profile-video-section {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  /* Responsive grid */
   gap: 25px;
+  justify-items: center;
   width: 100%;
   max-width: 1250pt;
 }
@@ -17,9 +17,10 @@
   flex-direction: column;
   gap: 10px;
   border-radius: 8px;
-  width: 23%;
-  max-width: 550px;
-  min-width: 250px;
+  width: 100%;
+  /* Take full width of the grid cell */
+  max-width: 350px;
+  /* Optional: Set a maximum width if you want to limit the card size */
   min-height: 250px;
   text-align: center;
   transition: 0.4s ease-in-out;
@@ -85,31 +86,16 @@
 }
 
 .thumbnail-container {
-  position: relative;
-  width: 100%;
-  padding-top: 56.25%;
-  /* 16:9 Aspect Ratio */
-  overflow: hidden;
   border-top-left-radius: 20px 30px;
   border-top-right-radius: 30px 20px;
   border-bottom-right-radius: 20px 30px;
   border-bottom-left-radius: 20px 30px;
-  background-color: var(--tertiary-color-dark);
   transition: 0.3s ease-in-out;
 }
 
 .thumbnail-container:hover {
   border-top-left-radius: 30px 20px;
   border-top-right-radius: 20px 30px;
-  border-bottom-right-radius: 20px 30px;
+  border-bottom-right-radius: 30px 20px;
   border-bottom-left-radius: 20px 30px;
-}
-
-.video-thumbnail {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }

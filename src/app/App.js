@@ -11,6 +11,8 @@ import WatchVideo from "../pages/watchvideo/WatchVideo.js";
 import UserProfile from "../pages/userProfile/UserProfile.js";
 import { AuthProvider } from "../contexts/AuthContext.js";
 import { VideoProvider } from "../contexts/VideoContext.js";
+import { ViewProvider } from "../contexts/ViewContext.js";
+
 import PrivateRoute from "../routes/PrivateRoute.js";
 import SignedRoute from "../routes/SignedRoute.js";
 import EditVideo from "../pages/editVideo/EditVideo.js";
@@ -24,6 +26,8 @@ function App() {
         <ThemeProvider>
           <AuthProvider>
             <VideoProvider>
+                  <ViewProvider>
+
               <TopBar />
               <div className="main-body">
                 <Routes>
@@ -38,6 +42,8 @@ function App() {
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </div>
+                  </ViewProvider>
+
             </VideoProvider>
           </AuthProvider>
         </ThemeProvider>

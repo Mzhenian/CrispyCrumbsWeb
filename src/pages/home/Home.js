@@ -1,24 +1,22 @@
+// Home.js
 import React, { useContext, useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
-import "./VideoList.css";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { VideoContext } from "../../contexts/VideoContext";
 import { AuthContext } from "../../contexts/AuthContext";
-import GenericButton from "../../components/buttons/GenericButton";
-import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail";
-import sad404 from "../../components/iconsLab/notFound.svg";
+import VideoList from "../../components/videosList/VideosList";
+import SortingOptions from "./SortingOptions";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
-  const { videos, fetchVideos, fetchFollowersVideos, getVideoBySearch } =
-    useContext(VideoContext);
+  const { videos, fetchVideos, fetchFollowersVideos, getVideoBySearch } = useContext(VideoContext);
   const { currentUser, getUserBasicById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
   const [videoAuthors, setVideoAuthors] = useState({});
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+
   useEffect(() => {
     fetchVideos();
     fetchFollowersVideos();
@@ -40,10 +38,7 @@ const Home = () => {
       });
 
       const authors = await Promise.all(authorPromises);
-      const authorsMap = authors.reduce(
-        (acc, author) => ({ ...acc, ...author }),
-        {}
-      );
+      const authorsMap = authors.reduce((acc, author) => ({ ...acc, ...author }), {});
       setVideoAuthors(authorsMap);
     };
 
@@ -63,7 +58,7 @@ const Home = () => {
       setSortOption("random");
     }
   }, [location.search, getVideoBySearch]);
-  
+
   const handleSortChange = (value) => {
     setSortOption(value);
   };
@@ -89,76 +84,15 @@ const Home = () => {
     }
   };
 
-  const videosList =
-    sortedVideos().length > 0 ? (
-      <div className={`watch-home-video-section ${theme}`}>
-        {sortedVideos().map((video) => {
-          const author = videoAuthors[video._id.toString()];
-          return author ? (
-            <div
-              key={video._id.toString()}
-              className={`home-video-card ${theme}`}
-            >
-              <Link
-                to={`/watch/${video._id.toString()}`}
-                className="thumbnail-link"
-              >
-                <VideoThumbnail video={video} />
-              </Link>
-              <div className="home-video-b">
-                <div className="home-video-details">
-                  <ProfilePhoto user={author} clickable={true} />
-                  <div className="home-video-info">
-                    <Link
-                      to={`/watch/${video._id.toString()}`}
-                      className="title-link"
-                    >
-                      <p className="home-video-title">{video.title}</p>
-                    </Link>
-                    <div
-                      className="author-link"
-                      onClick={(e) => handleAuthorClick(e, author._id)}
-                    >
-                      <p className="note">{author.userName}</p>
-                    </div>
-                    <p className="note">{`${video.views} views`} </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : null;
-        })}
-      </div>
-    ) : (
-      <div className="no-videos-found">
-        <h1>No videos found</h1>
-        <img src={sad404} alt="not-found" />
-      </div>
-    );
-
   return (
     <div>
-      <div className="sorting-filtering-options">
-        {currentUser && (
-          <GenericButton
-            text="Subscribed"
-            onClick={() => handleSortChange("subscribed")}
-          />
-        )}
-        <GenericButton
-          text="Most Watched"
-          onClick={() => handleSortChange("most-watched")}
-        />
-        <GenericButton
-          text="Most Recent"
-          onClick={() => handleSortChange("most-recent")}
-        />
-        <GenericButton
-          text="Suggested for you"
-          onClick={() => handleSortChange("random")}
-        />
-      </div>
-        { videosList }
+      <VideoList
+        videos={sortedVideos()}
+        videoAuthors={videoAuthors}
+        handleAuthorClick={handleAuthorClick}
+        theme={theme}
+        sortOptions={<SortingOptions currentUser={currentUser} handleSortChange={handleSortChange} />}
+      />
     </div>
   );
 };
