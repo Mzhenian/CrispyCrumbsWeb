@@ -1,70 +1,92 @@
-/* Container for the video section using CSS Grid */
-.watch-home-video-section,
-.watch-user-profile-video-section {
+/* Grid view container for the video section */
+.watch-grid-video-section {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  /* Responsive grid */
   gap: 25px;
   justify-items: center;
-  width: 100%;
-  max-width: 1250pt;
+  width: 1150pt;
 }
 
-/* Card for each video */
-.home-video-card,
-.user-profile-video-card {
+/* List view container for the video section */
+.watch-list-video-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 1150pt;
+}
+
+/* Card for each video in grid and list view */
+.video-card.grid {
   display: flex;
   flex-direction: column;
   gap: 10px;
   border-radius: 8px;
   width: 100%;
-  /* Take full width of the grid cell */
   max-width: 350px;
-  /* Optional: Set a maximum width if you want to limit the card size */
   min-height: 250px;
   text-align: center;
   transition: 0.4s ease-in-out;
-  transition: background-color 0.3s ease-in-out;
-}
-
-/* Light and dark theme styles */
-.home-video-card.light,
-.user-profile-video-card.light {
   background-color: var(--white-color);
 }
 
-.home-video-card.dark,
-.user-profile-video-card.dark {
+.video-card.list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  width: 100%;
+  height: 150px;
+  text-align: left;
+  transition: 0.4s ease-in-out;
+  background-color: var(--white-color);
+
+}
+
+/* Light and dark theme styles for video cards */
+.video-card.light {
+  background-color: var(--white-color);
+}
+
+.video-card.dark {
   background-color: var(--black-color);
 }
 
-.home-video-card.light:hover,
-.user-profile-video-card.light:hover {
+.video-card.light:hover {
   background-color: var(--dark-white-color);
 }
 
-.home-video-card.dark:hover,
-.user-profile-video-card.dark:hover {
+.video-card.dark:hover {
   background-color: var(--light-black-color);
 }
 
-.home-video-card:hover,
-.user-profile-video-card:hover {
+/* Hover effect for video cards */
+.video-card:hover {
   border-top-left-radius: 30px 20px;
   border-top-right-radius: 20px 30px;
   border-bottom-right-radius: 30px 20px;
   border-bottom-left-radius: 20px 30px;
 }
 
-.home-video-details,
-.user-profile-video-details {
+/* Layout for video details in both grid and list view */
+.home-video-details {
   padding: 10px;
   display: flex;
   align-items: start;
   text-align: start;
   gap: 10px;
+  flex: 1;
 }
 
+/* Layout for the information inside the video card */
+.home-video-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* Sorting and filtering options layout */
 .sorting-filtering-options {
   display: flex;
   justify-content: center;
@@ -73,16 +95,23 @@
   margin-bottom: 25px;
 }
 
-.video-list-edit-icon {
-  position: absolute;
-}
-
+/* Thumbnail and links */
 .thumbnail-link,
 .title-link,
 .author-link {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  height: auto;
+  display: block;
+}
+
+.thumbnail-link.grid {
+  width: 100%;
+}
+
+.thumbnail-link.list {
+  width: 266.66px;
 }
 
 .thumbnail-container {
@@ -98,4 +127,21 @@
   border-top-right-radius: 20px 30px;
   border-bottom-right-radius: 30px 20px;
   border-bottom-left-radius: 20px 30px;
+}
+
+.video-card.list .thumbnail-link {
+  flex: 0 0 150px;
+  /* Fixed size for thumbnail in list view */
+}
+
+.video-list-edit-icon {
+  position: absolute;
+}
+
+/* Not found section */
+.no-videos-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }

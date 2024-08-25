@@ -15,27 +15,9 @@ const TopBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
-  const UploadLoginTitle = "Log in";
-  const UploadSignUpTitle = "Sign up";
-  const UploadVideoTitle = "Upload Video";
-
-  const leftButtons = currentUser ? (
-    <div className="top-bar-buttons">
-      <GenericButton text={UploadVideoTitle} link={"/uploadvideo"} />
-      <ProfilePhoto />
-      <LightDarkButton />
-    </div>
-  ) : (
-    <div className="top-bar-buttons">
-      <GenericButton text={UploadSignUpTitle} link={"/signup"} />
-      <GenericButton text={UploadLoginTitle} link={"/login"} />
-      <LightDarkButton />
-    </div>
-  );
-
   const handleSearchClick = () => {
-    if (searchQuery !== "") {
-      navigate(`/?search=${searchQuery}`);
+    if (searchQuery.trim() !== "") {
+      navigate(`/search?search=${searchQuery}`);
     }
   };
 
@@ -56,6 +38,20 @@ const TopBar = () => {
         onKeyDown={handleSearchBarKeyDown}
       />
       <GenericButton icon={searchIcon} onClick={handleSearchClick} />
+    </div>
+  );
+
+  const leftButtons = currentUser ? (
+    <div className="top-bar-buttons">
+      <GenericButton text="Upload Video" link="/uploadvideo" />
+      <ProfilePhoto />
+      <LightDarkButton />
+    </div>
+  ) : (
+    <div className="top-bar-buttons">
+      <GenericButton text="Sign up" link="/signup" />
+      <GenericButton text="Log in" link="/login" />
+      <LightDarkButton />
     </div>
   );
 

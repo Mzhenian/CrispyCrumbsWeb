@@ -14,46 +14,48 @@ const VideoList = ({
   handleAuthorClick,
   theme,
   sortOptions,
+  showView = false,
   isProfile = false,
   editVideo = false,
 }) => {
   const { toggleView, view } = useContext(ViewContext);
-
-  const ViewOptions = () => (
-    <div className="sorting-filtering-options">
-      <GenericButton text="Grid" onClick={() => toggleView()} />
-    </div>
-  );
+  const listView = showView ? showView : view;
+  const ViewOptions = () =>
+    !showView && (
+      <div className="sorting-filtering-options">
+        <GenericButton text={view === "grid" ? "List" : "Grid"} onClick={toggleView} />
+      </div>
+    );
 
   const videosList =
     videos.length > 0 ? (
-      <div className={`watch-home-video-section ${theme}`}>
+      <div className={`watch-${listView}-video-section ${theme}`}>
         {videos.map((video) => {
           const author = videoAuthors[video._id.toString()];
           return (
-            <div key={video._id.toString()} className={`home-video-card ${theme}`}>
-              <Link to={`/watch/${video._id.toString()}`} className="thumbnail-link">
-                <VideoThumbnail video={video} />
-              </Link>
-              {editVideo && (
-                <div className="video-list-edit-icon">
-                  <GenericButton icon={editIcon} link={`/edit/${video._id}`} />
-                </div>
-              )}
-              <div className="home-video-b">
-                <div className="home-video-details">
-                  {!isProfile && author && <ProfilePhoto user={author} clickable={true} />}
-                  <div className="home-video-info">
-                    <Link to={`/watch/${video._id.toString()}`} className="title-link">
-                      <p className="home-video-title">{video.title}</p>
-                    </Link>
-                    {!isProfile && author && (
-                      <div className="author-link" onClick={(e) => handleAuthorClick(e, author._id)}>
-                        <p className="note">{author.userName}</p>
-                      </div>
-                    )}
-                    <p className="note">{`${video.views} views`} </p>
+            <div key={video._id.toString()} className={`video-card ${theme} ${listView}`}>
+              <div>
+                <Link to={`/watch/${video._id.toString()}`} className={`thumbnail-link  ${listView}`}>
+                  <VideoThumbnail video={video} />
+                </Link>
+                {editVideo && (
+                  <div className="video-list-edit-icon">
+                    <GenericButton icon={editIcon} link={`/edit/${video._id}`} />
                   </div>
+                )}
+              </div>
+              <div className="home-video-details">
+                {!isProfile && author && <ProfilePhoto user={author} clickable={true} />}
+                <div className="home-video-info">
+                  <Link to={`/watch/${video._id.toString()}`} className="title-link">
+                    <p className="home-video-title">{video.title}</p>
+                  </Link>
+                  {!isProfile && author && (
+                    <div className="author-link" onClick={(e) => handleAuthorClick(e, author._id)}>
+                      <p className="note">{author.userName}</p>
+                    </div>
+                  )}
+                  <p className="note">{`${video.views} views`}</p>
                 </div>
               </div>
             </div>

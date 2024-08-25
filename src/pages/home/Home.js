@@ -1,6 +1,5 @@
-// Home.js
 import React, { useContext, useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { VideoContext } from "../../contexts/VideoContext";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -9,13 +8,11 @@ import SortingOptions from "./SortingOptions";
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
-  const { videos, fetchVideos, fetchFollowersVideos, getVideoBySearch } = useContext(VideoContext);
+  const { videos, fetchVideos, fetchFollowersVideos } = useContext(VideoContext);
   const { currentUser, getUserBasicById } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("most-watched");
   const [videoAuthors, setVideoAuthors] = useState({});
-  const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     fetchVideos();
@@ -29,7 +26,6 @@ const Home = () => {
         ...videos.mostRecentVideos,
         ...videos.followingVideos,
         ...videos.randomVideos,
-        ...searchResults,
       ];
 
       const authorPromises = videoList.map(async (video) => {
@@ -42,22 +38,10 @@ const Home = () => {
       setVideoAuthors(authorsMap);
     };
 
-    if (videos.mostViewedVideos.length > 0 || searchResults.length > 0) {
+    if (videos.mostViewedVideos.length > 0) {
       fetchAuthors();
     }
-  }, [videos, searchResults, getUserBasicById]);
-
-  useEffect(() => {
-    const query = new URLSearchParams(location.search).get("search");
-    if (query) {
-      getVideoBySearch(query).then((results) => {
-        setSearchResults(results);
-        setSortOption("search-results");
-      });
-    } else {
-      setSortOption("random");
-    }
-  }, [location.search, getVideoBySearch]);
+  }, [videos, getUserBasicById]);
 
   const handleSortChange = (value) => {
     setSortOption(value);
@@ -71,8 +55,6 @@ const Home = () => {
 
   const sortedVideos = () => {
     switch (sortOption) {
-      case "search-results":
-        return searchResults;
       case "most-watched":
         return videos.mostViewedVideos;
       case "most-recent":
