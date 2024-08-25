@@ -22,6 +22,7 @@
 
     display: flex;
     gap: 5px;
+    user-select: none;
 
 
     /* transition property */
@@ -79,6 +80,7 @@
     scale: 100%;
 
     transition: 0.3s ease-in-out;
+    user-select: none;
 }
 
 .light-button:hover {
