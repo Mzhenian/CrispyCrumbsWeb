@@ -8,7 +8,7 @@ import UploadVideo from "../pages/uploadVideo/UploadVideo.js";
 import SignUp from "../pages/signup/SignUp.js";
 import Login from "../pages/login/Login.js";
 import WatchVideo from "../pages/watchvideo/WatchVideo.js";
-import Search from "../pages/search/search.js";
+import Search from "../pages/search/Search.js";
 import UserProfile from "../pages/userProfile/UserProfile.js";
 import { AuthProvider } from "../contexts/AuthContext.js";
 import { VideoProvider } from "../contexts/VideoContext.js";

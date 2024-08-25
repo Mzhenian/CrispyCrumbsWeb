@@ -11,7 +11,7 @@ import copyIcon from "../../../../components/iconsLab/copy.svg";
 const SharePopup = ({ isOpen, onClose }) => {
   const url = encodeURIComponent(window.location.href);
   const xtext = encodeURIComponent("Check this out!");
-  const shareUrlFacebook = 'https://www.facebook.com/sharer/sharer.php?u=' + url;
+  //const shareUrlFacebook = 'https://www.facebook.com/sharer/sharer.php?u=' + url;
   const shareUrlX = `https://twitter.com/intent/tweet?url=${url}&text=${xtext}`;
   const shareUrlWhatsapp = `https://wa.me/?text=${url}`;
   const InstagramUrl = "https://instagram.com/";
@@ -34,20 +34,33 @@ const SharePopup = ({ isOpen, onClose }) => {
   return (
     <Popup isOpen={isOpen} onClose={onClose} title="Share this video">
       <div className="social-photos-layout">
-
         <a className="social-container" id="x-container" href={shareUrlX} target="_blank" rel="noopener noreferrer">
           <img src={shareX} alt="share on X" className="social-thumbnail" />
         </a>
 
-        <div className="social-container" id="facebook-container" onClick={() => handleShareLinks("continue to open Facebook.", FacebookUrl)}>
+        <div
+          className="social-container"
+          id="facebook-container"
+          onClick={() => handleShareLinks("continue to open Facebook.", FacebookUrl)}
+        >
           <img src={shareFacebook} alt="share on Instagram" className="social-thumbnail" />
         </div>
 
-        <div className="social-container" id="instagram-container" onClick={() => handleShareLinks("continue to open Instagram.", InstagramUrl)}>
+        <div
+          className="social-container"
+          id="instagram-container"
+          onClick={() => handleShareLinks("continue to open Instagram.", InstagramUrl)}
+        >
           <img src={shareInstagram} alt="share on Instagram" className="social-thumbnail" />
         </div>
 
-        <a className="social-container" id="whatsapp-container" href={shareUrlWhatsapp} target="_blank" rel="noopener noreferrer">
+        <a
+          className="social-container"
+          id="whatsapp-container"
+          href={shareUrlWhatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <img src={shareWhatsapp} alt="share on Whatsapp" className="social-thumbnail" />
         </a>
 

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
@@ -79,19 +79,12 @@ const Login = () => {
               <OnOffToggle
                 name="rememberMe"
                 value={formData.rememberMe}
-                action={() =>
-                  setFormData({ ...formData, rememberMe: !formData.rememberMe })
-                }
+                action={() => setFormData({ ...formData, rememberMe: !formData.rememberMe })}
               />
             </div>
           </div>
           <div className="buttons-container">
-            <GenericButton
-              text="Log in"
-              type="submit"
-              onClick={handleSubmit}
-              tabIndex="1"
-            />
+            <GenericButton text="Log in" type="submit" onClick={handleSubmit} tabIndex="1" />
             <LightButton text="Signup" link="/signup" />
           </div>
         </form>

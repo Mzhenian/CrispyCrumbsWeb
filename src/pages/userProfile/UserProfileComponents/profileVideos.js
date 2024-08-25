@@ -11,7 +11,7 @@ const ProfileVideos = ({ userId }) => {
   const { currentUser } = useContext(AuthContext);
   const [sortOption, setSortOption] = useState("newest");
   const [userVideos, setUserVideos] = useState([]);
-  const [videoAuthors, setVideoAuthors] = useState({});
+  const [videoAuthors] = useState({});
 
   useEffect(() => {
     const fetchVideos = async () => {
