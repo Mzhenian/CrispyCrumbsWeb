@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { AuthContext } from "../../../contexts/AuthContext";
@@ -12,6 +12,7 @@ const ProfilePhoto = () => {
   const [profilePhoto, setProfilePhoto] = useState(defaultProfileImage);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const navigate = useNavigate();
+  const popupRef = useRef(null);
 
   useEffect(() => {
     if (currentUser && currentUser.profilePhoto && currentUser.profilePhoto !== "null") {
@@ -25,15 +26,41 @@ const ProfilePhoto = () => {
     setIsMenuVisible(!isMenuVisible);
   };
 
+  const handleOptionClick = (action) => {
+    setIsMenuVisible(false);
+    action();
+  };
+
+  const handleClickOutside = (event) => {
+    if (popupRef.current && !popupRef.current.contains(event.target)) {
+      setIsMenuVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isMenuVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuVisible]);
+
   const popup = (
-    <div className={`popup ${theme}`}>
-      <div className="popup-row" onClick={() => navigate(`/crumb/${currentUser._id.toString()}`)}>
+    <div className={`popup ${theme}`} ref={popupRef}>
+      <div
+        className="popup-row"
+        onClick={() => handleOptionClick(() => navigate(`/crumb/${currentUser._id.toString()}`))}
+      >
         View my profile
       </div>
-      <div className="popup-row" onClick={() => navigate(`/crumb/edit`)}>
+      <div className="popup-row" onClick={() => handleOptionClick(() => navigate(`/crumb/edit`))}>
         Edit my profile
       </div>
-      <div className="popup-row" onClick={logout}>
+      <div className="popup-row" onClick={() => handleOptionClick(logout)}>
         Log out
       </div>
     </div>
