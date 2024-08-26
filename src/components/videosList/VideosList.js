@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProfilePhoto from "../../components/profilePhoto/ProfilePhoto";
 import VideoThumbnail from "../../components/videoThumbnail/VideoThumbnail";
@@ -23,6 +23,17 @@ const VideoList = ({
   editVideo = false,
 }) => {
   const { toggleView, view } = useContext(ViewContext);
+  const [showNotFound, setShowNotFound] = useState(false);
+
+  useEffect(() => {
+    if (videos.length === 0) {
+      const timer = setTimeout(() => setShowNotFound(true), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowNotFound(false);
+    }
+  }, [videos]);
+
   const listView = showView ? showView : view;
   const ViewOptions = () =>
     !showView && (
@@ -75,10 +86,9 @@ const VideoList = ({
           <ViewOptions />
         </div>
       )}
-
       {videosList}
     </div>
-  ) : (
+  ) : showNotFound ? (
     <div className="route">
       {isProfile ? (
         editVideo ? (
@@ -98,7 +108,7 @@ const VideoList = ({
         </>
       )}
     </div>
-  );
+  ) : null;
 };
 
 export default VideoList;
