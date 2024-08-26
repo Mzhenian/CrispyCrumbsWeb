@@ -1,10 +1,13 @@
 .route {
+  max-width: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 90vh;
   text-align: center;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .route h1 {

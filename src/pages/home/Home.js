@@ -67,7 +67,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="video-list-container">
       <VideoList
         videos={sortedVideos()}
         videoAuthors={videoAuthors}

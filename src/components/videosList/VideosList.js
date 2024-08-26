@@ -9,6 +9,7 @@ import editIcon from "../../components/iconsLab/edit.svg";
 import { ViewContext } from "../../contexts/ViewContext";
 import gridIcon from "../iconsLab/grid.svg";
 import listIcon from "../iconsLab/list.svg";
+import "../../routes/Routs.css";
 
 const VideoList = ({
   videos,
@@ -30,49 +31,43 @@ const VideoList = ({
       </div>
     );
 
-  const videosList =
-    videos.length > 0 ? (
-      <div className={`watch-${listView}-video-section ${theme}`}>
-        {videos.map((video) => {
-          const author = videoAuthors[video._id.toString()];
-          return (
-            <div key={video._id.toString()} className={`video-card ${theme} ${listView}`}>
-              <div>
-                <Link to={`/watch/${video._id.toString()}`} className={`thumbnail-link  ${listView}`}>
-                  {editVideo && (
-                    <div className="video-list-edit-icon">
-                      <GenericButton icon={editIcon} link={`/edit/${video._id}`} />
-                    </div>
-                  )}
-                  <VideoThumbnail video={video} />
+  const videosList = videos.length > 0 && (
+    <div className={`watch-${listView}-video-section ${theme}`}>
+      {videos.map((video) => {
+        const author = videoAuthors[video._id.toString()];
+        return (
+          <div key={video._id.toString()} className={`video-card ${theme} ${listView}`}>
+            <div>
+              <Link to={`/watch/${video._id.toString()}`} className={`thumbnail-link  ${listView}`}>
+                {editVideo && (
+                  <div className="video-list-edit-icon">
+                    <GenericButton icon={editIcon} link={`/edit/${video._id}`} />
+                  </div>
+                )}
+                <VideoThumbnail video={video} />
+              </Link>
+            </div>
+            <div className="video-details">
+              {!isProfile && displayProfileImage && author && <ProfilePhoto user={author} clickable={true} />}
+              <div className="video-info">
+                <Link to={`/watch/${video._id.toString()}`} className="title-link">
+                  <p className="video-title">{video.title}</p>
                 </Link>
-              </div>
-              <div className="video-details">
-                {!isProfile && displayProfileImage && author && <ProfilePhoto user={author} clickable={true} />}
-                <div className="video-info">
-                  <Link to={`/watch/${video._id.toString()}`} className="title-link">
-                    <p className="video-title">{video.title}</p>
-                  </Link>
-                  {!isProfile && author && (
-                    <div className="author-link" onClick={(e) => handleAuthorClick(e, author._id)}>
-                      <p className="note">{author.userName}</p>
-                    </div>
-                  )}
-                  <p className="note">{`${video.views} views`}</p>
-                </div>
+                {!isProfile && author && (
+                  <div className="author-link" onClick={(e) => handleAuthorClick(e, author._id)}>
+                    <p className="note">{author.userName}</p>
+                  </div>
+                )}
+                <p className="note">{`${video.views} views`}</p>
               </div>
             </div>
-          );
-        })}
-      </div>
-    ) : (
-      <div className="no-videos-found">
-        <h1>No videos found</h1>
-        <img src={sad404} alt="not-found" />
-      </div>
-    );
+          </div>
+        );
+      })}
+    </div>
+  );
 
-  return (
+  return videos.length > 0 ? (
     <div>
       {!showView && (
         <div className="sorting-filtering-options">
@@ -82,6 +77,26 @@ const VideoList = ({
       )}
 
       {videosList}
+    </div>
+  ) : (
+    <div className="route">
+      {isProfile ? (
+        editVideo ? (
+          <>
+            <p>You haven't uploaded any videos yet.</p>
+            <br />
+            <GenericButton text="Click here to upload your first one" link="/uploadvideo" />
+          </>
+        ) : (
+          <p>No videos uploaded to this channel yet</p>
+        )
+      ) : (
+        <>
+          <img src={sad404} alt="not-found" />
+          <h1>404</h1>
+          <p>No Videos Found</p>
+        </>
+      )}
     </div>
   );
 };

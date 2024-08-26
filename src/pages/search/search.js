@@ -47,7 +47,7 @@ const Search = () => {
   };
 
   return (
-    <div>
+    <div className="video-list-container">
       <VideoList
         videos={searchResults}
         videoAuthors={videoAuthors}
