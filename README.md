@@ -37,11 +37,11 @@ After downloading the CrispyCrumbsWeb and CrispyCrumbsServer projects-folders in
 
 1) open a powershell in `CrispyCrumbsWeb` project-folder.
 2) run: `.\init_website.ps1`
-3) Enter the new CrispyCrumbs server JWT secret if prompted.
-4) wait for the website to open itself.
+3) wait for the website to open itself.
 
 **Notes:**
 
+- to update the CrispyCrumbs server JWT secret, run `..\CrispyCrumbsServer\init_server.ps1` before running the website.
 - if the server wasn't active when running the script than this method will open the **server** at the background of the current terminal. Which will keep running as long as that terminal is kept open.
 - After this initial setup, you can run the website again in the same way
 - or run the site manually as shown below.
