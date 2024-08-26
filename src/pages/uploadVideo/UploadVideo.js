@@ -166,6 +166,7 @@ const UploadVideo = () => {
               name="title"
               value={formData.title}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              tabIndex="1"
             />
           </div>
           <div className="field-container">
@@ -176,6 +177,7 @@ const UploadVideo = () => {
               name="description"
               value={formData.description}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              tabIndex="2"
             />
           </div>
           <div className="field-container">
