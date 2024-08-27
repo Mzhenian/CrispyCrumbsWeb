@@ -36,9 +36,8 @@ for the server:
 After downloading the CrispyCrumbsWeb and CrispyCrumbsServer projects-folders into the the same parent folder.
 
 1) open a powershell in `CrispyCrumbsWeb` project-folder.
-2) run: `.\init_website.ps1`
-3) Enter the new CrispyCrumbs server JWT secret if prompted.
-4) wait for the website to open itself.
+2) run: `.\init_website.cmd`
+3) wait for the website to open itself.
 
 **Notes:**
 
