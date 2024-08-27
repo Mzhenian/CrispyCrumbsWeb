@@ -4,11 +4,11 @@
   height: 100%;
 
   width: 100%;
-  max-width: 1717px;
 }
 
 .profile-videos {
   width: inherit;
+  width: 80%;
 }
 
 .profile-details {
