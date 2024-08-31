@@ -7,7 +7,7 @@ import GenericButton from "../../components/buttons/GenericButton";
 import Container from "../../components/container/Container";
 import NotFoundRoute from "../../routes/NotFoundRoute";
 import "./UserProfile.css";
-import VideoList from "./UserProfileComponents/VideoList";
+import VideoList from "./UserProfileComponents/profileVideos";
 
 const UserProfile = () => {
   const { userId } = useParams();

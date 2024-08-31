@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext.js";
 import Container from "../../components/container/Container.js";
 import GenericButton from "../../components/buttons/GenericButton.js";
@@ -40,6 +40,11 @@ const Login = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
   return (
     <div className={`page ${theme}`}>
       <Container title={"Log in"} containerStyle={"login-container"}>
@@ -52,6 +57,8 @@ const Login = () => {
               name="username"
               value={formData.username}
               onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              tabIndex="1"
             />
           </div>
           <div className="field-container">
@@ -62,6 +69,8 @@ const Login = () => {
               type="password"
               value={formData.password}
               onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              tabIndex="2"
             />
           </div>
           <div className="linear-layout-1">
@@ -73,12 +82,9 @@ const Login = () => {
                 action={() => setFormData({ ...formData, rememberMe: !formData.rememberMe })}
               />
             </div>
-            <Link className={theme} to="./forgotpassword">
-              <b>I forgot my password</b>
-            </Link>
           </div>
           <div className="buttons-container">
-            <GenericButton text="Log in" type="submit" onClick={handleSubmit} />
+            <GenericButton text="Log in" type="submit" onClick={handleSubmit} tabIndex="1" />
             <LightButton text="Signup" link="/signup" />
           </div>
         </form>

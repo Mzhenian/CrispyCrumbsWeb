@@ -120,9 +120,13 @@ const CommentsSection = ({ currentUser, videoId }) => {
         placeholder="Add a comment..."
         rows="4"
         style={{ resize: "none" }}
+        onKeyDown={(e) => e.ctrlKey && e.key === "Enter" && handleCommentSubmit()}
       />
       <div className="comment-buttons">
-        <GenericButton text="Comment" onClick={handleCommentSubmit} />
+        <GenericButton
+          text="Comment"
+          onClick={handleCommentSubmit}
+        />
         <LightButton text="Cancel" onClick={handleCancel} />
       </div>
     </div>

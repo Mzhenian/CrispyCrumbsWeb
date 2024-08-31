@@ -103,6 +103,18 @@ b {
   outline: none;
 }
 
+
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  background-color: inherit !important;
+  color: inherit !important;
+  box-shadow: 0 0 0px 1000px inherit inset !important;
+  -webkit-text-fill-color: inherit !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .error {
   margin-bottom: 16pt;
 }

@@ -248,7 +248,9 @@ const WatchVideo = () => {
           {videoSection}
           <div className="video-details">{<CommentsSection videoId={videoId} currentUser={currentUser} />}</div>
         </div>
-        <SuggestedVideos />
+        <div className="suggested-videos-section">
+          <SuggestedVideos />
+        </div>
       </div>
     )
   );

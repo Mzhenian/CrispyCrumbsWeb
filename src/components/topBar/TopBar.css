@@ -65,7 +65,7 @@
     background-color: transparent;
 
 
-    font-family: Roboto;
+    font-family: "Rubik", sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -75,6 +75,12 @@
         border: none;
         outline: none;
     }
+}
+
+.transparent-input::placeholder {
+    font-family: 'Lexend', sans-serif;
+    font-size: 14px;
+    color: #a8a8a8;
 }
 
 .transparent-input.light {

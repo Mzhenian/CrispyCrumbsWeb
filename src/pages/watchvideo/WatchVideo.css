@@ -3,12 +3,11 @@
   justify-content: space-around;
   gap: 20px;
   width: 100%;
-  max-width: 1717px;
+  max-width: 1817px;
 }
 
 .main-video-section {
-
-  width: 100%;
+  width: 80%;
 }
 
 .container {
@@ -104,4 +103,8 @@ video {
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
+}
+
+.suggested-videos-section {
+  width: 40%;
 }
