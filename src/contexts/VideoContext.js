@@ -124,7 +124,7 @@ const VideoProvider = ({ children }) => {
       console.error("search videos failed:", err);
       return [];
     }
-  }
+  };
 
   const uploadVideo = async (token, videoData, userId) => {
     try {
@@ -247,11 +247,14 @@ const VideoProvider = ({ children }) => {
 
   const incrementViews = async (videoId) => {
     try {
+      const headers = { "Content-Type": "application/json" };
+      if (currentUser && currentUser.token) {
+        headers.Authorization = `Bearer ${currentUser.token}`;
+      }
+
       const response = await fetch(`${apiVideosUrl}/incrementViews`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headers,
         body: JSON.stringify({ videoId }),
       });
       if (!response.ok) {
