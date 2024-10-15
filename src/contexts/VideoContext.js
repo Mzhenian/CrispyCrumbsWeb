@@ -10,6 +10,7 @@ const VideoProvider = ({ children }) => {
     mostRecentVideos: [],
     followingVideos: [],
     randomVideos: [],
+    recommendedVideos: [],
   });
 
   const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
@@ -335,6 +336,33 @@ const VideoProvider = ({ children }) => {
     }
   };
 
+  const fetchRecommendations = useCallback(
+    async (videoId) => {
+      try {
+        const response = await fetch(`${apiVideosUrl}/${videoId}/recommendations`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        setVideos((prevVideos) => ({
+          ...prevVideos,
+          recommendedVideos: data,
+        }));
+      } catch (error) {
+        console.error("Error fetching recommendations:", error);
+      }
+    },
+    [apiVideosUrl]
+  );
+
   return (
     <VideoContext.Provider
       value={{
@@ -354,6 +382,7 @@ const VideoProvider = ({ children }) => {
         deleteComment,
         deleteVideo,
         incrementViews,
+        fetchRecommendations,
       }}
     >
       {children}

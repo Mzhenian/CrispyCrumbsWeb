@@ -16,7 +16,7 @@ import NotFoundRoute from "../../routes/NotFoundRoute";
 const WatchVideo = () => {
   const { theme } = useContext(ThemeContext);
   const { currentUser, getUserById } = useContext(AuthContext);
-  const { getVideoById, likeVideo, dislikeVideo, incrementViews, fetchVideos } = useContext(VideoContext);
+  const { getVideoById, likeVideo, dislikeVideo, incrementViews } = useContext(VideoContext);
 
   const { videoId } = useParams();
   const [video, setVideo] = useState(null);
@@ -28,10 +28,6 @@ const WatchVideo = () => {
   const hasIncrementedView = useRef(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
-
-  useEffect(() => {
-    fetchVideos();
-  }, [fetchVideos]);
 
   useEffect(() => {
     const fetchVideoAndAuthor = async () => {
@@ -249,7 +245,7 @@ const WatchVideo = () => {
           <div className="video-details">{<CommentsSection videoId={videoId} currentUser={currentUser} />}</div>
         </div>
         <div className="suggested-videos-section">
-          <SuggestedVideos />
+          <SuggestedVideos videoId={videoId} />
         </div>
       </div>
     )
