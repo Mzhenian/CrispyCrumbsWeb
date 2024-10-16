@@ -19,6 +19,13 @@ Welcome to the **Crispy Crumbs** website, a video-sharing platform showcasing ex
   - [CrispyCrumbsServer](https://github.com/Mzhenian/CrispyCrumbsServer) must be set up before running the website. Follow the instructions in the repository to initialize the server correctly.
   - MongoDB: By default, the CrispyCrumbs server will use the "CrispyCrumbs" database at "mongodb://localhost:27017/CrispyCrumbs" and **will overwrite anything in it**.
 
+```mermaid
+graph TD;
+    NodeJS_Server["NodeJS Server - Backend"] <--> React_Web["React Frontend"];
+    NodeJS_Server <--> Android_App["Android App - Frontend"];
+    NodeJS_Server <--> TCP_Server["TCP Recommendation Server - Backend"];
+```
+
 ### Download
 
 - First, download [CrispyCrumbsWeb](https://github.com/Mzhenian/CrispyCrumbsWeb) and unzip it.
