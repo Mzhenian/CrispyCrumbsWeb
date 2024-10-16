@@ -89,5 +89,9 @@ the Jira at the beginning-
 ![alt text](<readme photos/Jira start.png>)
 ![alt text](<readme photos/Jira end.png>)
 
+- **Jira Board**:  
+  [Jira Missions](https://crispycrumbs.atlassian.net/jira/software/projects/SCRUM/list?sortBy=customfield_10020&direction=ASC)
+
+
 the figma document-
 ![alt text](<readme photos/Figma.png>)
