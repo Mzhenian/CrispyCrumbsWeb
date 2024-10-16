@@ -5,17 +5,22 @@ import { VideoContext } from "../../../../contexts/VideoContext";
 import { AuthContext } from "../../../../contexts/AuthContext";
 import VideoList from "../../../../components/videosList/VideosList";
 
-
-const SuggestedVideos = () => {
+const SuggestedVideos = ({ videoId }) => {
   const { theme } = useContext(ThemeContext);
-  const { videos, fetchVideos } = useContext(VideoContext);
+  const { videos, fetchRecommendations } = useContext(VideoContext);
   const { getUserBasicById } = useContext(AuthContext);
   const [videoAuthors, setVideoAuthors] = useState({});
   const navigate = useNavigate();
 
+  // Fetch recommendations when videoId changes
+  useEffect(() => {
+    fetchRecommendations(videoId);
+  }, [fetchRecommendations, videoId]);
+
+  // Fetch authors for recommended videos
   useEffect(() => {
     const fetchAuthors = async () => {
-      const authorPromises = videos.randomVideos.map(async (video) => {
+      const authorPromises = videos.recommendedVideos.map(async (video) => {
         const author = await getUserBasicById(video.userId);
         return { [video._id.toString()]: author };
       });
@@ -24,23 +29,19 @@ const SuggestedVideos = () => {
       setVideoAuthors(authorsMap);
     };
 
-    if (videos.randomVideos.length > 0) {
+    if (videos.recommendedVideos.length > 0) {
       fetchAuthors();
     }
-  }, [videos, getUserBasicById]);
+  }, [videos.recommendedVideos, getUserBasicById]);
 
   const handleAuthorClick = (e, profileId) => {
     e.stopPropagation();
     navigate(`/crumb/${profileId}`);
   };
 
-  useEffect(() => {
-    fetchVideos();
-  }, [fetchVideos]);
-
   return (
     <VideoList
-      videos={videos.randomVideos.slice(0, 10)}
+      videos={videos.recommendedVideos.slice(0, 10)}
       videoAuthors={videoAuthors}
       handleAuthorClick={handleAuthorClick}
       theme={theme}

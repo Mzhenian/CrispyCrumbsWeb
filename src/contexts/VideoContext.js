@@ -10,6 +10,7 @@ const VideoProvider = ({ children }) => {
     mostRecentVideos: [],
     followingVideos: [],
     randomVideos: [],
+    recommendedVideos: [],
   });
 
   const apiVideosUrl = `${process.env.REACT_APP_API_URL}/api/videos`;
@@ -124,7 +125,7 @@ const VideoProvider = ({ children }) => {
       console.error("search videos failed:", err);
       return [];
     }
-  }
+  };
 
   const uploadVideo = async (token, videoData, userId) => {
     try {
@@ -247,11 +248,14 @@ const VideoProvider = ({ children }) => {
 
   const incrementViews = async (videoId) => {
     try {
+      const headers = { "Content-Type": "application/json" };
+      if (currentUser && currentUser.token) {
+        headers.Authorization = `Bearer ${currentUser.token}`;
+      }
+
       const response = await fetch(`${apiVideosUrl}/incrementViews`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headers,
         body: JSON.stringify({ videoId }),
       });
       if (!response.ok) {
@@ -332,6 +336,35 @@ const VideoProvider = ({ children }) => {
     }
   };
 
+  const fetchRecommendations = useCallback(
+    async (videoId) => {
+      try {
+        const headers = { "Content-Type": "application/json" };
+        if (currentUser && currentUser.token) {
+          headers.Authorization = `Bearer ${currentUser.token}`;
+        }
+        const response = await fetch(`${apiVideosUrl}/${videoId}/recommendations`, {
+          method: "GET",
+          headers: headers,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        setVideos((prevVideos) => ({
+          ...prevVideos,
+          recommendedVideos: data,
+        }));
+      } catch (error) {
+        console.error("Error fetching recommendations:", error);
+      }
+    },
+    [apiVideosUrl, currentUser]
+  );
+
   return (
     <VideoContext.Provider
       value={{
@@ -351,6 +384,7 @@ const VideoProvider = ({ children }) => {
         deleteComment,
         deleteVideo,
         incrementViews,
+        fetchRecommendations,
       }}
     >
       {children}
