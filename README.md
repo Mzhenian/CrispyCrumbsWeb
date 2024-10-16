@@ -64,7 +64,7 @@ The photos are not enough, you should go and explore the website by yourself :>
 
 5. **Video Page**
    
-   This page shows a video player at the top left, playing the selected video. Below the video, there are details about the video, including the uploader's name, upload date, views, and tags. Users can see and add comments below the video. On the right side, there is a list of suggested or related videos with thumbnails and view counts. if the comment is yours you can edit or delete that comment.
+   This page shows a video player at the top left, playing the selected video. Below the video, there are details about the video, including the uploader's name, upload date, views, and tags. Users can see and add comments below the video. On the right side, there is a list of suggested or related videos with thumbnails and view counts at ex4 we made it work with a cpp server that will display the videos according to the viewing history of the users. if the comment is yours you can edit or delete that comment.
 
 ![alt text](<readme photos/Video example.png>)
 
