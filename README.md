@@ -107,3 +107,5 @@ The project was a collaborative effort among the three of us. Initially, we focu
 Similar to part 1, we divided the work among ourselves using Jira.
 
 ![Jira Board](<readme photos/Screenshot 2024-07-27 233247.png>)
+[Jira Missions](https://crispycrumbs.atlassian.net/jira/software/projects/SCRUM/list?sortBy=customfield_10020&direction=ASC)
+
