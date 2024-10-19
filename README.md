@@ -1,3 +1,5 @@
+The full project wiki is [in the server repository submition](https://github.com/Mzhenian/CrispyCrumbsServer/tree/EX4-complete/wiki)
+
 # Crispy Crumbs: React Website
 
 Welcome to the **Crispy Crumbs** website, a video-sharing platform showcasing exclusive Crispy Crumbs content. Built with React, this website provides a smooth, interactive, and enjoyable user experience.
