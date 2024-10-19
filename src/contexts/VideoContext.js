@@ -339,11 +339,13 @@ const VideoProvider = ({ children }) => {
   const fetchRecommendations = useCallback(
     async (videoId) => {
       try {
+        const headers = { "Content-Type": "application/json" };
+        if (currentUser && currentUser.token) {
+          headers.Authorization = `Bearer ${currentUser.token}`;
+        }
         const response = await fetch(`${apiVideosUrl}/${videoId}/recommendations`, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: headers,
         });
 
         if (!response.ok) {
@@ -360,7 +362,7 @@ const VideoProvider = ({ children }) => {
         console.error("Error fetching recommendations:", error);
       }
     },
-    [apiVideosUrl]
+    [apiVideosUrl, currentUser]
   );
 
   return (
