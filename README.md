@@ -6,9 +6,9 @@ Welcome to the **Crispy Crumbs** website, a video-sharing platform showcasing ex
 
 ## Crispy Crumbs - Founders
 
-- Ofek Avan Danan (211824727)
-- Zohar Mzhen (314621806)
-- Dolev Menajem (207272220)
+- Ofek Avan Danan
+- Zohar Mzhen
+- Dolev Menajem
 
 ## Running the Crispy Crumbs Website
 
